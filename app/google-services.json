@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "181672576623",
+    "project_id": "aire-libre-5096b",
+    "storage_bucket": "aire-libre-5096b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:181672576623:android:da90c74afca36c9e04ef9a",
+        "android_client_info": {
+          "package_name": "com.lucasginard.airelibre"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "181672576623-u6ik8ec614opf9a5qateopbfo7iqq0uj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwXacN7FiLuX8cJGRxwP4IJRZU1VU5ltA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "181672576623-u6ik8ec614opf9a5qateopbfo7iqq0uj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
