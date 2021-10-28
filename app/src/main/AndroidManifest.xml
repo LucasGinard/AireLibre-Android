@@ -12,7 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AireLibre">
         <activity
-            android:name=".MainActivity"
+            android:name=".modules.splash.SplashActivity"
+            android:theme="@style/SplashTheme"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,6 +21,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".modules.home.view.MainActivity"
+            android:exported="true">
+        </activity>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value=""/>
     </application>
 
 </manifest>

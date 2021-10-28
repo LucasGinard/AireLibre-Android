@@ -9,7 +9,7 @@ import retrofit2.http.GET
 interface APIService {
 
     @GET("api/v1/aqi")
-    fun getList(): Call<CityListResponse>
+    fun getList(): Call<ArrayList<CityListResponse>>
 
     companion object {
         var retrofitService: APIService? = null

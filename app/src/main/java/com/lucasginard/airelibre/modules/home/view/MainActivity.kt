@@ -1,4 +1,4 @@
-package com.lucasginard.airelibre
+package com.lucasginard.airelibre.modules.home.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -12,6 +12,16 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         bindding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(bindding.root)
+        configureFragment()
+    }
 
+    private fun configureFragment() {
+        val ft = supportFragmentManager.beginTransaction()
+        ft.replace(bindding.fragmentHome.id, HomeFragment.newInstance())
+        ft.commit()
+    }
+
+    override fun onBackPressed() {
+        finish()
     }
 }

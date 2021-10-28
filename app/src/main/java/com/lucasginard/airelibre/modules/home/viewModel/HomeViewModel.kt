@@ -10,20 +10,20 @@ import retrofit2.Response
 
 class HomeViewModel constructor(private val repository: HomeRepository) : ViewModel() {
 
-    val getAllList = MutableLiveData<CityListResponse>()
+    val getListCitys = MutableLiveData<ArrayList<CityListResponse>>()
     val errorMessage = MutableLiveData<String>()
 
-    fun getAllDolar() {
+    fun getAllCity() {
         val response = repository.getAllCitys()
-        response.enqueue(object : Callback<CityListResponse> {
+        response.enqueue(object : Callback<ArrayList<CityListResponse>> {
             override fun onResponse(
-                call: Call<CityListResponse>,
-                response: Response<CityListResponse>
+                call: Call<ArrayList<CityListResponse>>,
+                response: Response<ArrayList<CityListResponse>>
             ) {
-                getAllList.postValue(response.body())
+                getListCitys.postValue(response.body())
             }
 
-            override fun onFailure(call: Call<CityListResponse>, t: Throwable) {
+            override fun onFailure(call: Call<ArrayList<CityListResponse>>, t: Throwable) {
                 errorMessage.postValue(t.message)
             }
         })
