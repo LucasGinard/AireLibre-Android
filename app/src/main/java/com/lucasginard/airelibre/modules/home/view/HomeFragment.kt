@@ -8,7 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.maps.*
+import com.google.android.gms.maps.model.BitmapDescriptor
+import com.lucasginard.airelibre.R
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.lucasginard.airelibre.databinding.FragmentHomeBinding
 import com.lucasginard.airelibre.modules.data.APIService
 import com.lucasginard.airelibre.modules.home.domain.HomeRepository
@@ -43,6 +47,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         viewModel.getListCitys.observe(requireActivity(), {
             listCitys.clear()
             listCitys.addAll(it)
+            configureMarkers(listCitys)
         })
         viewModel.errorMessage.observe(requireActivity(), {
             Log.d("testArray","error")
@@ -63,12 +68,34 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         mapView?.getMapAsync(this)
     }
 
+    private fun configureMarkers(arrayList: ArrayList<CityListResponse>) {
+        for (x in arrayList){
+            GoogleMap.addMarker(
+                MarkerOptions()
+                    .position(LatLng(x.latitude,x.longitude))
+                    .title(x.description)
+                    .icon(setImageMarker(x.quality.index))
+            )
+        }
+    }
+
+    private fun setImageMarker(index:Int): BitmapDescriptor {
+        when (index) {
+            in 0..50 -> return BitmapDescriptorFactory.fromResource(R.drawable.icon_maps_green)
+            in 51..100 -> return BitmapDescriptorFactory.fromResource(R.drawable.icon_maps_yellow)
+            in 101..150 -> return BitmapDescriptorFactory.fromResource(R.drawable.icon_maps_orange)
+            in 151..200 -> return BitmapDescriptorFactory.fromResource(R.drawable.icon_maps_red)
+            in 201..300 -> return BitmapDescriptorFactory.fromResource(R.drawable.icon_maps_purple)
+            else -> return BitmapDescriptorFactory.fromResource(R.drawable.icon_maps_danger)
+        }
+    }
+
     override fun onMapReady(googleMap: GoogleMap?) {
         googleMap.let {
             GoogleMap = it!!
         }
-        val py = LatLng(-25.294589, -57.578563)
-        googleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(py, 6f))
+        val py = LatLng(-25.250, -57.536)
+        googleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(py, 10f))
         googleMap?.uiSettings?.isMapToolbarEnabled = false
     }
 
