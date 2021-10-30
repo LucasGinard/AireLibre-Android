@@ -1,5 +1,6 @@
 package com.lucasginard.airelibre.modules.home.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -15,18 +16,16 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.lucasginard.airelibre.databinding.FragmentHomeBinding
+import com.lucasginard.airelibre.modules.about.AboutActivity
 import com.lucasginard.airelibre.modules.data.APIService
 import com.lucasginard.airelibre.modules.home.domain.HomeRepository
 import com.lucasginard.airelibre.modules.home.model.CityResponse
 import com.lucasginard.airelibre.modules.home.viewModel.HomeViewModel
 import com.lucasginard.airelibre.modules.home.viewModel.HomeViewModelFactory
 import com.lucasginard.airelibre.utils.animationCreate
-import kotlinx.coroutines.delay
-import java.util.*
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
-import kotlin.concurrent.schedule
 
 class HomeFragment : Fragment(), OnMapReadyCallback {
 
@@ -63,6 +62,10 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                 }
             }
         }
+
+        _binding.btnAbout.setOnClickListener {
+            activity?.startActivity(Intent(activity,AboutActivity::class.java))
+        }
     }
 
     private fun configureService() {
@@ -92,29 +95,33 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
     private fun configureMarkers(arrayList: ArrayList<CityResponse>) {
         for (x in arrayList){
-            GoogleMap.addMarker(
-                MarkerOptions()
-                    .position(LatLng(x.latitude,x.longitude))
-                    .title(x.description)
-                    .icon(setImageMarker(x.quality.index))
-            )
-            GoogleMap.setOnMarkerClickListener { maker ->
-                _binding.linearInfoMarker.visibility = View.VISIBLE
-                _binding.linearInfoMarker.startAnimation(_binding.linearInfoMarker.animationCreate(R.anim.slide_up))
-                val cityObject = arrayList.find { it.description == maker.title}
-                _binding.tvCiudad.text = cityObject?.description
-                cityObject?.quality?.index?.let { setInfoMarker(it)}
-                true
+            if(::GoogleMap.isInitialized){
+                GoogleMap.addMarker(
+                    MarkerOptions()
+                        .position(LatLng(x.latitude,x.longitude))
+                        .title(x.description)
+                        .icon(setImageMarker(x.quality.index))
+                )
+                GoogleMap.setOnMarkerClickListener { maker ->
+                    _binding.linearInfoMarker.visibility = View.VISIBLE
+                    _binding.linearInfoMarker.startAnimation(_binding.linearInfoMarker.animationCreate(R.anim.slide_up))
+                    val cityObject = arrayList.find { it.description == maker.title}
+                    _binding.tvCiudad.text = cityObject?.description
+                    cityObject?.quality?.index?.let { setInfoMarker(it)}
+                    true
+                }
             }
         }
-        GoogleMap.setOnMapClickListener {
-            if (_binding.linearInfoMarker.visibility == View.VISIBLE){
-                _binding.linearInfoMarker.apply {
-                    _binding.linearInfoMarker.startAnimation(this.animationCreate(R.anim.slide_down))
-                    Executors.newSingleThreadScheduledExecutor().schedule({
-                        visibility = View.GONE
-                    }, 1, TimeUnit.SECONDS)
+        if(::GoogleMap.isInitialized){
+            GoogleMap.setOnMapClickListener {
+                if (_binding.linearInfoMarker.visibility == View.VISIBLE){
+                    _binding.linearInfoMarker.apply {
+                        _binding.linearInfoMarker.startAnimation(this.animationCreate(R.anim.slide_down))
+                        Executors.newSingleThreadScheduledExecutor().schedule({
+                            visibility = View.GONE
+                        }, 1, TimeUnit.SECONDS)
 
+                    }
                 }
             }
         }
@@ -168,6 +175,11 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         val py = LatLng(-25.250, -57.536)
         googleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(py, 10f))
         googleMap?.uiSettings?.isMapToolbarEnabled = false
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mapView?.onResume()
     }
 
     companion object {
