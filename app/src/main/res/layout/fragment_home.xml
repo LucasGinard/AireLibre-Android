@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/disket_bold"
             android:paddingBottom="5dp"
-            android:text="Aire | Libre"
+            android:text="@string/titleName"
             android:textColor="@color/white"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -52,6 +52,7 @@
             android:background="@android:color/transparent"
             android:scaleType="centerCrop"
             android:src="@drawable/icon_about"
+            android:contentDescription="@string/app_name"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tvTitle"
             app:layout_constraintTop_toTopOf="parent"
@@ -81,7 +82,7 @@
             android:layout_marginStart="15dp"
             android:layout_marginTop="15dp"
             android:fontFamily="@font/disket_bold"
-            android:text="Ciudad:"
+            android:text="@string/tvCity"
             android:textColor="@color/white"
             android:textSize="12sp" />
 
@@ -93,7 +94,7 @@
             android:layout_marginTop="4dp"
             android:layout_marginBottom="5dp"
             android:fontFamily="@font/disket_regular"
-            android:text="Ciudad:"
+            android:text="@string/app_name"
             android:textColor="@color/white"
             android:textSize="14sp" />
 
@@ -109,7 +110,7 @@
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="15dp"
                 android:fontFamily="@font/disket_bold"
-                android:text="Estado:"
+                android:text="@string/tvStatus"
                 android:textColor="@color/white"
                 android:textSize="12sp" />
 
@@ -127,18 +128,19 @@
                     android:id="@+id/iconInfo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="🟢👍"
+                    android:text="@string/emojiGreen"
+                    android:textColor="#F9A825"
                     android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/tvDescripcion"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="top"
                     android:layout_marginStart="4dp"
                     android:layout_weight="2"
                     android:fontFamily="@font/disket_regular"
-                    android:text='Ciudad: "Riesgo general para las personas, efectos más graves en personas sensibles."'
+                    android:text='@string/app_name'
                     android:textColor="@color/white"
                     android:textSize="14sp" />
 
@@ -164,7 +166,7 @@
                 android:layout_marginStart="15dp"
                 android:fontFamily="@font/disket_bold"
                 android:gravity="center"
-                android:text="Escala AQI:"
+                android:text="@string/tvEscale"
                 android:textColor="@color/white"
                 android:textSize="12sp" />
 
@@ -174,6 +176,7 @@
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 android:src="@drawable/ic_info_aqi"
+                android:contentDescription="@string/app_name"
                 tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
         </LinearLayout>
 
@@ -183,7 +186,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
             android:fontFamily="@font/disket_regular"
-            android:text="50"
+            android:text="@string/app_name"
             android:textColor="@color/white"
             android:textSize="20sp" />
 
@@ -197,7 +200,7 @@
         android:background="@drawable/info_background"
         android:fontFamily="@font/disket_bold"
         android:padding="10dp"
-        android:text="Es un índice utilizado por agencias ambientales para medir la calidad del aire, cuanto más alto su valor, el nivel de contaminación es mayor."
+        android:text="@string/tvHelp"
         android:textColor="@color/black"
         android:textSize="12sp"
         android:visibility="gone"

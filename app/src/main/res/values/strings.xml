@@ -1,6 +1,31 @@
 <resources>
     <string name="app_name">Aire Libre</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_about">AboutActivity</string>
+    <string name="titleName">Aire | Libre</string>
+
+    <!---HomeActivity-->
+    <string name="tvCity">Ciudad:</string>
+    <string name="tvEscale">Escala AQI:</string>
+    <string name="tvStatus">Estado:</string>
+    <string name="tvHelp">Es un índice utilizado por agencias ambientales para medir la calidad del aire, cuanto más alto su valor, el nivel de contaminación es mayor.</string>
+    <string name="emojiGreen">🟢👍</string>
+    <string name="emojiYellow">🟡😐</string>
+    <string name="emojiOrange">🟠⚠</string>
+    <string name="emojiRed">🔴⚠</string>
+    <string name="emojiPurple">🟣☣️</string>
+    <string name="emojiDanger">🟤☠️</string>
+    <string name="tvDescriptionGreen">Escaso riesgo de contaminación atmosférica, calidad de aire satisfactoria.</string>
+    <string name="tvDescriptionYellow">Calidad de aire aceptable, riesgo moderado para la salud de personas sensibles.</string>
+    <string name="tvDescriptionOrange">Insalubre para personas sensibles.</string>
+    <string name="tvDescriptionRed">Riesgo general para las personas, efectos más graves en personas sensibles.</string>
+    <string name="tvDescriptionPurple">Condición de emergencia.</string>
+    <string name="tvDescriptionDanger">Alerta sanitaria, efectos graves para toda la población.</string>
+
+    <!---AboutActivity-->
+    <string name="whatsIsAireLibre">¿Qué es AireLibre?</string>
+    <string name="descriptionWhatis">AireLibre es una respuesta de la comunidad a la necesidad de saber sobre la calidad del aire de manera libre, colaborativa y descentralizada.</string>
+    <string name="questionInteresant">¿Querés saber más sobre el proyecto?</string>
+    <string name="descriptionInteresant">Si querés colaborar,aprender a construir tu propio sensor, o saber en que se diferencia con otros proyectos similares Entrá:</string>
+    <string name="seeMore">Ver proyecto</string>
+    <string name="licenseAireLibre">AireLibre es un proyecto libre y de código abierto bajo licencia AGPLv3.</string>
+    <string name="licenseLogo">Imagen Ilustrativa original de:\npch.vector - www.freepik.es.</string>
 </resources>

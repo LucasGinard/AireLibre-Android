@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -49,7 +50,8 @@ fun Greeting(activity: AboutActivity = AboutActivity()) {
     )
     val context = LocalContext.current
     Column(
-        modifier = Modifier.padding(20.dp)
+        modifier = Modifier
+            .padding(20.dp)
             .fillMaxSize()
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.Center,
@@ -62,17 +64,16 @@ fun Greeting(activity: AboutActivity = AboutActivity()) {
                 .height(240.dp),
             painter = painterResource(id = R.drawable.playstore_icon),
             contentDescription = "Logo APP",
-
             )
 
         Text(
-            text = "¿Qué es AireLibre?",
+            text = stringResource(id = R.string.whatsIsAireLibre),
             fontFamily = fonts,
             fontWeight = FontWeight.Bold
         )
 
         Text(
-            text = "AireLibre es una respuesta de la comunidad a la necesidad de saber sobre la calidad del aire de manera libre, colaborativa y descentralizada.",
+            text = stringResource(id = R.string.descriptionWhatis),
             fontFamily = fonts,
             fontWeight = FontWeight.Normal,
             fontSize = 14.sp
@@ -80,14 +81,14 @@ fun Greeting(activity: AboutActivity = AboutActivity()) {
 
         Text(
             modifier = Modifier.paddingFromBaseline(top = 30.dp),
-            text = "¿Querés saber más sobre el proyecto?",
+            text = stringResource(id = R.string.questionInteresant),
             fontFamily = fonts,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center
         )
 
         Text(
-            text = "Si querés colaborar,aprender a construir tu propio sensor, o saber en que se diferencia con otros proyectos similares Entrá:",
+            text = stringResource(id = R.string.descriptionInteresant),
             fontFamily = fonts,
             fontWeight = FontWeight.Normal,
             fontSize = 14.sp
@@ -95,7 +96,7 @@ fun Greeting(activity: AboutActivity = AboutActivity()) {
 
 
         Text(
-            text = "Ver proyecto",
+            text = stringResource(id = R.string.seeMore),
             fontFamily = fonts,
             fontWeight = FontWeight.Bold,
             color = Color.Blue,
@@ -115,13 +116,13 @@ fun Greeting(activity: AboutActivity = AboutActivity()) {
         )
         Text(
             modifier = Modifier.paddingFromBaseline(top = 30.dp),
-            text = "AireLibre es un proyecto libre y de código abierto bajo licencia AGPLv3.",
+            text = stringResource(id = R.string.licenseAireLibre),
             textAlign = TextAlign.Center
         )
 
         Text(
             modifier = Modifier.paddingFromBaseline(top = 30.dp),
-            text = "Imagen Ilustrativa original de:\npch.vector - www.freepik.es.",
+            text = stringResource(id = R.string.licenseLogo),
             textAlign = TextAlign.Center
         )
         IconButton(

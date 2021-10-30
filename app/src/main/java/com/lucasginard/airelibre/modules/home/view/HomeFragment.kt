@@ -120,7 +120,6 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                         Executors.newSingleThreadScheduledExecutor().schedule({
                             visibility = View.GONE
                         }, 1, TimeUnit.SECONDS)
-
                     }
                 }
             }
@@ -141,28 +140,28 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     private fun setInfoMarker(index:Int){
         when (index) {
             in 0..50 -> {
-                _binding.iconInfo.text = "\uD83D\uDFE2\uD83D\uDC4D"
-                _binding.tvDescripcion.text = "Escaso riesgo de contaminación atmosférica, calidad de aire satisfactoria."
+                _binding.iconInfo.text = getString(R.string.emojiGreen)
+                _binding.tvDescripcion.text = getString(R.string.tvDescriptionGreen)
             }
             in 51..100 -> {
-                _binding.iconInfo.text = "\uD83D\uDFE1\uD83D\uDE10"
-                _binding.tvDescripcion.text = "Calidad de aire aceptable, riesgo moderado para la salud de personas sensibles"
+                _binding.iconInfo.text = getString(R.string.emojiYellow)
+                _binding.tvDescripcion.text = getString(R.string.tvDescriptionYellow)
             }
             in 101..150 -> {
-                _binding.iconInfo.text = "\uD83D\uDFE0⚠\uD83D\uDE37"
-                _binding.tvDescripcion.text = "Insalubre para personas sensibles."
+                _binding.iconInfo.text = getString(R.string.emojiOrange)
+                _binding.tvDescripcion.text = getString(R.string.tvDescriptionOrange)
             }
             in 151..200 -> {
-                _binding.iconInfo.text = "\uD83D\uDD34⚠\uD83D\uDE37"
-                _binding.tvDescripcion.text = "Riesgo general para las personas, efectos más graves en personas sensibles."
+                _binding.iconInfo.text = getString(R.string.emojiRed)
+                _binding.tvDescripcion.text = getString(R.string.tvDescriptionRed)
             }
             in 201..300 -> {
-                _binding.iconInfo.text = "\uD83D\uDFE3☣️☣"
-                _binding.tvDescripcion.text = "Condición de emergencia."
+                _binding.iconInfo.text = getString(R.string.emojiPurple)
+                _binding.tvDescripcion.text = getString(R.string.tvDescriptionPurple)
             }
             else -> {
-                _binding.iconInfo.text = "\uD83D\uDFE4☠️☠"
-                _binding.tvDescripcion.text = "Alerta sanitaria, efectos graves para toda la población."
+                _binding.iconInfo.text = getString(R.string.emojiDanger)
+                _binding.tvDescripcion.text = getString(R.string.tvDescriptionDanger)
             }
         }
         _binding.tvQquality.text = index.toString()
