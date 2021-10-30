@@ -12,9 +12,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AireLibre">
         <activity
+            android:name=".modules.about.AboutActivity"
+            android:exported="true"
+            android:label="@string/title_activity_about"
+            android:theme="@style/Theme.AireLibre.NoActionBar" />
+        <activity
             android:name=".modules.splash.SplashActivity"
-            android:theme="@style/SplashTheme"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,8 +28,8 @@
         </activity>
         <activity
             android:name=".modules.home.view.MainActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true"></activity>
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value=""/>
