@@ -1,5 +1,6 @@
 package com.lucasginard.airelibre.modules.home.view
 
+import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -7,7 +8,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.BitmapDescriptor
@@ -45,11 +45,11 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         configureMaps(savedInstanceState)
         configureService()
-        configureOnListeners()
+        configureOnClickListeners()
         return _binding.root
     }
 
-    private fun configureOnListeners() {
+    private fun configureOnClickListeners() {
         _binding.btnInfo.setOnClickListener {
             _binding.tvHelp.apply {
                 if (this.visibility == View.GONE){
@@ -64,7 +64,8 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         }
 
         _binding.btnAbout.setOnClickListener {
-            activity?.startActivity(Intent(activity,AboutActivity::class.java))
+            activity?.startActivity(Intent(activity,AboutActivity::class.java),
+                ActivityOptions.makeCustomAnimation(activity,R.anim.fade_in,R.anim.fade_out).toBundle())
         }
     }
 

@@ -40,6 +40,11 @@ class AboutActivity : ComponentActivity() {
             }
         }
     }
+
+    override fun finish() {
+        super.finish()
+        overridePendingTransition(R.anim.fade_in,R.anim.fade_out)
+    }
 }
 
 @Composable
@@ -64,7 +69,7 @@ fun Greeting(activity: AboutActivity = AboutActivity()) {
                 .height(240.dp),
             painter = painterResource(id = R.drawable.playstore_icon),
             contentDescription = "Logo APP",
-            )
+        )
 
         Text(
             text = stringResource(id = R.string.whatsIsAireLibre),
@@ -129,7 +134,9 @@ fun Greeting(activity: AboutActivity = AboutActivity()) {
             modifier = Modifier
                 .then(Modifier.size(60.dp))
                 .padding(top = 15.dp),
-            onClick = { activity.finish() },
+            onClick = {
+                activity.finish()
+            },
         ) {
             Icon(
                 modifier = Modifier.then(Modifier.size(60.dp)),
