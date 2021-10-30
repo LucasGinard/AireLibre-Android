@@ -1,6 +1,6 @@
 package com.lucasginard.airelibre.modules.data
 
-import com.lucasginard.airelibre.modules.home.model.CityListResponse
+import com.lucasginard.airelibre.modules.home.model.CityResponse
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -9,7 +9,7 @@ import retrofit2.http.GET
 interface APIService {
 
     @GET("api/v1/aqi")
-    fun getList(): Call<ArrayList<CityListResponse>>
+    fun getList(): Call<ArrayList<CityResponse>>
 
     companion object {
         var retrofitService: APIService? = null
