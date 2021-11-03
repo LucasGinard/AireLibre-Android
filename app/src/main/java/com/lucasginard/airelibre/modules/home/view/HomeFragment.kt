@@ -4,10 +4,8 @@ import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.BitmapDescriptor
@@ -26,13 +24,17 @@ import com.lucasginard.airelibre.utils.animationCreate
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
+import com.lucasginard.airelibre.utils.OnSwipeTouchListener
+
+
+
 
 class HomeFragment : Fragment(), OnMapReadyCallback {
-
 
     private lateinit var viewModel:HomeViewModel
     private lateinit var _binding:FragmentHomeBinding
     private lateinit var GoogleMap: GoogleMap
+    private lateinit var onSwipeTouchListener:OnSwipeTouchListener
 
     private var mapView: MapView? = null
     private val retrofit = APIService.getInstance()
@@ -67,6 +69,8 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             activity?.startActivity(Intent(activity,AboutActivity::class.java),
                 ActivityOptions.makeCustomAnimation(activity,R.anim.fade_in,R.anim.fade_out).toBundle())
         }
+        onSwipeTouchListener = OnSwipeTouchListener(requireContext(), _binding.linearList)
+        //onSwipeTouchListener = OnSwipeTouchListener(requireContext(), _binding.linearInfoMarker,_binding.linearList)
     }
 
     private fun configureService() {
@@ -105,6 +109,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                 )
                 GoogleMap.setOnMarkerClickListener { maker ->
                     _binding.linearInfoMarker.visibility = View.VISIBLE
+                    _binding.linearList.visibility = View.GONE
                     _binding.linearInfoMarker.startAnimation(_binding.linearInfoMarker.animationCreate(R.anim.slide_up))
                     val cityObject = arrayList.find { it.description == maker.title}
                     _binding.tvCiudad.text = cityObject?.description
@@ -122,6 +127,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                             visibility = View.GONE
                         }, 1, TimeUnit.SECONDS)
                     }
+                    _binding.linearList.visibility = View.VISIBLE
                 }
             }
         }
