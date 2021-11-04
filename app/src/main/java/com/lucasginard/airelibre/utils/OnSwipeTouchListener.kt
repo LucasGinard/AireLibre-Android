@@ -1,20 +1,19 @@
 package com.lucasginard.airelibre.utils
 
 import android.content.Context
-import android.opengl.Visibility
 import android.view.MotionEvent
 import android.view.GestureDetector
 import android.view.GestureDetector.SimpleOnGestureListener
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import androidx.core.content.ContextCompat
 import com.lucasginard.airelibre.R
 import java.lang.Exception
-import java.util.concurrent.Executors
-import java.util.concurrent.TimeUnit
 import kotlin.math.abs
 
 
-class OnSwipeTouchListener internal constructor(ctx: Context, val mainView: View,val viewList:View ?=null) :
+class OnSwipeTouchListener internal constructor(ctx: Context, val mainView: View,val viewList:View ?=null,val arrowView:ImageView ?=null) :
     View.OnTouchListener {
     private val gestureDetector: GestureDetector
     var context: Context
@@ -73,14 +72,13 @@ class OnSwipeTouchListener internal constructor(ctx: Context, val mainView: View
     }
 
     fun onSwipeTop() {
-        if (mainView.height <= 340){
+        if (mainView.height <= 340 && mainView.id == 2131296757){
             mainView.startAnimation(mainView.animationCreate(R.anim.slide_up))
-            if (mainView.id == 2131296757){
-                val params: ViewGroup.LayoutParams = mainView.layoutParams
-                params.height = ViewGroup.LayoutParams.MATCH_PARENT
-                mainView.layoutParams = params
-            }
+            val params: ViewGroup.LayoutParams = mainView.layoutParams
+            params.height = ViewGroup.LayoutParams.MATCH_PARENT
+            mainView.layoutParams = params
             onSwipe?.swipeTop()
+            arrowView?.setImageDrawable( ContextCompat.getDrawable(context,R.drawable.ic_arrow_down))
         }
     }
 
@@ -90,6 +88,7 @@ class OnSwipeTouchListener internal constructor(ctx: Context, val mainView: View
             val params: ViewGroup.LayoutParams = mainView.layoutParams
             params.height = 340
             mainView.layoutParams = params
+            arrowView?.setImageDrawable( ContextCompat.getDrawable(context,R.drawable.ic_arrow_up))
         }else{
             mainView.visibility = View.GONE
             viewList?.visibility = View.VISIBLE

@@ -5,8 +5,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.lucasginard.airelibre.R
@@ -25,16 +28,16 @@ import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 import com.lucasginard.airelibre.utils.OnSwipeTouchListener
-
-
+import com.lucasginard.airelibre.utils.adapter.AdapterCityList
 
 
 class HomeFragment : Fragment(), OnMapReadyCallback {
 
-    private lateinit var viewModel:HomeViewModel
-    private lateinit var _binding:FragmentHomeBinding
+    private lateinit var viewModel: HomeViewModel
+    private lateinit var _binding: FragmentHomeBinding
     private lateinit var GoogleMap: GoogleMap
-    private lateinit var onSwipeTouchListener:OnSwipeTouchListener
+    private lateinit var adapter: AdapterCityList
+    private lateinit var onSwipeTouchListener: OnSwipeTouchListener
 
     private var mapView: MapView? = null
     private val retrofit = APIService.getInstance()
@@ -45,16 +48,22 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        configureMaps(savedInstanceState)
         configureService()
         configureOnClickListeners()
+        configureMaps(savedInstanceState)
         return _binding.root
+    }
+
+    private fun configureAdapter(arrayList: ArrayList<CityResponse>) {
+        adapter = AdapterCityList(arrayList)
+        _binding.rvLista.layoutManager = LinearLayoutManager(requireContext())
+        _binding.rvLista.adapter = adapter
     }
 
     private fun configureOnClickListeners() {
         _binding.btnInfo.setOnClickListener {
             _binding.tvHelp.apply {
-                if (this.visibility == View.GONE){
+                if (this.visibility == View.GONE) {
                     this.startAnimation(this.animationCreate(R.anim.fade_in))
                     this.visibility = View.VISIBLE
                     Executors.newSingleThreadScheduledExecutor().schedule({
@@ -65,23 +74,70 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             }
         }
 
-        _binding.btnAbout.setOnClickListener {
-            activity?.startActivity(Intent(activity,AboutActivity::class.java),
-                ActivityOptions.makeCustomAnimation(activity,R.anim.fade_in,R.anim.fade_out).toBundle())
+        _binding.btnClose.setOnClickListener {
+            _binding.linearInfoMarker.apply {
+                _binding.linearInfoMarker.startAnimation(this.animationCreate(R.anim.slide_down))
+                Executors.newSingleThreadScheduledExecutor().schedule({
+                    visibility = View.GONE
+                }, 1, TimeUnit.SECONDS)
+            }
+            _binding.linearList.visibility = View.VISIBLE
         }
-        onSwipeTouchListener = OnSwipeTouchListener(requireContext(), _binding.linearList)
-        //onSwipeTouchListener = OnSwipeTouchListener(requireContext(), _binding.linearInfoMarker,_binding.linearList)
+
+        _binding.btnAbout.setOnClickListener {
+            activity?.startActivity(
+                Intent(activity, AboutActivity::class.java),
+                ActivityOptions.makeCustomAnimation(activity, R.anim.fade_in, R.anim.fade_out)
+                    .toBundle()
+            )
+        }
+        onSwipeTouchListener = OnSwipeTouchListener(
+            requireContext(),
+            _binding.linearList,
+            arrowView = _binding.btnArrow
+        )
+        onSwipeTouchListener =
+            OnSwipeTouchListener(requireContext(), _binding.linearInfoMarker, _binding.linearList)
+
+        _binding.btnArrow.setOnClickListener {
+            if (_binding.linearList.height <= 340) {
+                _binding.linearList.startAnimation(_binding.linearList.animationCreate(R.anim.slide_up))
+                val params: ViewGroup.LayoutParams = _binding.linearList.layoutParams
+                params.height = ViewGroup.LayoutParams.MATCH_PARENT
+                _binding.linearList.layoutParams = params
+                _binding.btnArrow.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.ic_arrow_down
+                    )
+                )
+            } else {
+                _binding.linearList.startAnimation(_binding.linearList.animationCreate(R.anim.slide_down))
+                val params: ViewGroup.LayoutParams = _binding.linearList.layoutParams
+                params.height = 340
+                _binding.linearList.layoutParams = params
+                _binding.btnArrow.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.ic_arrow_up
+                    )
+                )
+            }
+        }
     }
 
     private fun configureService() {
-        viewModel = ViewModelProvider(this,HomeViewModelFactory(HomeRepository(retrofit))).get(HomeViewModel::class.java)
+        viewModel = ViewModelProvider(this, HomeViewModelFactory(HomeRepository(retrofit))).get(
+            HomeViewModel::class.java
+        )
         viewModel.getListCitys.observe(requireActivity(), {
             listCitys.clear()
             listCitys.addAll(it)
             configureMarkers(listCitys)
+            configureAdapter(listCitys)
         })
         viewModel.errorMessage.observe(requireActivity(), {
-            Log.d("testArray","error")
+            Log.d("testArray", "error")
         })
         viewModel.getAllCity()
     }
@@ -99,28 +155,32 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun configureMarkers(arrayList: ArrayList<CityResponse>) {
-        for (x in arrayList){
-            if(::GoogleMap.isInitialized){
+        for (x in arrayList) {
+            if (::GoogleMap.isInitialized) {
                 GoogleMap.addMarker(
                     MarkerOptions()
-                        .position(LatLng(x.latitude,x.longitude))
+                        .position(LatLng(x.latitude, x.longitude))
                         .title(x.description)
                         .icon(setImageMarker(x.quality.index))
                 )
                 GoogleMap.setOnMarkerClickListener { maker ->
                     _binding.linearInfoMarker.visibility = View.VISIBLE
                     _binding.linearList.visibility = View.GONE
-                    _binding.linearInfoMarker.startAnimation(_binding.linearInfoMarker.animationCreate(R.anim.slide_up))
-                    val cityObject = arrayList.find { it.description == maker.title}
+                    _binding.linearInfoMarker.startAnimation(
+                        _binding.linearInfoMarker.animationCreate(
+                            R.anim.slide_up
+                        )
+                    )
+                    val cityObject = arrayList.find { it.description == maker.title }
                     _binding.tvCiudad.text = cityObject?.description
-                    cityObject?.quality?.index?.let { setInfoMarker(it)}
+                    cityObject?.quality?.index?.let { setInfoMarker(it) }
                     true
                 }
             }
         }
-        if(::GoogleMap.isInitialized){
+        if (::GoogleMap.isInitialized) {
             GoogleMap.setOnMapClickListener {
-                if (_binding.linearInfoMarker.visibility == View.VISIBLE){
+                if (_binding.linearInfoMarker.visibility == View.VISIBLE) {
                     _binding.linearInfoMarker.apply {
                         _binding.linearInfoMarker.startAnimation(this.animationCreate(R.anim.slide_down))
                         Executors.newSingleThreadScheduledExecutor().schedule({
@@ -133,7 +193,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    private fun setImageMarker(index:Int): BitmapDescriptor {
+    private fun setImageMarker(index: Int): BitmapDescriptor {
         return when (index) {
             in 0..50 -> BitmapDescriptorFactory.fromResource(R.drawable.icon_maps_green)
             in 51..100 -> BitmapDescriptorFactory.fromResource(R.drawable.icon_maps_yellow)
@@ -144,7 +204,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    private fun setInfoMarker(index:Int){
+    private fun setInfoMarker(index: Int) {
         when (index) {
             in 0..50 -> {
                 _binding.iconInfo.text = getString(R.string.emojiGreen)
@@ -189,6 +249,6 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     }
 
     companion object {
-        fun newInstance()=HomeFragment()
+        fun newInstance() = HomeFragment()
     }
 }
