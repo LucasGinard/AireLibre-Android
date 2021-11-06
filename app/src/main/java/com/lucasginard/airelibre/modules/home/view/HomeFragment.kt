@@ -1,23 +1,31 @@
 package com.lucasginard.airelibre.modules.home.view
 
+import android.Manifest
+import android.Manifest.permission.ACCESS_COARSE_LOCATION
+import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.app.ActivityOptions
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.view.ViewGroup.LayoutParams.*
-import android.widget.LinearLayout
+import android.widget.RelativeLayout
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.lucasginard.airelibre.R
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.maps.android.SphericalUtil
 import com.lucasginard.airelibre.databinding.FragmentHomeBinding
 import com.lucasginard.airelibre.modules.about.AboutActivity
 import com.lucasginard.airelibre.modules.data.APIService
@@ -37,8 +45,11 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     private lateinit var viewModel: HomeViewModel
     private lateinit var _binding: FragmentHomeBinding
     private lateinit var GoogleMap: GoogleMap
+    private lateinit var lastLocation:Location
     private lateinit var adapter: AdapterCityList
     private lateinit var onSwipeTouchListener: OnSwipeTouchListener
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+
 
     private var mapView: MapView? = null
     private val retrofit = APIService.getInstance()
@@ -69,6 +80,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        requestLocation()
         configureService()
         configureOnClickListeners()
         configureMaps(savedInstanceState)
@@ -155,6 +167,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             listCitys.addAll(it)
             configureMarkers(listCitys)
             configureAdapter(listCitys)
+            calculateMarkerLocation()
         })
         viewModel.errorMessage.observe(requireActivity(), {
             Log.d("testArray", "error")
@@ -172,6 +185,12 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             e.printStackTrace()
         }
         mapView?.getMapAsync(this)
+        //Button Center Location:
+        val locationButton = (_binding.mapView.findViewById<View>(Integer.parseInt("1"))?.parent as View).findViewById<View>(Integer.parseInt("2"))
+        val rlp =  locationButton.layoutParams as RelativeLayout.LayoutParams
+        rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE)
+        rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 0)
+        rlp.setMargins(0, 160, 30, 0)
     }
 
     private fun configureMarkers(arrayList: ArrayList<CityResponse>) {
@@ -184,7 +203,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                         .icon(setImageMarker(x.quality.index))
                 )
                 GoogleMap.setOnMarkerClickListener { maker ->
-                    makerLamda(maker.title)
+                    makerLamda(maker.title!!)
                     true
                 }
             }
@@ -215,6 +234,27 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
+    private fun requestLocation(){
+        val locationPermissionRequest = registerForActivityResult(
+            ActivityResultContracts.RequestMultiplePermissions()
+        ) { permissions ->
+            when {
+                permissions.getOrDefault(ACCESS_FINE_LOCATION, false) -> {
+                    // Precise location access granted.
+                }
+                permissions.getOrDefault(ACCESS_COARSE_LOCATION, false) -> {
+                    // Only approximate location access granted.
+                } else -> {
+                // No location access granted.
+            }
+            }
+        }
+        locationPermissionRequest.launch(arrayOf(
+            ACCESS_FINE_LOCATION,
+            ACCESS_COARSE_LOCATION
+        ))
+    }
+
 
 
     override fun onMapReady(googleMap: GoogleMap?) {
@@ -223,14 +263,66 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         }
         val py = LatLng(-25.250, -57.536)
         googleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(py, 10f))
-        googleMap?.uiSettings?.isMapToolbarEnabled = false
+        googleMap?.uiSettings?.isMapToolbarEnabled = true
+        updateLocation()
     }
 
+    private fun updateLocation() {
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                requireContext(),
+                ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return
+        }
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        if (::fusedLocationClient.isInitialized){
+            fusedLocationClient.lastLocation.addOnSuccessListener { position ->
+                lastLocation = position
+            }
+        }
+        GoogleMap.isMyLocationEnabled = true
+    }
+
+    private fun calculateMarkerLocation(){
+        if (::lastLocation.isInitialized){
+            val miPos = LatLng(lastLocation.latitude,lastLocation.longitude)
+            var  posicionMasCercana = LatLng(0.0, 0.0)
+            var distanciaActual = Double.MAX_VALUE;
+
+            for(x in listCitys) {
+                var  distancia = SphericalUtil.computeDistanceBetween(miPos,LatLng(x.latitude,x.longitude));
+                if (distanciaActual > distancia) {
+                    posicionMasCercana = LatLng(x.latitude,x.longitude)
+                    distanciaActual = distancia;
+                }
+            }
+            val cerca = listCitys.find { it.latitude == posicionMasCercana.latitude && it.longitude == posicionMasCercana.longitude }
+            if (cerca != null) {
+                makerLamda(cerca.description)
+                GoogleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(cerca.latitude,cerca.longitude), 13f))
+            }
+        }
+    }
     override fun onResume() {
         super.onResume()
         mapView?.onResume()
     }
 
+    private val requestMultiplePermissions =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+            permissions.entries.forEach {
+                Log.d("test", "${it.key} = ${it.value}")
+            }
+            if (permissions[ACCESS_FINE_LOCATION] == true && permissions[ACCESS_COARSE_LOCATION] == true) {
+                updateLocation()
+            } else {
+                Log.d("test", "Permission not granted")
+            }
+        }
     companion object {
         fun newInstance() = HomeFragment()
     }

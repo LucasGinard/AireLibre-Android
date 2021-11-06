@@ -19,7 +19,7 @@ class CityViewHolder (view: View): RecyclerView.ViewHolder(view) {
         binding.tvTitleCity.text = local.description
         fragment.textsAQI(null, binding.stateIcon,binding.tvAQI,local.quality.index)
         binding.tvLink.setOnClickListener {
-            maps.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(local.latitude,local.longitude), 15f))
+            maps.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(local.latitude,local.longitude), 13f))
             fragment.makerLamda(local.description)
         }
     }

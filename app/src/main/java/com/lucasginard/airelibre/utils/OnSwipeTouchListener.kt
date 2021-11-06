@@ -48,7 +48,7 @@ class OnSwipeTouchListener internal constructor(ctx: Context, val mainView: View
                         result = true
                     }
                 } else if (abs(diffY) > Companion.SWIPE_THRESHOLD && abs(velocityY) > Companion.SWIPE_VELOCITY_THRESHOLD) {
-                    if (diffY > 0 && diffY != null) {
+                    if (diffY > 0) {
                         onSwipeBottom()
                     } else {
                         onSwipeTop()

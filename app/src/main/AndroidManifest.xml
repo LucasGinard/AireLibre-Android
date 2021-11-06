@@ -3,6 +3,8 @@
     package="com.lucasginard.airelibre">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -14,7 +16,6 @@
         <activity
             android:name=".modules.about.AboutActivity"
             android:exported="true"
-            android:label="@string/title_activity_about"
             android:theme="@style/Theme.AireLibre.NoActionBar" />
         <activity
             android:name=".modules.splash.SplashActivity"
