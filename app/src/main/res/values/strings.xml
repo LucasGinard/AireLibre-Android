@@ -28,4 +28,8 @@
     <string name="seeMore">Ver proyecto</string>
     <string name="licenseAireLibre">AireLibre es un proyecto libre y de código abierto bajo licencia AGPLv3.</string>
     <string name="licenseLogo">Imagen Ilustrativa original de:\npch.vector - www.freepik.es.</string>
+
+    <!---recyclerView-->
+    <string name="tvLinkGo"><u>Ver mas</u></string>
+
 </resources>

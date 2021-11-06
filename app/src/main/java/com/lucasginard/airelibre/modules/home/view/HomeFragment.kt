@@ -5,6 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.view.ViewGroup.LayoutParams.*
+import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -23,11 +25,10 @@ import com.lucasginard.airelibre.modules.home.domain.HomeRepository
 import com.lucasginard.airelibre.modules.home.model.CityResponse
 import com.lucasginard.airelibre.modules.home.viewModel.HomeViewModel
 import com.lucasginard.airelibre.modules.home.viewModel.HomeViewModelFactory
-import com.lucasginard.airelibre.utils.animationCreate
+import com.lucasginard.airelibre.utils.*
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
-import com.lucasginard.airelibre.utils.OnSwipeTouchListener
 import com.lucasginard.airelibre.utils.adapter.AdapterCityList
 
 
@@ -42,6 +43,26 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     private var mapView: MapView? = null
     private val retrofit = APIService.getInstance()
     private var listCitys = ArrayList<CityResponse>()
+    val makerLamda = fun(maker:String){
+        _binding.linearInfoMarker.visibility = View.VISIBLE
+        _binding.linearList.visibility = View.GONE
+        _binding.linearInfoMarker.startAnimation(
+            _binding.linearInfoMarker.animationCreate(
+                R.anim.slide_up
+            )
+        )
+        val cityObject = listCitys.find { it.description == maker }
+        _binding.tvCiudad.text = cityObject?.description
+        cityObject?.quality?.index?.let { this.textsAQI(_binding.tvDescripcion,_binding.iconInfo,_binding.tvQquality,it) }
+        _binding.linearList.resizeSmall()
+        _binding.rvLista.visibility = View.GONE
+        _binding.btnArrow.setImageDrawable(
+            ContextCompat.getDrawable(
+                requireContext(),
+                R.drawable.ic_arrow_up
+            )
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,7 +76,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun configureAdapter(arrayList: ArrayList<CityResponse>) {
-        adapter = AdapterCityList(arrayList)
+        adapter = AdapterCityList(arrayList,this,GoogleMap)
         _binding.rvLista.layoutManager = LinearLayoutManager(requireContext())
         _binding.rvLista.adapter = adapter
     }
@@ -94,17 +115,17 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         onSwipeTouchListener = OnSwipeTouchListener(
             requireContext(),
             _binding.linearList,
-            arrowView = _binding.btnArrow
+            arrowView = _binding.btnArrow,
+            viewRecycler = _binding.rvLista
         )
         onSwipeTouchListener =
             OnSwipeTouchListener(requireContext(), _binding.linearInfoMarker, _binding.linearList)
 
         _binding.btnArrow.setOnClickListener {
-            if (_binding.linearList.height <= 340) {
+            if (_binding.rvLista.visibility == View.GONE) {
                 _binding.linearList.startAnimation(_binding.linearList.animationCreate(R.anim.slide_up))
-                val params: ViewGroup.LayoutParams = _binding.linearList.layoutParams
-                params.height = ViewGroup.LayoutParams.MATCH_PARENT
-                _binding.linearList.layoutParams = params
+                _binding.linearList.resizeLarge()
+                _binding.rvLista.visibility = View.VISIBLE
                 _binding.btnArrow.setImageDrawable(
                     ContextCompat.getDrawable(
                         requireContext(),
@@ -113,9 +134,8 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                 )
             } else {
                 _binding.linearList.startAnimation(_binding.linearList.animationCreate(R.anim.slide_down))
-                val params: ViewGroup.LayoutParams = _binding.linearList.layoutParams
-                params.height = 340
-                _binding.linearList.layoutParams = params
+                _binding.linearList.resizeSmall()
+                _binding.rvLista.visibility = View.GONE
                 _binding.btnArrow.setImageDrawable(
                     ContextCompat.getDrawable(
                         requireContext(),
@@ -164,16 +184,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                         .icon(setImageMarker(x.quality.index))
                 )
                 GoogleMap.setOnMarkerClickListener { maker ->
-                    _binding.linearInfoMarker.visibility = View.VISIBLE
-                    _binding.linearList.visibility = View.GONE
-                    _binding.linearInfoMarker.startAnimation(
-                        _binding.linearInfoMarker.animationCreate(
-                            R.anim.slide_up
-                        )
-                    )
-                    val cityObject = arrayList.find { it.description == maker.title }
-                    _binding.tvCiudad.text = cityObject?.description
-                    cityObject?.quality?.index?.let { setInfoMarker(it) }
+                    makerLamda(maker.title)
                     true
                 }
             }
@@ -204,35 +215,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    private fun setInfoMarker(index: Int) {
-        when (index) {
-            in 0..50 -> {
-                _binding.iconInfo.text = getString(R.string.emojiGreen)
-                _binding.tvDescripcion.text = getString(R.string.tvDescriptionGreen)
-            }
-            in 51..100 -> {
-                _binding.iconInfo.text = getString(R.string.emojiYellow)
-                _binding.tvDescripcion.text = getString(R.string.tvDescriptionYellow)
-            }
-            in 101..150 -> {
-                _binding.iconInfo.text = getString(R.string.emojiOrange)
-                _binding.tvDescripcion.text = getString(R.string.tvDescriptionOrange)
-            }
-            in 151..200 -> {
-                _binding.iconInfo.text = getString(R.string.emojiRed)
-                _binding.tvDescripcion.text = getString(R.string.tvDescriptionRed)
-            }
-            in 201..300 -> {
-                _binding.iconInfo.text = getString(R.string.emojiPurple)
-                _binding.tvDescripcion.text = getString(R.string.tvDescriptionPurple)
-            }
-            else -> {
-                _binding.iconInfo.text = getString(R.string.emojiDanger)
-                _binding.tvDescripcion.text = getString(R.string.tvDescriptionDanger)
-            }
-        }
-        _binding.tvQquality.text = index.toString()
-    }
+
 
     override fun onMapReady(googleMap: GoogleMap?) {
         googleMap.let {
