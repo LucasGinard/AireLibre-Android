@@ -1,6 +1,5 @@
 package com.lucasginard.airelibre.modules.home.view
 
-import android.Manifest
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.app.ActivityOptions
@@ -234,28 +233,6 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    private fun requestLocation(){
-        val locationPermissionRequest = registerForActivityResult(
-            ActivityResultContracts.RequestMultiplePermissions()
-        ) { permissions ->
-            when {
-                permissions.getOrDefault(ACCESS_FINE_LOCATION, false) -> {
-                    // Precise location access granted.
-                }
-                permissions.getOrDefault(ACCESS_COARSE_LOCATION, false) -> {
-                    // Only approximate location access granted.
-                } else -> {
-                // No location access granted.
-            }
-            }
-        }
-        locationPermissionRequest.launch(arrayOf(
-            ACCESS_FINE_LOCATION,
-            ACCESS_COARSE_LOCATION
-        ))
-    }
-
-
 
     override fun onMapReady(googleMap: GoogleMap?) {
         googleMap.let {
@@ -267,24 +244,53 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         updateLocation()
     }
 
-    private fun updateLocation() {
-        if (ActivityCompat.checkSelfPermission(
-                requireContext(),
-                ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                requireContext(),
-                ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            return
-        }
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
-        if (::fusedLocationClient.isInitialized){
-            fusedLocationClient.lastLocation.addOnSuccessListener { position ->
-                lastLocation = position
+    private fun requestLocation() {
+        val locationPermissionRequest = registerForActivityResult(
+            ActivityResultContracts.RequestMultiplePermissions()
+        ) { permissions ->
+            when {
+                permissions.getOrDefault(ACCESS_FINE_LOCATION, false) -> {
+                    updateLocation()
+                }
+                permissions.getOrDefault(ACCESS_COARSE_LOCATION, false) -> {
+                    updateLocation()
+                }
+                else -> {
+
+                }
             }
         }
-        GoogleMap.isMyLocationEnabled = true
+        locationPermissionRequest.launch(
+            arrayOf(
+                ACCESS_FINE_LOCATION,
+                ACCESS_COARSE_LOCATION
+            )
+        )
+    }
+
+
+    private fun updateLocation() {
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        if (::GoogleMap.isInitialized) {
+            if (ActivityCompat.checkSelfPermission(
+                    requireContext(),
+                    ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                    requireContext(),
+                    ACCESS_COARSE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                return
+            }else{
+                fusedLocationClient.lastLocation.addOnSuccessListener { position ->
+                    if (position != null){
+                        lastLocation = position
+                        calculateMarkerLocation()
+                    }
+                }
+                GoogleMap.isMyLocationEnabled = true
+            }
+        }
     }
 
     private fun calculateMarkerLocation(){
@@ -303,7 +309,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             val cerca = listCitys.find { it.latitude == posicionMasCercana.latitude && it.longitude == posicionMasCercana.longitude }
             if (cerca != null) {
                 makerLamda(cerca.description)
-                GoogleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(cerca.latitude,cerca.longitude), 13f))
+                GoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(cerca.latitude,cerca.longitude), 13f))
             }
         }
     }
@@ -312,17 +318,6 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         mapView?.onResume()
     }
 
-    private val requestMultiplePermissions =
-        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
-            permissions.entries.forEach {
-                Log.d("test", "${it.key} = ${it.value}")
-            }
-            if (permissions[ACCESS_FINE_LOCATION] == true && permissions[ACCESS_COARSE_LOCATION] == true) {
-                updateLocation()
-            } else {
-                Log.d("test", "Permission not granted")
-            }
-        }
     companion object {
         fun newInstance() = HomeFragment()
     }
