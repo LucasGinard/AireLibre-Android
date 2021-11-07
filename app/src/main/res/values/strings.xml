@@ -19,6 +19,7 @@
     <string name="tvDescriptionRed">Riesgo general para las personas, efectos más graves en personas sensibles.</string>
     <string name="tvDescriptionPurple">Condición de emergencia.</string>
     <string name="tvDescriptionDanger">Alerta sanitaria, efectos graves para toda la población.</string>
+    <string name="toastErrorNet">Sin conexión compruebe su conexión</string>
 
     <!---AboutActivity-->
     <string name="whatsIsAireLibre">¿Qué es AireLibre?</string>

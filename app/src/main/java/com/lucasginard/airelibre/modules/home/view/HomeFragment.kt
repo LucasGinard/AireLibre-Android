@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.RelativeLayout
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -80,10 +81,17 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         requestLocation()
+        configureUI()
         configureService()
         configureOnClickListeners()
         configureMaps(savedInstanceState)
         return _binding.root
+    }
+
+    private fun configureUI() {
+        _binding.btnReconnect.apply {
+            this.imageTintList = ContextCompat.getColorStateList(this.context , R.color.white)
+        }
     }
 
     private fun configureAdapter(arrayList: ArrayList<CityResponse>) {
@@ -155,6 +163,10 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                 )
             }
         }
+
+        _binding.btnReconnect.setOnClickListener {
+            configureService()
+        }
     }
 
     private fun configureService() {
@@ -167,9 +179,14 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             configureMarkers(listCitys)
             configureAdapter(listCitys)
             calculateMarkerLocation()
+            if( _binding.btnReconnect.visibility == View.VISIBLE ){
+                _binding.btnReconnect.visibility = View.GONE
+            }
         })
         viewModel.errorMessage.observe(requireActivity(), {
-            Log.d("testArray", "error")
+            _binding.linearList.visibility = View.GONE
+            _binding.btnReconnect.visibility = View.VISIBLE
+            Toast.makeText(requireContext(),getText(R.string.toastErrorNet),Toast.LENGTH_SHORT).show()
         })
         viewModel.getAllCity()
     }
