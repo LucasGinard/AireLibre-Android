@@ -7,7 +7,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.RelativeLayout
 import android.widget.Toast
@@ -49,7 +48,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     private lateinit var adapter: AdapterCityList
     private lateinit var onSwipeTouchListener: OnSwipeTouchListener
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-
+    private lateinit var cityCloser:CityResponse
 
     private var mapView: MapView? = null
     private val retrofit = APIService.getInstance()
@@ -220,6 +219,13 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                 )
                 GoogleMap.setOnMarkerClickListener { maker ->
                     makerLamda(maker.title!!)
+                    if (::cityCloser.isInitialized){
+                        if (cityCloser.description == maker.title){
+                            _binding.tvTitleCity.text = getText(R.string.tvCityCloser)
+                        }else _binding.tvTitleCity.text = getText(R.string.tvCity)
+                    }else{
+                        _binding.tvTitleCity.text = getText(R.string.tvCity)
+                    }
                     true
                 }
             }
@@ -325,8 +331,10 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             }
             val cerca = listCitys.find { it.latitude == posicionMasCercana.latitude && it.longitude == posicionMasCercana.longitude }
             if (cerca != null) {
+                cityCloser = cerca
                 makerLamda(cerca.description)
                 GoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(cerca.latitude,cerca.longitude), 13f))
+                _binding.tvTitleCity.text = getText(R.string.tvCityCloser)
             }
         }
     }

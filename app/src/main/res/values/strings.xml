@@ -4,6 +4,7 @@
 
     <!---HomeActivity-->
     <string name="tvCity">Ciudad:</string>
+    <string name="tvCityCloser">Ciudad mas cercana:</string>
     <string name="tvEscale">Escala AQI:</string>
     <string name="tvStatus">Estado:</string>
     <string name="tvHelp">Es un índice utilizado por agencias ambientales para medir la calidad del aire, cuanto más alto su valor, el nivel de contaminación es mayor.</string>
