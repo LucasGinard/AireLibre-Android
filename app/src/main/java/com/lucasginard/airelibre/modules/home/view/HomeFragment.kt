@@ -44,18 +44,19 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     private lateinit var viewModel: HomeViewModel
     private lateinit var _binding: FragmentHomeBinding
     private lateinit var GoogleMap: GoogleMap
-    private lateinit var lastLocation:Location
+    private lateinit var lastLocation: Location
     private lateinit var adapter: AdapterCityList
     private lateinit var onSwipeTouchListener: OnSwipeTouchListener
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private lateinit var cityCloser:CityResponse
+    private lateinit var cityCloser: CityResponse
 
     private var mapView: MapView? = null
     private val retrofit = APIService.getInstance()
     private var listCitys = ArrayList<CityResponse>()
-    val makerLamda = fun(maker:String){
+    val makerLamda = fun(maker: String) {
         _binding.linearInfoMarker.visibility = View.VISIBLE
         _binding.linearList.visibility = View.GONE
+        _binding.linearListGone.visibility = View.VISIBLE
         _binding.linearInfoMarker.startAnimation(
             _binding.linearInfoMarker.animationCreate(
                 R.anim.slide_up
@@ -63,15 +64,14 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         )
         val cityObject = listCitys.find { it.description == maker }
         _binding.tvCiudad.text = cityObject?.description
-        cityObject?.quality?.index?.let { this.textsAQI(_binding.tvDescripcion,_binding.iconInfo,_binding.tvQquality,it) }
-        _binding.linearList.resizeSmall()
-        _binding.rvLista.visibility = View.GONE
-        _binding.btnArrow.setImageDrawable(
-            ContextCompat.getDrawable(
-                requireContext(),
-                R.drawable.ic_arrow_up
+        cityObject?.quality?.index?.let {
+            this.textsAQI(
+                _binding.tvDescripcion,
+                _binding.iconInfo,
+                _binding.tvQquality,
+                it
             )
-        )
+        }
     }
 
     override fun onCreateView(
@@ -89,12 +89,12 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
     private fun configureUI() {
         _binding.btnReconnect.apply {
-            this.imageTintList = ContextCompat.getColorStateList(this.context , R.color.white)
+            this.imageTintList = ContextCompat.getColorStateList(this.context, R.color.white)
         }
     }
 
     private fun configureAdapter(arrayList: ArrayList<CityResponse>) {
-        adapter = AdapterCityList(arrayList,this,GoogleMap)
+        adapter = AdapterCityList(arrayList, this, GoogleMap)
         _binding.rvLista.layoutManager = LinearLayoutManager(requireContext())
         _binding.rvLista.adapter = adapter
     }
@@ -117,10 +117,10 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             _binding.linearInfoMarker.apply {
                 _binding.linearInfoMarker.startAnimation(this.animationCreate(R.anim.slide_down))
                 Executors.newSingleThreadScheduledExecutor().schedule({
-                    visibility = View.GONE
+                    this.visibility = View.GONE
                 }, 1, TimeUnit.SECONDS)
             }
-            _binding.linearList.visibility = View.VISIBLE
+            _binding.linearList.visibility = View.GONE
         }
 
         _binding.btnAbout.setOnClickListener {
@@ -130,37 +130,22 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                     .toBundle()
             )
         }
+        onSwipeTouchListener =
+            OnSwipeTouchListener(requireContext(), _binding.linearList, _binding.linearListGone)
         onSwipeTouchListener = OnSwipeTouchListener(
             requireContext(),
-            _binding.linearList,
-            arrowView = _binding.btnArrow,
-            viewRecycler = _binding.rvLista
+            _binding.linearInfoMarker,
+            _binding.linearListGone
         )
-        onSwipeTouchListener =
-            OnSwipeTouchListener(requireContext(), _binding.linearInfoMarker, _binding.linearList)
 
         _binding.btnArrow.setOnClickListener {
-            if (_binding.rvLista.visibility == View.GONE) {
-                _binding.linearList.startAnimation(_binding.linearList.animationCreate(R.anim.slide_up))
-                _binding.linearList.resizeLarge()
-                _binding.rvLista.visibility = View.VISIBLE
-                _binding.btnArrow.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        requireContext(),
-                        R.drawable.ic_arrow_down
-                    )
-                )
-            } else {
-                _binding.linearList.startAnimation(_binding.linearList.animationCreate(R.anim.slide_down))
-                _binding.linearList.resizeSmall()
-                _binding.rvLista.visibility = View.GONE
-                _binding.btnArrow.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        requireContext(),
-                        R.drawable.ic_arrow_up
-                    )
-                )
-            }
+            _binding.linearList.startAnimation(_binding.linearList.animationCreate(R.anim.slide_down))
+            _binding.linearList.visibility = View.GONE
+            _binding.linearListGone.visibility = View.VISIBLE
+        }
+        _binding.btnArrowGone.setOnClickListener {
+            _binding.linearList.visibility = View.VISIBLE
+            _binding.linearListGone.visibility = View.GONE
         }
 
         _binding.btnReconnect.setOnClickListener {
@@ -178,14 +163,15 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             configureMarkers(listCitys)
             configureAdapter(listCitys)
             calculateMarkerLocation()
-            if( _binding.btnReconnect.visibility == View.VISIBLE ){
+            if (_binding.btnReconnect.visibility == View.VISIBLE) {
                 _binding.btnReconnect.visibility = View.GONE
             }
         })
         viewModel.errorMessage.observe(requireActivity(), {
             _binding.linearList.visibility = View.GONE
             _binding.btnReconnect.visibility = View.VISIBLE
-            Toast.makeText(requireContext(),getText(R.string.toastErrorNet),Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getText(R.string.toastErrorNet), Toast.LENGTH_SHORT)
+                .show()
         })
         viewModel.getAllCity()
     }
@@ -201,8 +187,11 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         }
         mapView?.getMapAsync(this)
         //Button Center Location:
-        val locationButton = (_binding.mapView.findViewById<View>(Integer.parseInt("1"))?.parent as View).findViewById<View>(Integer.parseInt("2"))
-        val rlp =  locationButton.layoutParams as RelativeLayout.LayoutParams
+        val locationButton =
+            (_binding.mapView.findViewById<View>(Integer.parseInt("1"))?.parent as View).findViewById<View>(
+                Integer.parseInt("2")
+            )
+        val rlp = locationButton.layoutParams as RelativeLayout.LayoutParams
         rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE)
         rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 0)
         rlp.setMargins(0, 160, 30, 0)
@@ -219,27 +208,14 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                 )
                 GoogleMap.setOnMarkerClickListener { maker ->
                     makerLamda(maker.title!!)
-                    if (::cityCloser.isInitialized){
-                        if (cityCloser.description == maker.title){
+                    if (::cityCloser.isInitialized) {
+                        if (cityCloser.description == maker.title) {
                             _binding.tvTitleCity.text = getText(R.string.tvCityCloser)
-                        }else _binding.tvTitleCity.text = getText(R.string.tvCity)
-                    }else{
+                        } else _binding.tvTitleCity.text = getText(R.string.tvCity)
+                    } else {
                         _binding.tvTitleCity.text = getText(R.string.tvCity)
                     }
                     true
-                }
-            }
-        }
-        if (::GoogleMap.isInitialized) {
-            GoogleMap.setOnMapClickListener {
-                if (_binding.linearInfoMarker.visibility == View.VISIBLE) {
-                    _binding.linearInfoMarker.apply {
-                        _binding.linearInfoMarker.startAnimation(this.animationCreate(R.anim.slide_down))
-                        Executors.newSingleThreadScheduledExecutor().schedule({
-                            visibility = View.GONE
-                        }, 1, TimeUnit.SECONDS)
-                    }
-                    _binding.linearList.visibility = View.VISIBLE
                 }
             }
         }
@@ -304,9 +280,9 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
                 return
-            }else{
+            } else {
                 fusedLocationClient.lastLocation.addOnSuccessListener { position ->
-                    if (position != null){
+                    if (position != null) {
                         lastLocation = position
                         calculateMarkerLocation()
                     }
@@ -316,28 +292,38 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    private fun calculateMarkerLocation(){
-        if (::lastLocation.isInitialized){
-            val miPos = LatLng(lastLocation.latitude,lastLocation.longitude)
-            var  posicionMasCercana = LatLng(0.0, 0.0)
+    private fun calculateMarkerLocation() {
+        if (::lastLocation.isInitialized) {
+            val miPos = LatLng(lastLocation.latitude, lastLocation.longitude)
+            var posicionMasCercana = LatLng(0.0, 0.0)
             var distanciaActual = Double.MAX_VALUE;
 
-            for(x in listCitys) {
-                var  distancia = SphericalUtil.computeDistanceBetween(miPos,LatLng(x.latitude,x.longitude));
+            for (x in listCitys) {
+                var distancia =
+                    SphericalUtil.computeDistanceBetween(miPos, LatLng(x.latitude, x.longitude));
                 if (distanciaActual > distancia) {
-                    posicionMasCercana = LatLng(x.latitude,x.longitude)
+                    posicionMasCercana = LatLng(x.latitude, x.longitude)
                     distanciaActual = distancia;
                 }
             }
-            val cerca = listCitys.find { it.latitude == posicionMasCercana.latitude && it.longitude == posicionMasCercana.longitude }
+            val cerca =
+                listCitys.find { it.latitude == posicionMasCercana.latitude && it.longitude == posicionMasCercana.longitude }
             if (cerca != null) {
                 cityCloser = cerca
                 makerLamda(cerca.description)
-                GoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(cerca.latitude,cerca.longitude), 13f))
+                GoogleMap.animateCamera(
+                    CameraUpdateFactory.newLatLngZoom(
+                        LatLng(
+                            cerca.latitude,
+                            cerca.longitude
+                        ), 13f
+                    )
+                )
                 _binding.tvTitleCity.text = getText(R.string.tvCityCloser)
             }
         }
     }
+
     override fun onResume() {
         super.onResume()
         mapView?.onResume()

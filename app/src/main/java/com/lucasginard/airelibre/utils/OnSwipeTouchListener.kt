@@ -1,6 +1,7 @@
 package com.lucasginard.airelibre.utils
 
 import android.content.Context
+import android.util.Log
 import android.view.MotionEvent
 import android.view.GestureDetector
 import android.view.GestureDetector.SimpleOnGestureListener
@@ -13,7 +14,7 @@ import java.lang.Exception
 import kotlin.math.abs
 
 
-class OnSwipeTouchListener internal constructor(ctx: Context, val mainView: View,val viewList:View ?=null,val arrowView:ImageView ?=null,val viewRecycler:View ?=null) :
+class OnSwipeTouchListener internal constructor(ctx: Context, val mainView: View,val viewList:View ?=null) :
     View.OnTouchListener {
     private val gestureDetector: GestureDetector
     var context: Context
@@ -72,25 +73,17 @@ class OnSwipeTouchListener internal constructor(ctx: Context, val mainView: View
     }
 
     fun onSwipeTop() {
-        if (mainView.height <= 340 && mainView.id == 2131296757){
+        if (mainView.id == 2131296757){
             mainView.startAnimation(mainView.animationCreate(R.anim.slide_up))
             mainView.resizeLarge()
             onSwipe?.swipeTop()
-            viewRecycler?.visibility = View.VISIBLE
-            arrowView?.setImageDrawable( ContextCompat.getDrawable(context,R.drawable.ic_arrow_down))
         }
     }
 
     fun onSwipeBottom() {
         mainView.startAnimation(mainView.animationCreate(R.anim.slide_down))
-        if (mainView.id == 2131296757){
-            mainView.resizeSmall()
-            viewRecycler?.visibility = View.GONE
-            arrowView?.setImageDrawable( ContextCompat.getDrawable(context,R.drawable.ic_arrow_up))
-        }else{
-            mainView.visibility = View.GONE
-            viewList?.visibility = View.VISIBLE
-        }
+        mainView.visibility = View.GONE
+        viewList?.visibility = View.VISIBLE
         onSwipe?.swipeBottom()
     }
 
