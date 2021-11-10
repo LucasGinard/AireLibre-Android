@@ -97,6 +97,10 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         adapter = AdapterCityList(arrayList, this, GoogleMap)
         _binding.rvLista.layoutManager = LinearLayoutManager(requireContext())
         _binding.rvLista.adapter = adapter
+        if(::lastLocation.isInitialized){
+            adapter.lastLocation = lastLocation
+            adapter.notifyDataSetChanged()
+        }
     }
 
     private fun configureOnClickListeners() {
@@ -162,7 +166,6 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             listCitys.addAll(it)
             configureMarkers(listCitys)
             configureAdapter(listCitys)
-            calculateMarkerLocation()
             if (_binding.btnReconnect.visibility == View.VISIBLE) {
                 _binding.btnReconnect.visibility = View.GONE
             }
@@ -285,6 +288,10 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                     if (position != null) {
                         lastLocation = position
                         calculateMarkerLocation()
+                        if(::lastLocation.isInitialized && ::adapter.isInitialized){
+                            adapter.lastLocation = lastLocation
+                            adapter.notifyDataSetChanged()
+                        }
                     }
                 }
                 GoogleMap.isMyLocationEnabled = true
