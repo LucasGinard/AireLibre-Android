@@ -166,6 +166,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             listCitys.addAll(it)
             configureMarkers(listCitys)
             configureAdapter(listCitys)
+            calculateMarkerLocation()
             if (_binding.btnReconnect.visibility == View.VISIBLE) {
                 _binding.btnReconnect.visibility = View.GONE
             }
