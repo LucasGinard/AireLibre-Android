@@ -55,8 +55,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     private var listCitys = ArrayList<CityResponse>()
     val makerLamda = fun(maker: String) {
         _binding.linearInfoMarker.visibility = View.VISIBLE
-        _binding.linearList.visibility = View.GONE
-        _binding.linearListGone.visibility = View.VISIBLE
+        if(_binding.linearList.visibility == View.GONE) _binding.linearList.visibility = View.INVISIBLE
         _binding.linearInfoMarker.startAnimation(
             _binding.linearInfoMarker.animationCreate(
                 R.anim.slide_up
