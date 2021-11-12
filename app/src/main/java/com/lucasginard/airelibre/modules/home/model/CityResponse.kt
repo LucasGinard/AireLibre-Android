@@ -9,6 +9,7 @@ data class CityResponse(
     @SerializedName("longitude") var longitude: Double,
     @SerializedName("latitude") var latitude: Double,
     @SerializedName("quality") var quality: Quality,
+    var distance: Float?=null,
 )
 
 data class Quality (

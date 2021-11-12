@@ -155,6 +155,10 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         _binding.btnReconnect.setOnClickListener {
             configureService()
         }
+
+        _binding.btnOrderList.setOnClickListener {
+            adapter.orderList()
+        }
     }
 
     private fun configureService() {

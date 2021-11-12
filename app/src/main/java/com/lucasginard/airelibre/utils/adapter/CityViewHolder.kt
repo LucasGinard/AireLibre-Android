@@ -1,6 +1,5 @@
 package com.lucasginard.airelibre.utils.adapter
 
-import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -15,18 +14,19 @@ class CityViewHolder (view: View): RecyclerView.ViewHolder(view) {
 
     private val binding = ItemCityBinding.bind(view)
 
-    fun bind(local: CityResponse, fragment: HomeFragment, maps: GoogleMap, distance: String){
+    fun bind(local: CityResponse, fragment: HomeFragment, maps: GoogleMap){
         binding.tvTitleCity.text = local.description
         fragment.textsAQI(null, binding.stateIcon,binding.tvAQI,local.quality.index)
         binding.tvLink.setOnClickListener {
             maps.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(local.latitude,local.longitude), 13f))
             fragment.makerLamda(local.description)
         }
-        if (distance == ""){
+        if (local.distance == 0.0F || local.distance == null){
             binding.tvDistance.visibility = View.INVISIBLE
             binding.tvSensorTitle.visibility = View.INVISIBLE
         }else{
-            binding.tvDistance.visibility = View.VISIBLE
+            var distance = local.distance.toString().substring(0,2)
+            if (distance.last() == '.')  distance = distance.replace('.',' ')
             binding.tvDistance.text = "$distance Km"
         }
     }

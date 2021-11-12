@@ -1,6 +1,7 @@
 package com.lucasginard.airelibre.utils.adapter
 
 import android.location.Location
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -21,21 +22,30 @@ class AdapterCityList(var cityList: ArrayList<CityResponse>,val fragment: HomeFr
     override fun onBindViewHolder(holder: CityViewHolder, position: Int) {
         val item = cityList[position]
         val distance = calculateDistance(LatLng(item.latitude,item.longitude),lastLocation)
-        holder.bind(item,fragment,maps,distance)
+        item.distance = distance
+        holder.bind(item,fragment,maps)
+
     }
 
     override fun getItemCount(): Int = cityList.size
 
-    fun calculateDistance(Maker: LatLng, lastLocation: Location?=null):String{
+    private fun calculateDistance(Maker: LatLng, lastLocation: Location?=null):Float{
         return if (lastLocation != null){
-            val deciF =  DecimalFormat("#,###")
             val locationMaker = Location("Maker")
             locationMaker.latitude = Maker.latitude
             locationMaker.longitude = Maker.longitude
-            val distance = lastLocation.distanceTo(locationMaker)
-            deciF.format(distance).substring(0,3)
+            lastLocation.distanceTo(locationMaker)/1000
         }else{
-            ""
+            0.0F
         }
+    }
+
+    fun orderList(){
+        val aux = cityList.sortedBy { it.distance }
+        Log.d("testOrder", cityList[0].distance.toString())
+        cityList.clear()
+        cityList.addAll(aux)
+        Log.d("testOrder","Ordenado: "+ cityList[0].distance.toString())
+        notifyDataSetChanged()
     }
 }
