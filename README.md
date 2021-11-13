@@ -1,5 +1,5 @@
 # 🍃AireLibre-Android🍃
-## 👨🏽‍💻Hackathon: AristComp 2021
+## 👨🏽‍💻Hackathon: AristiComp 2021
 
 ### 🙌🏼Temática: Ayudar
 
