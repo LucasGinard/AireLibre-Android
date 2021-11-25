@@ -24,7 +24,6 @@ import com.lucasginard.airelibre.R
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import com.google.maps.android.SphericalUtil
 import com.lucasginard.airelibre.databinding.FragmentHomeBinding
 import com.lucasginard.airelibre.modules.about.AboutActivity
 import com.lucasginard.airelibre.modules.data.APIService
@@ -62,13 +61,23 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             )
         )
         val cityObject = listCitys.find { it.description == maker }
-        _binding.tvCiudad.text = cityObject?.description
-        cityObject?.quality?.index?.let {
-            this.textsAQI(
-                _binding.tvDescripcion,
-                _binding.iconInfo,
-                _binding.tvQquality,
-                it
+        if (cityObject != null){
+            _binding.tvCiudad.text = cityObject.description
+            cityObject.quality.index.let {
+                this.textsAQI(
+                    _binding.tvDescripcion,
+                    _binding.iconInfo,
+                    _binding.tvQquality,
+                    it
+                )
+            }
+            GoogleMap.animateCamera(
+                CameraUpdateFactory.newLatLngZoom(
+                    LatLng(
+                        cityObject.latitude,
+                        cityObject.longitude
+                    ), 13f
+                )
             )
         }
     }
@@ -96,10 +105,6 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         adapter = AdapterCityList(arrayList, this, GoogleMap)
         _binding.rvLista.layoutManager = LinearLayoutManager(requireContext())
         _binding.rvLista.adapter = adapter
-        if(::lastLocation.isInitialized){
-            adapter.lastLocation = lastLocation
-            adapter.notifyDataSetChanged()
-        }
     }
 
     private fun configureOnClickListeners() {
@@ -292,10 +297,6 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                     if (position != null) {
                         lastLocation = position
                         calculateMarkerLocation()
-                        if(::lastLocation.isInitialized && ::adapter.isInitialized){
-                            adapter.lastLocation = lastLocation
-                            adapter.notifyDataSetChanged()
-                        }
                     }
                 }
                 GoogleMap.isMyLocationEnabled = true
@@ -305,32 +306,28 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
     private fun calculateMarkerLocation() {
         if (::lastLocation.isInitialized) {
-            val miPos = LatLng(lastLocation.latitude, lastLocation.longitude)
+            var distanceMarker = Location("Distance")
             var posicionMasCercana = LatLng(0.0, 0.0)
             var distanciaActual = Double.MAX_VALUE;
 
             for (x in listCitys) {
-                var distancia =
-                    SphericalUtil.computeDistanceBetween(miPos, LatLng(x.latitude, x.longitude));
+                distanceMarker.longitude = x.longitude
+                distanceMarker.latitude = x.latitude
+                var distancia = lastLocation.distanceTo(distanceMarker)
+                x.distance = distancia/1000
                 if (distanciaActual > distancia) {
                     posicionMasCercana = LatLng(x.latitude, x.longitude)
-                    distanciaActual = distancia;
+                    distanciaActual = distancia.toDouble();
                 }
             }
-            val cerca =
-                listCitys.find { it.latitude == posicionMasCercana.latitude && it.longitude == posicionMasCercana.longitude }
+            val cerca = listCitys.find { it.latitude == posicionMasCercana.latitude && it.longitude == posicionMasCercana.longitude }
             if (cerca != null) {
                 cityCloser = cerca
                 makerLamda(cerca.description)
-                GoogleMap.animateCamera(
-                    CameraUpdateFactory.newLatLngZoom(
-                        LatLng(
-                            cerca.latitude,
-                            cerca.longitude
-                        ), 13f
-                    )
-                )
                 _binding.tvTitleCity.text = getText(R.string.tvCityCloser)
+            }
+            if (::adapter.isInitialized){
+                adapter.orderList()
             }
         }
     }

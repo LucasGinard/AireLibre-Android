@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat.startActivity
 import com.lucasginard.airelibre.R
 import com.lucasginard.airelibre.modules.about.ui.theme.AireLibreTheme
+import com.lucasginard.airelibre.utils.goToURL
 
 class AboutActivity : ComponentActivity() {
 
@@ -51,7 +52,7 @@ class AboutActivity : ComponentActivity() {
 fun Greeting(activity: AboutActivity = AboutActivity()) {
     val fonts = FontFamily(
         Font(R.font.disket_bold, weight = FontWeight.Bold),
-        Font(R.font.disket_regular, weight = FontWeight.Normal)
+        Font(R.font.rubik_regular, weight = FontWeight.Normal)
     )
     val context = LocalContext.current
     Column(
@@ -110,11 +111,11 @@ fun Greeting(activity: AboutActivity = AboutActivity()) {
             modifier = Modifier
                 .clickable(
                     onClick = {
-                        val intent = Intent(
-                            Intent.ACTION_VIEW,
-                            Uri.parse("https://github.com/melizeche/AireLibre/#faq")
+                        val intent = Intent()
+                        intent.goToURL(
+                            url = "https://github.com/melizeche/AireLibre/#faq",
+                            context = context
                         )
-                        startActivity(context, intent, null)
                     }
                 )
                 .paddingFromBaseline(top = 30.dp)
@@ -142,7 +143,6 @@ fun Greeting(activity: AboutActivity = AboutActivity()) {
                 modifier = Modifier.then(Modifier.size(60.dp)),
                 painter = painterResource(id = R.drawable.ic_back),
                 contentDescription = "onBack",
-                tint = Color.Blue
             )
         }
     }
