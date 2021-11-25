@@ -26,10 +26,8 @@ class AdapterCityList(var cityList: ArrayList<CityResponse>,val fragment: HomeFr
 
     fun orderList(){
         val aux = cityList.sortedBy { it.distance }
-        Log.d("testOrder", cityList[0].distance.toString())
         cityList.clear()
         cityList.addAll(aux)
-        Log.d("testOrder","Ordenado: "+ cityList[0].distance.toString())
         notifyDataSetChanged()
     }
 }

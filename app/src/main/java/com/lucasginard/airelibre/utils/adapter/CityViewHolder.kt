@@ -25,8 +25,7 @@ class CityViewHolder (view: View): RecyclerView.ViewHolder(view) {
             binding.tvDistance.visibility = View.INVISIBLE
             binding.tvSensorTitle.visibility = View.INVISIBLE
         }else{
-            var distance = local.distance.toString().substring(0,2)
-            if (distance.last() == '.')  distance = distance.replace('.',' ')
+            val distance = local.distance.toString().substringBefore(".")
             binding.tvDistance.text = "$distance Km"
         }
     }
