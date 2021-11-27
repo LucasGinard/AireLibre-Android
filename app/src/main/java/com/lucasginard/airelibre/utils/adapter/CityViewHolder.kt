@@ -14,19 +14,28 @@ class CityViewHolder (view: View): RecyclerView.ViewHolder(view) {
 
     private val binding = ItemCityBinding.bind(view)
 
-    fun bind(local: CityResponse, fragment: HomeFragment, maps: GoogleMap){
+    fun bind(local: CityResponse, fragment: HomeFragment, maps: GoogleMap?=null){
         binding.tvTitleCity.text = local.description
         fragment.textsAQI(null, binding.stateIcon,binding.tvAQI,local.quality.index)
         binding.tvLink.setOnClickListener {
-            maps.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(local.latitude,local.longitude), 13f))
+            maps?.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(local.latitude,local.longitude), 13f))
             fragment.makerLamda(local.description)
         }
         if (local.distance == 0.0F || local.distance == null){
             binding.tvDistance.visibility = View.INVISIBLE
             binding.tvSensorTitle.visibility = View.INVISIBLE
         }else{
-            val distance = local.distance.toString().substringBefore(".")
-            binding.tvDistance.text = "$distance Km"
+            var distance = ""
+            var distanceType = ""
+            distance = if (local.distance!! < 1F){
+                val converMeter = local.distance!! * 1000
+                distanceType ="metros"
+                converMeter.toString().substringBefore(".")
+            }else{
+                distanceType ="km"
+                local.distance.toString().substringBefore(".")
+            }
+            binding.tvDistance.text = "$distance $distanceType"
         }
     }
 }

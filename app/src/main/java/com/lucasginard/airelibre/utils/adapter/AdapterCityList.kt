@@ -1,6 +1,5 @@
 package com.lucasginard.airelibre.utils.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -9,7 +8,7 @@ import com.lucasginard.airelibre.R
 import com.lucasginard.airelibre.modules.home.model.CityResponse
 import com.lucasginard.airelibre.modules.home.view.HomeFragment
 
-class AdapterCityList(var cityList: ArrayList<CityResponse>,val fragment: HomeFragment,val maps: GoogleMap) : RecyclerView.Adapter<CityViewHolder>(){
+class AdapterCityList(var cityList: ArrayList<CityResponse>,val fragment: HomeFragment,val maps: GoogleMap?=null) : RecyclerView.Adapter<CityViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CityViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -18,7 +17,11 @@ class AdapterCityList(var cityList: ArrayList<CityResponse>,val fragment: HomeFr
 
     override fun onBindViewHolder(holder: CityViewHolder, position: Int) {
         val item = cityList[position]
-        holder.bind(item,fragment,maps)
+        if (maps != null) {
+            holder.bind(item,fragment,maps)
+        }else{
+            holder.bind(item,fragment)
+        }
 
     }
 
@@ -28,6 +31,5 @@ class AdapterCityList(var cityList: ArrayList<CityResponse>,val fragment: HomeFr
         val aux = cityList.sortedBy { it.distance }
         cityList.clear()
         cityList.addAll(aux)
-        notifyDataSetChanged()
     }
 }

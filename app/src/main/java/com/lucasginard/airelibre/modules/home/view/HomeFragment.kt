@@ -55,6 +55,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     val makerLamda = fun(maker: String) {
         _binding.linearInfoMarker.visibility = View.VISIBLE
         if(_binding.linearList.visibility == View.GONE) _binding.linearList.visibility = View.INVISIBLE
+        if(_binding.linearList.visibility == View.VISIBLE) _binding.linearList.visibility = View.INVISIBLE
         _binding.linearInfoMarker.startAnimation(
             _binding.linearInfoMarker.animationCreate(
                 R.anim.slide_up
@@ -129,6 +130,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                 }, 1, TimeUnit.SECONDS)
             }
             _binding.linearList.visibility = View.GONE
+            _binding.linearListGone.visibility = View.VISIBLE
         }
 
         _binding.btnAbout.setOnClickListener {
@@ -325,9 +327,10 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                 cityCloser = cerca
                 makerLamda(cerca.description)
                 _binding.tvTitleCity.text = getText(R.string.tvCityCloser)
-            }
-            if (::adapter.isInitialized){
-                adapter.orderList()
+                if (::adapter.isInitialized){
+                    adapter.orderList()
+                    adapter.notifyDataSetChanged()
+                }
             }
         }
     }

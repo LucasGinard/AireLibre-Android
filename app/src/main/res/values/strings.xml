@@ -5,6 +5,7 @@
     <!---HomeActivity-->
     <string name="tvCity">Ciudad:</string>
     <string name="tvCityCloser">Ciudad mas cercana:</string>
+    <string name="tvTitleList">Lista de Ciudades:</string>
     <string name="tvEscale">Escala AQI</string>
     <string name="tvStatus">Estado</string>
     <string name="tvDistance">Distancia</string>
@@ -16,7 +17,7 @@
     <string name="emojiPurple">🟣☣️</string>
     <string name="emojiDanger">🟤☠️</string>
     <string name="tvDescriptionGreen">Escaso riesgo de contaminación atmosférica, calidad de aire satisfactoria.</string>
-    <string name="tvDescriptionYellow">Calidad de aire aceptable, riesgo moderado para la salud de personas sensibles.</string>
+    <string name="tvDescriptionYellow">Calidad de aire aceptable, riesgo moderado para la salud de personas sensibles a la contaminación ambiental.</string>
     <string name="tvDescriptionOrange">Insalubre para personas sensibles.</string>
     <string name="tvDescriptionRed">Riesgo general para las personas, efectos más graves en personas sensibles.</string>
     <string name="tvDescriptionPurple">Condición de emergencia.</string>
