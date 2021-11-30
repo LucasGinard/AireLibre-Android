@@ -8,14 +8,17 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
 import android.view.*
+import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.*
@@ -24,6 +27,7 @@ import com.lucasginard.airelibre.R
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.lucasginard.airelibre.databinding.FragmentHomeBinding
 import com.lucasginard.airelibre.modules.about.AboutActivity
 import com.lucasginard.airelibre.modules.data.APIService
@@ -45,17 +49,16 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     private lateinit var GoogleMap: GoogleMap
     private lateinit var lastLocation: Location
     private lateinit var adapter: AdapterCityList
-    private lateinit var onSwipeTouchListener: OnSwipeTouchListener
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var cityCloser: CityResponse
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
+    private lateinit var btnArrow:ImageView
 
     private var mapView: MapView? = null
     private val retrofit = APIService.getInstance()
     private var listCitys = ArrayList<CityResponse>()
     val makerLamda = fun(maker: String) {
         _binding.linearInfoMarker.visibility = View.VISIBLE
-        if(_binding.linearList.visibility == View.GONE) _binding.linearList.visibility = View.INVISIBLE
-        if(_binding.linearList.visibility == View.VISIBLE) _binding.linearList.visibility = View.INVISIBLE
         _binding.linearInfoMarker.startAnimation(
             _binding.linearInfoMarker.animationCreate(
                 R.anim.slide_up
@@ -81,6 +84,10 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                 )
             )
         }
+        if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_EXPANDED) {
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+            btnArrow.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.ic_arrow_up))
+        }
     }
 
     override fun onCreateView(
@@ -104,8 +111,9 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
     private fun configureAdapter(arrayList: ArrayList<CityResponse>) {
         adapter = AdapterCityList(arrayList, this, GoogleMap)
-        _binding.rvLista.layoutManager = LinearLayoutManager(requireContext())
-        _binding.rvLista.adapter = adapter
+        val recycler = _binding.includeS.findViewById<RecyclerView>(R.id.rvLista)
+        recycler.layoutManager = LinearLayoutManager(requireContext())
+        recycler.adapter = adapter
     }
 
     private fun configureOnClickListeners() {
@@ -129,8 +137,6 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                     this.visibility = View.GONE
                 }, 1, TimeUnit.SECONDS)
             }
-            _binding.linearList.visibility = View.GONE
-            _binding.linearListGone.visibility = View.VISIBLE
         }
 
         _binding.btnAbout.setOnClickListener {
@@ -140,30 +146,40 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                     .toBundle()
             )
         }
-        onSwipeTouchListener =
-            OnSwipeTouchListener(requireContext(), _binding.linearList, _binding.linearListGone)
-        onSwipeTouchListener = OnSwipeTouchListener(
-            requireContext(),
-            _binding.linearInfoMarker,
-            _binding.linearListGone
-        )
 
-        _binding.btnArrow.setOnClickListener {
-            _binding.linearList.startAnimation(_binding.linearList.animationCreate(R.anim.slide_down))
-            _binding.linearList.visibility = View.GONE
-            _binding.linearListGone.visibility = View.VISIBLE
-        }
-        _binding.btnArrowGone.setOnClickListener {
-            _binding.linearList.visibility = View.VISIBLE
-            _binding.linearListGone.visibility = View.GONE
-        }
 
         _binding.btnReconnect.setOnClickListener {
             configureService()
         }
 
-        _binding.btnOrderList.setOnClickListener {
-            adapter.orderList()
+
+        bottomSheetBehavior = BottomSheetBehavior.from(_binding.includeS.findViewById(R.id.bottomSheet))
+
+        bottomSheetBehavior.addBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                // handle onSlide
+            }
+
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                if (newState == BottomSheetBehavior.STATE_EXPANDED) {
+                    btnArrow.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.ic_arrow_down))
+                } else {
+                    btnArrow.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.ic_arrow_up))
+                }
+            }
+        })
+        btnArrow = _binding.includeS.findViewById(R.id.btnArrow)
+        btnArrow.setOnClickListener {
+            if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_EXPANDED) {
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                btnArrow.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.ic_arrow_up))
+            } else {
+                btnArrow.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.ic_arrow_down))
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+
+            }
         }
     }
 
@@ -182,7 +198,6 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             }
         })
         viewModel.errorMessage.observe(requireActivity(), {
-            _binding.linearList.visibility = View.GONE
             _binding.btnReconnect.visibility = View.VISIBLE
             Toast.makeText(requireContext(), getText(R.string.toastErrorNet), Toast.LENGTH_SHORT)
                 .show()
