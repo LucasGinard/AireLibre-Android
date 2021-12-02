@@ -43,13 +43,15 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
     private lateinit var viewModel: HomeViewModel
     private lateinit var _binding: FragmentHomeBinding
+    private lateinit var adapter: AdapterCityList
+    private lateinit var cityCloser: CityResponse
+    private lateinit var btnArrow:ImageView
+
     private lateinit var GoogleMap: GoogleMap
     private lateinit var lastLocation: Location
-    private lateinit var adapter: AdapterCityList
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private lateinit var cityCloser: CityResponse
+    private lateinit var onSwipeTouchListener: OnSwipeTouchListener
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
-    private lateinit var btnArrow:ImageView
 
     private var mapView: MapView? = null
     private val retrofit = APIService.getInstance()
@@ -83,7 +85,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         }
         if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_EXPANDED) {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-            btnArrow.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.ic_arrow_up))
+            btnArrow.background = ContextCompat.getDrawable(requireContext(),R.drawable.ic_arrow_up)
         }
     }
 
@@ -156,6 +158,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         }
 
 
+        onSwipeTouchListener = OnSwipeTouchListener(requireContext(), _binding.linearInfoMarker)
         bottomSheetBehavior = BottomSheetBehavior.from(_binding.includeS.findViewById(R.id.bottomSheet))
 
         bottomSheetBehavior.addBottomSheetCallback(object :
@@ -167,9 +170,9 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 if (newState == BottomSheetBehavior.STATE_EXPANDED) {
-                    btnArrow.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.ic_arrow_down))
+                    btnArrow.background = ContextCompat.getDrawable(requireContext(),R.drawable.ic_arrow_down)
                 } else {
-                    btnArrow.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.ic_arrow_up))
+                    btnArrow.background = ContextCompat.getDrawable(requireContext(),R.drawable.ic_arrow_up)
                 }
             }
         })
@@ -177,9 +180,9 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         btnArrow.setOnClickListener {
             if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_EXPANDED) {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-                btnArrow.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.ic_arrow_up))
+                btnArrow.background = ContextCompat.getDrawable(requireContext(),R.drawable.ic_arrow_up)
             } else {
-                btnArrow.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.ic_arrow_down))
+                btnArrow.background = ContextCompat.getDrawable(requireContext(),R.drawable.ic_arrow_down)
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
 
             }
@@ -358,10 +361,13 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
     fun mapTheme(){
         if (::GoogleMap.isInitialized && context != null){
+            btnArrow = _binding.includeS.findViewById(R.id.btnArrow)
             if (this.getModeTheme(requireContext())){
                 GoogleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(context, R.raw.mapstyle_night))
+                btnArrow.setTint(R.color.white)
             }else{
                 GoogleMap.mapType = com.google.android.gms.maps.GoogleMap.MAP_TYPE_NORMAL
+                btnArrow.setTint(R.color.black)
             }
         }
     }
