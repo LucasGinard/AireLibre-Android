@@ -22,11 +22,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.*
-import com.google.android.gms.maps.model.BitmapDescriptor
+import com.google.android.gms.maps.model.*
 import com.lucasginard.airelibre.R
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.lucasginard.airelibre.databinding.FragmentHomeBinding
 import com.lucasginard.airelibre.modules.about.AboutActivity
@@ -110,9 +107,15 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun configureAdapter(arrayList: ArrayList<CityResponse>) {
-        adapter = AdapterCityList(arrayList, this, GoogleMap)
+        adapter = if (::GoogleMap.isInitialized){
+            AdapterCityList(arrayList, this, GoogleMap)
+        }else{
+            AdapterCityList(arrayList, this)
+        }
         val recycler = _binding.includeS.findViewById<RecyclerView>(R.id.rvLista)
-        recycler.layoutManager = LinearLayoutManager(requireContext())
+        if (context != null){
+            recycler.layoutManager = LinearLayoutManager(context)
+        }
         recycler.adapter = adapter
     }
 
@@ -269,6 +272,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         val py = LatLng(-25.250, -57.536)
         googleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(py, 10f))
         googleMap?.uiSettings?.isMapToolbarEnabled = true
+        mapTheme()
         updateLocation()
     }
 
@@ -298,25 +302,27 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
 
     private fun updateLocation() {
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
-        if (::GoogleMap.isInitialized) {
-            if (ActivityCompat.checkSelfPermission(
-                    requireContext(),
-                    ACCESS_FINE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                    requireContext(),
-                    ACCESS_COARSE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                return
-            } else {
-                fusedLocationClient.lastLocation.addOnSuccessListener { position ->
-                    if (position != null) {
-                        lastLocation = position
-                        calculateMarkerLocation()
+        if (context != null){
+            fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+            if (::GoogleMap.isInitialized) {
+                if (ActivityCompat.checkSelfPermission(
+                        requireContext(),
+                        ACCESS_FINE_LOCATION
+                    ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                        requireContext(),
+                        ACCESS_COARSE_LOCATION
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
+                    return
+                } else {
+                    fusedLocationClient.lastLocation.addOnSuccessListener { position ->
+                        if (position != null) {
+                            lastLocation = position
+                            calculateMarkerLocation()
+                        }
                     }
+                    GoogleMap.isMyLocationEnabled = true
                 }
-                GoogleMap.isMyLocationEnabled = true
             }
         }
     }
@@ -350,9 +356,20 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
+    fun mapTheme(){
+        if (::GoogleMap.isInitialized && context != null){
+            if (this.getModeTheme(requireContext())){
+                GoogleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(context, R.raw.mapstyle_night))
+            }else{
+                GoogleMap.mapType = com.google.android.gms.maps.GoogleMap.MAP_TYPE_NORMAL
+            }
+        }
+    }
+
     override fun onResume() {
         super.onResume()
         mapView?.onResume()
+        mapTheme()
     }
 
     companion object {

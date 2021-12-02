@@ -2,6 +2,7 @@ package com.lucasginard.airelibre.utils
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.net.Uri
 import android.view.View
 import android.view.ViewGroup
@@ -27,7 +28,22 @@ fun Intent.goToURL(url: String, context: Context) {
     context.startActivity(intent)
 }
 
-fun Fragment.textsAQI(viewDescription: TextView?=null, viewIcon: TextView, viewQuality: TextView, index: Int) {
+fun Fragment.getModeTheme(context: Context):Boolean {
+    val nightModeFlags = context.resources.configuration.uiMode and
+            Configuration.UI_MODE_NIGHT_MASK
+    return when (nightModeFlags) {
+        Configuration.UI_MODE_NIGHT_YES -> true
+        Configuration.UI_MODE_NIGHT_NO -> false
+        else -> false
+    }
+}
+
+fun Fragment.textsAQI(
+    viewDescription: TextView? = null,
+    viewIcon: TextView,
+    viewQuality: TextView,
+    index: Int
+) {
     when (index) {
         in 0..50 -> {
             viewIcon.text = context?.getString(R.string.emojiGreen)
@@ -55,18 +71,4 @@ fun Fragment.textsAQI(viewDescription: TextView?=null, viewIcon: TextView, viewQ
         }
     }
     viewQuality.text = index.toString()
-}
-
-fun View.resizeSmall(){
-    this.updateLayoutParams{
-        this.height = 240
-    }
-    this.requestLayout()
-}
-
-fun View.resizeLarge(){
-    this.updateLayoutParams{
-        this.height = ViewGroup.LayoutParams.FILL_PARENT
-    }
-    this.requestLayout()
 }
