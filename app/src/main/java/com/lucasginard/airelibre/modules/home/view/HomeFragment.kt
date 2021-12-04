@@ -358,7 +358,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    fun mapTheme(){
+    private fun mapTheme(){
         if (::GoogleMap.isInitialized && context != null){
             btnArrow = _binding.coordinatorLayout.findViewById(R.id.btnArrow)
             if (this.getModeTheme(requireContext())){
