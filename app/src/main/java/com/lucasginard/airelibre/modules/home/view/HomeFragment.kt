@@ -114,7 +114,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         }else{
             AdapterCityList(arrayList, this)
         }
-        val recycler = _binding.includeS.findViewById<RecyclerView>(R.id.rvLista)
+        val recycler = _binding.coordinatorLayout.findViewById<RecyclerView>(R.id.rvLista)
         if (context != null){
             recycler.layoutManager = LinearLayoutManager(context)
         }
@@ -159,7 +159,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
 
         onSwipeTouchListener = OnSwipeTouchListener(requireContext(), _binding.linearInfoMarker)
-        bottomSheetBehavior = BottomSheetBehavior.from(_binding.includeS.findViewById(R.id.bottomSheet))
+        bottomSheetBehavior = BottomSheetBehavior.from(_binding.coordinatorLayout.findViewById(R.id.bottomSheet))
 
         bottomSheetBehavior.addBottomSheetCallback(object :
             BottomSheetBehavior.BottomSheetCallback() {
@@ -176,7 +176,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                 }
             }
         })
-        btnArrow = _binding.includeS.findViewById(R.id.btnArrow)
+        btnArrow = _binding.coordinatorLayout.findViewById(R.id.btnArrow)
         btnArrow.setOnClickListener {
             if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_EXPANDED) {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
@@ -353,7 +353,6 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                 _binding.tvTitleCity.text = getText(R.string.tvCityCloser)
                 if (::adapter.isInitialized){
                     adapter.orderList()
-                    adapter.notifyDataSetChanged()
                 }
             }
         }
@@ -361,7 +360,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
     fun mapTheme(){
         if (::GoogleMap.isInitialized && context != null){
-            btnArrow = _binding.includeS.findViewById(R.id.btnArrow)
+            btnArrow = _binding.coordinatorLayout.findViewById(R.id.btnArrow)
             if (this.getModeTheme(requireContext())){
                 GoogleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(context, R.raw.mapstyle_night))
                 btnArrow.setTint(R.color.white)

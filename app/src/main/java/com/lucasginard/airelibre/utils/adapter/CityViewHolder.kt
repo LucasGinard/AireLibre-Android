@@ -21,10 +21,13 @@ class CityViewHolder (view: View): RecyclerView.ViewHolder(view) {
             maps?.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(local.latitude,local.longitude), 13f))
             fragment.makerLamda(local.description)
         }
+
         if (local.distance == 0.0F || local.distance == null){
             binding.tvDistance.visibility = View.INVISIBLE
             binding.tvSensorTitle.visibility = View.INVISIBLE
         }else{
+            binding.tvDistance.visibility = View.VISIBLE
+            binding.tvSensorTitle.visibility = View.VISIBLE
             var distance = ""
             var distanceType = ""
             distance = if (local.distance!! < 1F){

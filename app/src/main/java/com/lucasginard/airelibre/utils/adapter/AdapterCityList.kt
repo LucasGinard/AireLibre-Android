@@ -22,7 +22,6 @@ class AdapterCityList(var cityList: ArrayList<CityResponse>,val fragment: HomeFr
         }else{
             holder.bind(item,fragment)
         }
-
     }
 
     override fun getItemCount(): Int = cityList.size
@@ -31,5 +30,6 @@ class AdapterCityList(var cityList: ArrayList<CityResponse>,val fragment: HomeFr
         val aux = cityList.sortedBy { it.distance }
         cityList.clear()
         cityList.addAll(aux)
+        notifyDataSetChanged()
     }
 }
