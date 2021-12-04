@@ -87,6 +87,13 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
             btnArrow.background = ContextCompat.getDrawable(requireContext(),R.drawable.ic_arrow_up)
         }
+        if (::cityCloser.isInitialized) {
+            if (cityCloser.description == maker) {
+                _binding.tvTitleCity.text = getText(R.string.tvCityCloser)
+            } else _binding.tvTitleCity.text = getText(R.string.tvCity)
+        } else {
+            _binding.tvTitleCity.text = getText(R.string.tvCity)
+        }
     }
 
     override fun onCreateView(
@@ -243,13 +250,6 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                 )
                 GoogleMap.setOnMarkerClickListener { maker ->
                     makerLamda(maker.title!!)
-                    if (::cityCloser.isInitialized) {
-                        if (cityCloser.description == maker.title) {
-                            _binding.tvTitleCity.text = getText(R.string.tvCityCloser)
-                        } else _binding.tvTitleCity.text = getText(R.string.tvCity)
-                    } else {
-                        _binding.tvTitleCity.text = getText(R.string.tvCity)
-                    }
                     true
                 }
             }
