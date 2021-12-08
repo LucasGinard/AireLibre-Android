@@ -1,7 +1,7 @@
 package com.lucasginard.airelibre.modules.about
 
+import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -24,7 +24,6 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat.startActivity
 import com.lucasginard.airelibre.R
 import com.lucasginard.airelibre.modules.about.ui.theme.AireLibreTheme
 import com.lucasginard.airelibre.utils.goToURL
@@ -57,7 +56,7 @@ fun Greeting(activity: AboutActivity = AboutActivity()) {
     val context = LocalContext.current
     Column(
         modifier = Modifier
-            .padding(20.dp)
+            .padding(end = 20.dp, start = 20.dp)
             .fillMaxSize()
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.Center,
@@ -65,72 +64,18 @@ fun Greeting(activity: AboutActivity = AboutActivity()) {
     ) {
         Image(
             modifier = Modifier
-                .padding(20.dp)
+                .padding(top = 0.dp, bottom = 20.dp, end = 20.dp, start = 20.dp)
                 .width(240.dp)
                 .height(240.dp),
             painter = painterResource(id = R.drawable.playstore_icon),
             contentDescription = "Logo APP",
         )
 
-        Text(
-            text = stringResource(id = R.string.whatsIsAireLibre),
-            fontFamily = fonts,
-            fontWeight = FontWeight.Bold
-        )
+        sectionWhatisAire(fonts)
+        sectionSocialMedia(fonts,context)
+        descriptionContributeProject(fonts,context)
+        sectionLicenseLogo(fonts,context)
 
-        Text(
-            text = stringResource(id = R.string.descriptionWhatis),
-            fontFamily = fonts,
-            fontWeight = FontWeight.Normal,
-            fontSize = 14.sp
-        )
-
-        Text(
-            modifier = Modifier.paddingFromBaseline(top = 30.dp),
-            text = stringResource(id = R.string.questionInteresant),
-            fontFamily = fonts,
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center
-        )
-
-        Text(
-            text = stringResource(id = R.string.descriptionInteresant),
-            fontFamily = fonts,
-            fontWeight = FontWeight.Normal,
-            fontSize = 14.sp
-        )
-
-
-        Text(
-            text = stringResource(id = R.string.seeMore),
-            fontFamily = fonts,
-            fontWeight = FontWeight.Bold,
-            color = Color.Blue,
-            style = TextStyle(textDecoration = TextDecoration.Underline),
-            fontSize = 18.sp,
-            modifier = Modifier
-                .clickable(
-                    onClick = {
-                        val intent = Intent()
-                        intent.goToURL(
-                            url = "https://github.com/melizeche/AireLibre/#faq",
-                            context = context
-                        )
-                    }
-                )
-                .paddingFromBaseline(top = 30.dp)
-        )
-        Text(
-            modifier = Modifier.paddingFromBaseline(top = 30.dp),
-            text = stringResource(id = R.string.licenseAireLibre),
-            textAlign = TextAlign.Center
-        )
-
-        Text(
-            modifier = Modifier.paddingFromBaseline(top = 30.dp),
-            text = stringResource(id = R.string.licenseLogo),
-            textAlign = TextAlign.Center
-        )
         IconButton(
             modifier = Modifier
                 .then(Modifier.size(60.dp))
@@ -143,9 +88,150 @@ fun Greeting(activity: AboutActivity = AboutActivity()) {
                 modifier = Modifier.then(Modifier.size(60.dp)),
                 painter = painterResource(id = R.drawable.ic_back),
                 contentDescription = "onBack",
+                tint = MaterialTheme.colors.primary
             )
         }
     }
+}
+
+@Composable
+fun sectionWhatisAire(fontFamily: FontFamily) {
+    Text(
+        text = stringResource(id = R.string.whatsIsAireLibre),
+        fontFamily = fontFamily,
+        fontWeight = FontWeight.Bold,
+        fontSize = 15.sp
+    )
+
+    Text(
+        text = stringResource(id = R.string.descriptionWhatis),
+        fontFamily = fontFamily,
+        fontWeight = FontWeight.Normal,
+        fontSize = 14.sp,
+        textAlign = TextAlign.Center,
+    )
+}
+
+@Composable
+fun sectionSocialMedia(fontFamily: FontFamily,context: Context){
+    Text(
+        modifier = Modifier.paddingFromBaseline(top = 30.dp),
+        text = stringResource(id = R.string.titleSocialMedia),
+        fontFamily = fontFamily,
+        fontWeight = FontWeight.Bold,
+        textAlign = TextAlign.Center,
+        fontSize = 15.sp
+    )
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Image(
+            modifier = Modifier
+                .padding(top = 15.dp,end = 20.dp)
+                .height(45.dp)
+                .clickable (
+                    onClick = {
+                        val intent = Intent()
+                        intent.goToURL(
+                            url = "https://twitter.com/KoaNdeAire",
+                            context = context
+                        )
+                    }
+                ),
+            painter = painterResource(id = R.drawable.ic_twiter),
+            contentDescription = "twitterBot",
+        )
+        Image(
+            modifier = Modifier
+                .padding(top = 15.dp)
+                .height(45.dp)
+                .clickable (
+                    onClick = {
+                        val intent = Intent()
+                        intent.goToURL(
+                            url = "https://airelib.re",
+                            context = context
+                        )
+                    }
+                ),
+            painter = painterResource(id = R.drawable.ic_website),
+            contentDescription = "webSite",
+        )
+    }
+}
+
+@Composable
+fun descriptionContributeProject(fontFamily: FontFamily,context: Context) {
+    Text(
+        modifier = Modifier.paddingFromBaseline(top = 30.dp),
+        text = stringResource(id = R.string.questionInteresant),
+        fontFamily = fontFamily,
+        fontWeight = FontWeight.Bold,
+        textAlign = TextAlign.Center,
+        fontSize = 15.sp
+    )
+
+    Text(
+        text = stringResource(id = R.string.descriptionInteresant),
+        fontFamily = fontFamily,
+        fontWeight = FontWeight.Normal,
+        fontSize = 14.sp,
+        textAlign = TextAlign.Center,
+    )
+    Text(
+        text = stringResource(id = R.string.seeMore),
+        fontFamily = fontFamily,
+        fontWeight = FontWeight.Bold,
+        color = Color.Blue,
+        style = TextStyle(textDecoration = TextDecoration.Underline),
+        fontSize = 18.sp,
+        modifier = Modifier
+            .clickable(
+                onClick = {
+                    val intent = Intent()
+                    intent.goToURL(
+                        url = "https://github.com/melizeche/AireLibre/#faq",
+                        context = context
+                    )
+                }
+            )
+            .paddingFromBaseline(top = 30.dp)
+    )
+}
+
+@Composable
+fun sectionLicenseLogo(fontFamily: FontFamily,context: Context){
+    Text(
+        modifier = Modifier.paddingFromBaseline(top = 30.dp),
+        text = stringResource(id = R.string.licenseAireLibre),
+        textAlign = TextAlign.Center
+    )
+    Text(
+        text = stringResource(id = R.string.TitlelicenseLogo),
+        textAlign = TextAlign.Center ,
+        fontFamily = fontFamily,
+        fontWeight = FontWeight.Bold,
+        fontSize = 14.sp,
+        modifier = Modifier.paddingFromBaseline(top = 30.dp)
+    )
+    Text(
+        text = stringResource(id = R.string.desciptionlicenseLogo),
+        textAlign = TextAlign.Center,
+        fontFamily = fontFamily,
+        fontWeight = FontWeight.Bold,
+        color = Color.Blue,
+        fontSize = 14.sp,
+        style = TextStyle(textDecoration = TextDecoration.Underline),
+        modifier = Modifier.clickable(
+            onClick = {
+                val intent = Intent()
+                intent.goToURL(
+                    url = "https://www.freepik.es/vector-gratis/familia-activa-feliz-caminando-al-aire-libre_7732632.htm",
+                    context = context
+                )
+            }
+        )
+    )
 }
 
 @Preview(showBackground = true)

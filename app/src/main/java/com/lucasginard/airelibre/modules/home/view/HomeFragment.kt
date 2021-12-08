@@ -332,14 +332,14 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
     private fun calculateMarkerLocation() {
         if (::lastLocation.isInitialized) {
-            var distanceMarker = Location("Distance")
+            val distanceMarker = Location("Distance")
             var posicionMasCercana = LatLng(0.0, 0.0)
             var distanciaActual = Double.MAX_VALUE;
 
             for (x in listCitys) {
                 distanceMarker.longitude = x.longitude
                 distanceMarker.latitude = x.latitude
-                var distancia = lastLocation.distanceTo(distanceMarker)
+                val distancia = lastLocation.distanceTo(distanceMarker)
                 x.distance = distancia/1000
                 if (distanciaActual > distancia) {
                     posicionMasCercana = LatLng(x.latitude, x.longitude)

@@ -30,8 +30,10 @@
     <string name="questionInteresant">¿Querés saber más sobre el proyecto?</string>
     <string name="descriptionInteresant">Si querés colaborar,aprender a construir tu propio sensor, o saber en que se diferencia con otros proyectos similares Entrá:</string>
     <string name="seeMore">Ver proyecto</string>
-    <string name="licenseAireLibre">AireLibre es un proyecto libre y de código abierto bajo licencia AGPLv3.</string>
-    <string name="licenseLogo">Imagen Ilustrativa original de:\npch.vector - www.freepik.es.</string>
+    <string name="licenseAireLibre">AireLibre es un proyecto libre y de código abierto bajo licencia AGPLv3📜.</string>
+    <string name="TitlelicenseLogo">Imagen Ilustrativa original de:</string>
+    <string name="desciptionlicenseLogo">pch.vector - www.freepik.es</string>
+    <string name="titleSocialMedia">Mantente al tanto de la contaminación del Aire en:</string>
 
     <!---recyclerView-->
     <string name="tvLinkGo"><u>Ver mas</u></string>
