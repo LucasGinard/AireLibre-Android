@@ -1,5 +1,6 @@
 package com.lucasginard.airelibre.modules.about
 
+import android.app.ActivityOptions
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -26,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.lucasginard.airelibre.R
 import com.lucasginard.airelibre.modules.about.ui.theme.AireLibreTheme
+import com.lucasginard.airelibre.modules.home.view.MainActivity
 import com.lucasginard.airelibre.utils.goToURL
 
 class AboutActivity : ComponentActivity() {
@@ -39,11 +41,6 @@ class AboutActivity : ComponentActivity() {
                 }
             }
         }
-    }
-
-    override fun finish() {
-        super.finish()
-        overridePendingTransition(R.anim.fade_in,R.anim.fade_out)
     }
 }
 
@@ -81,12 +78,16 @@ fun Greeting(activity: AboutActivity = AboutActivity()) {
                 .then(Modifier.size(60.dp))
                 .padding(top = 15.dp),
             onClick = {
-                activity.finish()
+                activity.startActivity(
+                    Intent(activity, MainActivity::class.java),
+                    ActivityOptions.makeCustomAnimation(activity, R.anim.slide_in_right, R.anim.slide_out_left)
+                        .toBundle()
+                )
             },
         ) {
             Icon(
                 modifier = Modifier.then(Modifier.size(60.dp)),
-                painter = painterResource(id = R.drawable.ic_back),
+                painter = painterResource(id = R.drawable.ic_arrow_right),
                 contentDescription = "onBack",
                 tint = MaterialTheme.colors.primary
             )

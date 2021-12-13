@@ -154,7 +154,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         _binding.btnAbout.setOnClickListener {
             activity?.startActivity(
                 Intent(activity, AboutActivity::class.java),
-                ActivityOptions.makeCustomAnimation(activity, R.anim.fade_in, R.anim.fade_out)
+                ActivityOptions.makeCustomAnimation(activity, R.anim.slide_left, R.anim.slide_right)
                     .toBundle()
             )
         }
