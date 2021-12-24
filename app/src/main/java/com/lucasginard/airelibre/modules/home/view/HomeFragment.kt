@@ -27,6 +27,7 @@ import com.lucasginard.airelibre.R
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.lucasginard.airelibre.databinding.FragmentHomeBinding
 import com.lucasginard.airelibre.modules.about.AboutActivity
+import com.lucasginard.airelibre.modules.config.ConfigActivity
 import com.lucasginard.airelibre.modules.data.APIService
 import com.lucasginard.airelibre.modules.home.domain.HomeRepository
 import com.lucasginard.airelibre.modules.home.model.CityResponse
@@ -56,6 +57,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     private var mapView: MapView? = null
     private val retrofit = APIService.getInstance()
     private var listCitys = ArrayList<CityResponse>()
+    private var flatPermisson = false
     val makerLamda = fun(maker: String) {
         _binding.linearInfoMarker.visibility = View.VISIBLE
         _binding.linearInfoMarker.startAnimation(
@@ -142,13 +144,13 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             }
         }
 
-        _binding.btnClose.setOnClickListener {
-            _binding.linearInfoMarker.apply {
-                _binding.linearInfoMarker.startAnimation(this.animationCreate(R.anim.slide_down))
-                Executors.newSingleThreadScheduledExecutor().schedule({
-                    this.visibility = View.GONE
-                }, 1, TimeUnit.SECONDS)
-            }
+        _binding.btnConfig.setOnClickListener {
+            activity?.startActivity(
+                Intent(activity, ConfigActivity::class.java)
+                    .putExtra("flatPermission",flatPermisson),
+                ActivityOptions.makeCustomAnimation(activity, R.anim.slide_in_right, R.anim.slide_out_left)
+                    .toBundle()
+            )
         }
 
         _binding.btnAbout.setOnClickListener {
@@ -157,6 +159,15 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                 ActivityOptions.makeCustomAnimation(activity, R.anim.slide_left, R.anim.slide_right)
                     .toBundle()
             )
+        }
+
+        _binding.btnClose.setOnClickListener {
+            _binding.linearInfoMarker.apply {
+                _binding.linearInfoMarker.startAnimation(this.animationCreate(R.anim.slide_down))
+                Executors.newSingleThreadScheduledExecutor().schedule({
+                    this.visibility = View.GONE
+                }, 1, TimeUnit.SECONDS)
+            }
         }
 
 
@@ -283,15 +294,17 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         val locationPermissionRequest = registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions()
         ) { permissions ->
-            when {
+            flatPermisson = when {
                 permissions.getOrDefault(ACCESS_FINE_LOCATION, false) -> {
                     updateLocation()
+                    true
                 }
                 permissions.getOrDefault(ACCESS_COARSE_LOCATION, false) -> {
                     updateLocation()
+                    true
                 }
                 else -> {
-
+                    false
                 }
             }
         }

@@ -42,6 +42,14 @@ class AboutActivity : ComponentActivity() {
             }
         }
     }
+
+    override fun onBackPressed() {
+        startActivity(
+            Intent(this, MainActivity::class.java),
+            ActivityOptions.makeCustomAnimation(this, R.anim.slide_in_right, R.anim.slide_out_left)
+                .toBundle()
+        )
+    }
 }
 
 @Composable

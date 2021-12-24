@@ -37,5 +37,6 @@
 
     <!---recyclerView-->
     <string name="tvLinkGo"><u>Ver mas</u></string>
+    <string name="title_activity_config">ConfigActivity</string>
 
 </resources>

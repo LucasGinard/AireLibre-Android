@@ -61,6 +61,20 @@
             app:tint="@color/white"
             tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
+        <ImageButton
+            android:id="@+id/btnConfig"
+            android:layout_width="35dp"
+            android:layout_height="30dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/app_name"
+            android:scaleType="centerCrop"
+            android:src="@drawable/icon_config"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tvTitle"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/white"
+            tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
