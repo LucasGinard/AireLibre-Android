@@ -142,7 +142,7 @@ fun sectionSocialMedia(fontFamily: FontFamily,context: Context){
                     onClick = {
                         val intent = Intent()
                         intent.goToURL(
-                            url = "https://twitter.com/KoaNdeAire",
+                            url = context.getString(R.string.linkTwitter),
                             context = context
                         )
                     }
@@ -158,7 +158,7 @@ fun sectionSocialMedia(fontFamily: FontFamily,context: Context){
                     onClick = {
                         val intent = Intent()
                         intent.goToURL(
-                            url = "https://airelib.re",
+                            url = context.getString(R.string.linkWebsite),
                             context = context
                         )
                     }
@@ -199,7 +199,7 @@ fun descriptionContributeProject(fontFamily: FontFamily,context: Context) {
                 onClick = {
                     val intent = Intent()
                     intent.goToURL(
-                        url = "https://github.com/melizeche/AireLibre/#faq",
+                        url = context.getString(R.string.linkGitHub),
                         context = context
                     )
                 }
@@ -235,7 +235,7 @@ fun sectionLicenseLogo(fontFamily: FontFamily,context: Context){
             onClick = {
                 val intent = Intent()
                 intent.goToURL(
-                    url = "https://www.freepik.es/vector-gratis/familia-activa-feliz-caminando-al-aire-libre_7732632.htm",
+                    url = context.getString(R.string.linkIcon),
                     context = context
                 )
             }

@@ -39,4 +39,10 @@
     <string name="tvLinkGo"><u>Ver mas</u></string>
     <string name="title_activity_config">ConfigActivity</string>
 
+    <!---links-->
+    <string name="linkIcon">https://www.freepik.es/vector-gratis/familia-activa-feliz-caminando-al-aire-libre_7732632.htm</string>
+    <string name="linkTwitter">https://twitter.com/KoaNdeAire</string>
+    <string name="linkWebsite">https://airelib.re</string>
+    <string name="linkGitHub">https://github.com/melizeche/AireLibre/#faq</string>
+
 </resources>
