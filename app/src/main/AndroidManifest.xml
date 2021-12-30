@@ -14,6 +14,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AireLibre">
         <activity
+            android:name=".modules.config.ConfigActivity"
+            android:exported="true"
+            android:label="@string/title_activity_config"
+            android:theme="@style/Theme.AireLibre.NoActionBar" />
+        <activity
             android:name=".modules.about.AboutActivity"
             android:exported="true"
             android:theme="@style/Theme.AireLibre.NoActionBar" />
@@ -29,7 +34,7 @@
         </activity>
         <activity
             android:name=".modules.home.view.MainActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
