@@ -11,15 +11,14 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
@@ -28,6 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import com.lucasginard.airelibre.R
@@ -220,10 +220,64 @@ class ConfigActivity : ComponentActivity() {
     @Composable
     private fun sectionSwitchTheme(fonts: FontFamily) {
         var checkedState = remember { mutableStateOf(false) }
-        //checkedState.value = checkPermissionLocation()
         Row(
             Modifier.padding(top = 10.dp, bottom = 10.dp)
         ) {
+            var openDialog = remember { mutableStateOf(false) }
+            if (openDialog.value) {
+                Dialog(onDismissRequest = { openDialog.value = false }) {
+                    Card(
+                        shape = RoundedCornerShape(8.dp),
+                        backgroundColor = MaterialTheme.colors.surface,
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .padding(16.dp),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ){
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Icon(
+                                    modifier = Modifier
+                                        .width(40.dp)
+                                        .height(40.dp)
+                                        .padding(end = 5.dp),
+                                    painter = painterResource(id = R.drawable.ic_theme_mode),
+                                    contentDescription = "logoTheme",
+                                    tint = MaterialTheme.colors.primary
+                                )
+                                Text(
+                                    text = "Actualmente la App detecta la configuracion del dispositivo \nsi cambia se mantendra el ajuste",
+                                    fontFamily = fonts,
+                                    fontWeight = FontWeight.Normal
+                                )
+                            }
+                            OutlinedButton(
+                                modifier = Modifier.fillMaxWidth()
+                                    .padding(top = 15.dp),
+                                onClick = {
+                                    viewModel.setFlatTheme(true)
+                                    checkedState.value = !checkedState.value
+                                    switchTheme(checkedState.value)
+                                    openDialog.value = false
+                                }) {
+                                Text(text = "Aceptar")
+                            }
+
+                            OutlinedButton(
+                                modifier = Modifier.fillMaxWidth()
+                                    .padding(top = 5.dp),
+                                onClick = {
+                                    openDialog.value = false
+                                }) {
+                                Text(text = "Cancelar")
+                            }
+                        }
+                    }
+                }
+            }
             Image(
                 painter = painterResource(id = R.drawable.ic_theme_mode),
                 contentDescription = "iconLocation",
@@ -240,21 +294,30 @@ class ConfigActivity : ComponentActivity() {
                     .align(alignment = Alignment.CenterVertically)
                     .padding(end = 5.dp)
             )
-            if (!viewModel.getFlatTheme()){
-                checkedState.value = isSystemInDarkTheme()
-            }else{
-                checkedState.value = viewModel.getTheme()
-            }
+            checkSwitchTheme(checkedState)
             Switch(
                 checked = checkedState.value,
                 onCheckedChange = {
-                    checkedState.value = it
-                    switchTheme(it)
+                    if (!viewModel.getFlatTheme()){
+                        openDialog.value = true
+                    }else{
+                        checkedState.value = it
+                        switchTheme(it)
+                    }
                 },
                 enabled = true,
                 modifier = Modifier
                     .align(alignment = Alignment.CenterVertically)
             )
+        }
+    }
+
+    @Composable
+    private fun checkSwitchTheme(checkedState:MutableState<Boolean>){
+        if (!viewModel.getFlatTheme()){
+            checkedState.value = isSystemInDarkTheme()
+        }else{
+            checkedState.value = viewModel.getTheme()
         }
     }
 
