@@ -28,4 +28,13 @@ class HomeViewModel constructor(private val repository: HomeRepository) : ViewMo
             }
         })
     }
+
+    fun getFlatTheme():Boolean{
+        return repository.getIsThemeSave()
+    }
+    fun getTheme():Boolean{
+        return repository.getThemeCustom()
+    }
+
+
 }

@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.sp
 import com.lucasginard.airelibre.R
 import com.lucasginard.airelibre.modules.about.ui.theme.AireLibreTheme
 import com.lucasginard.airelibre.modules.home.view.MainActivity
+import com.lucasginard.airelibre.utils.ThemeState
 import com.lucasginard.airelibre.utils.goToURL
 
 class AboutActivity : ComponentActivity() {
@@ -35,7 +36,7 @@ class AboutActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            AireLibreTheme {
+            AireLibreTheme(ThemeState.isDark) {
                 Surface(color = MaterialTheme.colors.background) {
                     Greeting(this)
                 }

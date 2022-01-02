@@ -7,28 +7,20 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
-import android.util.AttributeSet
-import android.view.View
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -37,20 +29,25 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.ViewModelProvider
 import com.lucasginard.airelibre.R
-import com.lucasginard.airelibre.modules.about.descriptionContributeProject
-import com.lucasginard.airelibre.modules.about.sectionLicenseLogo
-import com.lucasginard.airelibre.modules.about.sectionSocialMedia
-import com.lucasginard.airelibre.modules.about.sectionWhatisAire
+import com.lucasginard.airelibre.modules.config.domain.ConfigRepository
 import com.lucasginard.airelibre.modules.config.ui.theme.AireLibreTheme
+import com.lucasginard.airelibre.modules.config.viewModel.ConfigViewModel
+import com.lucasginard.airelibre.modules.config.viewModel.ConfigViewModelFactory
+import com.lucasginard.airelibre.modules.home.domain.HomeRepository
 import com.lucasginard.airelibre.modules.home.view.MainActivity
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import com.lucasginard.airelibre.modules.home.viewModel.HomeViewModel
+import com.lucasginard.airelibre.modules.home.viewModel.HomeViewModelFactory
+import com.lucasginard.airelibre.utils.ThemeState
 
 
 class ConfigActivity : ComponentActivity() {
+
+    private lateinit var viewModel: ConfigViewModel
     private lateinit var locationPermissionRequest:
             ActivityResultLauncher<Array<String>>
+    private lateinit var context: Context
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,8 +77,11 @@ class ConfigActivity : ComponentActivity() {
                 }
             }
         }
+        viewModel = ViewModelProvider(this, ConfigViewModelFactory(ConfigRepository())).get(
+            ConfigViewModel::class.java
+        )
         setContent {
-            AireLibreTheme {
+            AireLibreTheme(darkTheme = ThemeState.isDark) {
                 Surface(color = MaterialTheme.colors.background) {
                     baseConfig(this)
                 }
@@ -112,7 +112,7 @@ class ConfigActivity : ComponentActivity() {
             Font(R.font.rubik_bold, weight = FontWeight.Bold),
             Font(R.font.rubik_regular, weight = FontWeight.Normal)
         )
-        val context = LocalContext.current
+        context = LocalContext.current
         Column(
             modifier = Modifier
                 .padding(end = 20.dp, start = 20.dp)
@@ -124,6 +124,7 @@ class ConfigActivity : ComponentActivity() {
 
             sectionTitle(fonts)
             sectionSwitchLocation(fonts)
+            sectionSwitchTheme(fonts)
 
             IconButton(
                 modifier = Modifier
@@ -136,8 +137,7 @@ class ConfigActivity : ComponentActivity() {
                             activity,
                             R.anim.slide_left,
                             R.anim.slide_right
-                        )
-                            .toBundle()
+                        ).toBundle()
                     )
                 },
             ) {
@@ -165,7 +165,7 @@ class ConfigActivity : ComponentActivity() {
             text = "Ajustes",
             fontFamily = fonts,
             fontWeight = FontWeight.Bold,
-            fontSize = 22.sp
+            fontSize = 22.sp,
         )
     }
 
@@ -174,18 +174,18 @@ class ConfigActivity : ComponentActivity() {
         var checkedState = remember { mutableStateOf(false) }
         //checkedState.value = checkPermissionLocation()
         Row(
-            Modifier.padding(top = 10.dp, bottom = 10.dp)
+            Modifier.padding(top = 20.dp, bottom = 10.dp)
         ) {
             Image(
                 painter = painterResource(id = R.drawable.icon_maps_red),
-                contentDescription = "iconLocation",
+                contentDescription = "iconTheme",
                 modifier = Modifier
                     .height(20.dp)
                     .width(20.dp)
                     .align(alignment = Alignment.CenterVertically)
             )
             Text(
-                text = "Ubicación:",
+                text = "Permiso de Ubicación:",
                 fontFamily = fonts,
                 fontWeight = FontWeight.Normal,
                 modifier = Modifier
@@ -220,6 +220,56 @@ class ConfigActivity : ComponentActivity() {
         return permission == 0 || permissionl == 0
     }
 
+    @Composable
+    private fun sectionSwitchTheme(fonts: FontFamily) {
+        var checkedState = remember { mutableStateOf(false) }
+        //checkedState.value = checkPermissionLocation()
+        Row(
+            Modifier.padding(top = 10.dp, bottom = 10.dp)
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.ic_theme_mode),
+                contentDescription = "iconLocation",
+                modifier = Modifier
+                    .height(20.dp)
+                    .width(20.dp)
+                    .align(alignment = Alignment.CenterVertically)
+            )
+            Text(
+                text = "Modo Oscuro:",
+                fontFamily = fonts,
+                fontWeight = FontWeight.Normal,
+                modifier = Modifier
+                    .align(alignment = Alignment.CenterVertically)
+                    .padding(end = 5.dp)
+            )
+            Switch(
+                checked = checkedState.value,
+                onCheckedChange = {
+                    checkedState.value = it
+                    switchTheme(it)
+                },
+                enabled = true,
+                modifier = Modifier
+                    .align(alignment = Alignment.CenterVertically)
+            )
+        }
+    }
+
+    private fun switchTheme(switch:Boolean){
+        viewModel.setFlatTheme(true)
+        when (switch){
+            true -> {
+                ThemeState.isDark = true
+                viewModel.setTheme(true)
+            }
+            false -> {
+                ThemeState.isDark = false
+                viewModel.setTheme(false)
+            }
+        }
+    }
+
     @Preview(showBackground = true)
     @Composable
     fun DefaultPreview2() {
@@ -228,4 +278,3 @@ class ConfigActivity : ComponentActivity() {
         }
     }
 }
-

@@ -223,8 +223,10 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         })
         viewModel.errorMessage.observe(requireActivity(), {
             _binding.btnReconnect.visibility = View.VISIBLE
-            Toast.makeText(requireContext(), getText(R.string.toastErrorNet), Toast.LENGTH_SHORT)
-                .show()
+            if(activity != null){
+                Toast.makeText(requireContext(), getText(R.string.toastErrorNet), Toast.LENGTH_SHORT)
+                    .show()
+            }
         })
         viewModel.getAllCity()
     }
@@ -374,7 +376,12 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     private fun mapTheme(){
         if (::GoogleMap.isInitialized && context != null){
             btnArrow = _binding.coordinatorLayout.findViewById(R.id.btnArrow)
-            if (this.getModeTheme(requireContext())){
+            if (!viewModel.getFlatTheme()){
+                ThemeState.isDark = this.getModeTheme(requireContext())
+            }else{
+                ThemeState.isDark = viewModel.getTheme()
+            }
+            if (ThemeState.isDark){
                 GoogleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(context, R.raw.mapstyle_night))
                 btnArrow.setTint(R.color.white)
             }else{
