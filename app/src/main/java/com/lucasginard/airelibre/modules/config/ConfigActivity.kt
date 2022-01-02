@@ -11,8 +11,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -35,10 +35,7 @@ import com.lucasginard.airelibre.modules.config.domain.ConfigRepository
 import com.lucasginard.airelibre.modules.config.ui.theme.AireLibreTheme
 import com.lucasginard.airelibre.modules.config.viewModel.ConfigViewModel
 import com.lucasginard.airelibre.modules.config.viewModel.ConfigViewModelFactory
-import com.lucasginard.airelibre.modules.home.domain.HomeRepository
 import com.lucasginard.airelibre.modules.home.view.MainActivity
-import com.lucasginard.airelibre.modules.home.viewModel.HomeViewModel
-import com.lucasginard.airelibre.modules.home.viewModel.HomeViewModelFactory
 import com.lucasginard.airelibre.utils.ThemeState
 
 
@@ -243,6 +240,11 @@ class ConfigActivity : ComponentActivity() {
                     .align(alignment = Alignment.CenterVertically)
                     .padding(end = 5.dp)
             )
+            if (!viewModel.getFlatTheme()){
+                checkedState.value = isSystemInDarkTheme()
+            }else{
+                checkedState.value = viewModel.getTheme()
+            }
             Switch(
                 checked = checkedState.value,
                 onCheckedChange = {

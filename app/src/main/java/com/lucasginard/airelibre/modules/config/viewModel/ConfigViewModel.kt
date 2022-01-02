@@ -12,4 +12,11 @@ class ConfigViewModel constructor(private val repository: ConfigRepository) : Vi
     fun setTheme(flat:Boolean){
         repository.saveThemeCustom(flat)
     }
+
+    fun getFlatTheme():Boolean{
+        return repository.getIsThemeSave()
+    }
+    fun getTheme():Boolean{
+        return repository.getThemeCustom()
+    }
 }
