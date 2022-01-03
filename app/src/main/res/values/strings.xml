@@ -35,14 +35,32 @@
     <string name="desciptionlicenseLogo">pch.vector - www.freepik.es</string>
     <string name="titleSocialMedia">Mantente al tanto de la contaminación del Aire en:</string>
 
+    <!---ConfigActivity-->
+    <string name="title_activity_config">ConfigActivity</string>
+    <string name="titleConfig">Ajustes</string>
+    <string name="titleSwitchLocation">Acceso a su ubicación:</string>
+    <string name="titleSwitchTheme">Modo Oscuro:</string>
+    <string name="descriptionWarningLocation">Actualmente la App detecta la configuración del dispositivo\nsi lo modifica ya no tendrá en cuenta la configuración del dispositivo:</string>
+
     <!---recyclerView-->
     <string name="tvLinkGo"><u>Ver mas</u></string>
-    <string name="title_activity_config">ConfigActivity</string>
 
     <!---links-->
     <string name="linkIcon">https://www.freepik.es/vector-gratis/familia-activa-feliz-caminando-al-aire-libre_7732632.htm</string>
     <string name="linkTwitter">https://twitter.com/KoaNdeAire</string>
     <string name="linkWebsite">https://airelib.re</string>
     <string name="linkGitHub">https://github.com/melizeche/AireLibre/#faq</string>
+
+    <!---ContentDescriptions-->
+    <string name="contentOnBack">OnBack</string>
+    <string name="contentLogo">logoIcon</string>
+    <string name="contentIconWarning">iconWarning</string>
+    <string name="contentLocation">iconLocation</string>
+    <string name="contentOnB">logoTheme</string>
+    <string name="btnAccept">Aceptar</string>
+    <string name="btnCancel">Cancelar</string>
+    <string name="btnTwitter">twitterBot</string>
+    <string name="btnWebsite">webSite</string>
+
 
 </resources>

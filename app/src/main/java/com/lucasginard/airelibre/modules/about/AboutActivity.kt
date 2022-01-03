@@ -74,7 +74,7 @@ fun Greeting(activity: AboutActivity = AboutActivity()) {
                 .width(240.dp)
                 .height(240.dp),
             painter = painterResource(id = R.drawable.playstore_icon),
-            contentDescription = "Logo APP",
+            contentDescription = stringResource(id = R.string.contentLogo),
         )
 
         sectionWhatisAire(fonts)
@@ -97,7 +97,7 @@ fun Greeting(activity: AboutActivity = AboutActivity()) {
             Icon(
                 modifier = Modifier.then(Modifier.size(60.dp)),
                 painter = painterResource(id = R.drawable.ic_arrow_right),
-                contentDescription = "onBack",
+                contentDescription = stringResource(id = R.string.contentOnBack),
                 tint = MaterialTheme.colors.primary
             )
         }
@@ -149,13 +149,13 @@ fun sectionSocialMedia(fontFamily: FontFamily,context: Context){
                     }
                 ),
             painter = painterResource(id = R.drawable.ic_twiter),
-            contentDescription = "twitterBot",
+            contentDescription = stringResource(id = R.string.btnTwitter),
         )
         Image(
             modifier = Modifier
                 .padding(top = 15.dp)
                 .height(45.dp)
-                .clickable (
+                .clickable(
                     onClick = {
                         val intent = Intent()
                         intent.goToURL(
@@ -165,7 +165,7 @@ fun sectionSocialMedia(fontFamily: FontFamily,context: Context){
                     }
                 ),
             painter = painterResource(id = R.drawable.ic_website),
-            contentDescription = "webSite",
+            contentDescription = stringResource(id = R.string.btnWebsite),
         )
     }
 }

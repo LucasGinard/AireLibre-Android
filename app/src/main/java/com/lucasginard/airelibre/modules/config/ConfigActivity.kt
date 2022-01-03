@@ -18,9 +18,9 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -141,7 +141,7 @@ class ConfigActivity : ComponentActivity() {
                 Icon(
                     modifier = Modifier.then(Modifier.size(60.dp)),
                     painter = painterResource(id = R.drawable.ic_arrow_left),
-                    contentDescription = "onBack",
+                    contentDescription = stringResource(id = R.string.contentOnBack),
                     tint = MaterialTheme.colors.primary
                 )
             }
@@ -155,11 +155,11 @@ class ConfigActivity : ComponentActivity() {
                 .width(80.dp)
                 .height(80.dp),
             painter = painterResource(id = R.drawable.icon_config),
-            contentDescription = "logoIcon",
+            contentDescription = stringResource(id = R.string.contentLogo),
             tint = MaterialTheme.colors.primary
         )
         Text(
-            text = "Ajustes",
+            text = stringResource(id = R.string.titleConfig),
             fontFamily = fonts,
             fontWeight = FontWeight.Bold,
             fontSize = 22.sp,
@@ -175,14 +175,14 @@ class ConfigActivity : ComponentActivity() {
         ) {
             Image(
                 painter = painterResource(id = R.drawable.icon_maps_red),
-                contentDescription = "iconTheme",
+                contentDescription = stringResource(id = R.string.contentLocation),
                 modifier = Modifier
                     .height(20.dp)
                     .width(20.dp)
                     .align(alignment = Alignment.CenterVertically)
             )
             Text(
-                text = "Permiso de Ubicación:",
+                text = stringResource(id = R.string.titleSwitchLocation),
                 fontFamily = fonts,
                 fontWeight = FontWeight.Normal,
                 modifier = Modifier
@@ -245,17 +245,18 @@ class ConfigActivity : ComponentActivity() {
                                         .height(40.dp)
                                         .padding(end = 5.dp),
                                     painter = painterResource(id = R.drawable.ic_theme_mode),
-                                    contentDescription = "logoTheme",
+                                    contentDescription = stringResource(id = R.string.contentIconWarning),
                                     tint = MaterialTheme.colors.primary
                                 )
                                 Text(
-                                    text = "Actualmente la App detecta la configuracion del dispositivo \nsi cambia se mantendra el ajuste",
+                                    text = stringResource(id = R.string.descriptionWarningLocation),
                                     fontFamily = fonts,
                                     fontWeight = FontWeight.Normal
                                 )
                             }
                             OutlinedButton(
-                                modifier = Modifier.fillMaxWidth()
+                                modifier = Modifier
+                                    .fillMaxWidth()
                                     .padding(top = 15.dp),
                                 onClick = {
                                     viewModel.setFlatTheme(true)
@@ -263,16 +264,17 @@ class ConfigActivity : ComponentActivity() {
                                     switchTheme(checkedState.value)
                                     openDialog.value = false
                                 }) {
-                                Text(text = "Aceptar")
+                                Text(text = stringResource(id = R.string.btnAccept))
                             }
 
                             OutlinedButton(
-                                modifier = Modifier.fillMaxWidth()
+                                modifier = Modifier
+                                    .fillMaxWidth()
                                     .padding(top = 5.dp),
                                 onClick = {
                                     openDialog.value = false
                                 }) {
-                                Text(text = "Cancelar")
+                                Text(text = stringResource(id = R.string.btnCancel))
                             }
                         }
                     }
@@ -280,14 +282,14 @@ class ConfigActivity : ComponentActivity() {
             }
             Image(
                 painter = painterResource(id = R.drawable.ic_theme_mode),
-                contentDescription = "iconLocation",
+                contentDescription = stringResource(id = R.string.contentLogo),
                 modifier = Modifier
                     .height(20.dp)
                     .width(20.dp)
                     .align(alignment = Alignment.CenterVertically)
             )
             Text(
-                text = "Modo Oscuro:",
+                text = stringResource(id = R.string.titleSwitchTheme),
                 fontFamily = fonts,
                 fontWeight = FontWeight.Normal,
                 modifier = Modifier
