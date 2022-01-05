@@ -46,6 +46,12 @@ class ConfigActivity : ComponentActivity() {
             ActivityResultLauncher<Array<String>>
     private lateinit var context: Context
 
+    lateinit var checkedStateTheme:MutableState<Boolean>
+    val fonts = FontFamily(
+        Font(R.font.rubik_bold, weight = FontWeight.Bold),
+        Font(R.font.rubik_regular, weight = FontWeight.Normal)
+    )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         locationPermissionRequest = registerForActivityResult(
@@ -95,6 +101,13 @@ class ConfigActivity : ComponentActivity() {
         )
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (!viewModel.getFlatTheme()){
+            //
+        }
+    }
+
     override fun onBackPressed() {
         startActivity(
             Intent(this, MainActivity::class.java),
@@ -105,10 +118,6 @@ class ConfigActivity : ComponentActivity() {
 
     @Composable
     fun baseConfig(activity: ConfigActivity) {
-        val fonts = FontFamily(
-            Font(R.font.rubik_bold, weight = FontWeight.Bold),
-            Font(R.font.rubik_regular, weight = FontWeight.Normal)
-        )
         context = LocalContext.current
         Column(
             modifier = Modifier
@@ -119,9 +128,10 @@ class ConfigActivity : ComponentActivity() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            sectionTitle(fonts)
-            sectionSwitchLocation(fonts)
-            sectionSwitchTheme(fonts)
+            sectionTitle()
+            sectionSwitchLocation()
+            sectionSwitchTheme()
+
 
             IconButton(
                 modifier = Modifier
@@ -149,7 +159,7 @@ class ConfigActivity : ComponentActivity() {
     }
 
     @Composable
-    fun sectionTitle(fonts: FontFamily) {
+    fun sectionTitle() {
         Icon(
             modifier = Modifier
                 .width(80.dp)
@@ -167,7 +177,7 @@ class ConfigActivity : ComponentActivity() {
     }
 
     @Composable
-    private fun sectionSwitchLocation(fonts: FontFamily) {
+    private fun sectionSwitchLocation() {
         var checkedState = remember { mutableStateOf(false) }
         //checkedState.value = checkPermissionLocation()
         Row(
@@ -218,8 +228,8 @@ class ConfigActivity : ComponentActivity() {
     }
 
     @Composable
-    private fun sectionSwitchTheme(fonts: FontFamily) {
-        var checkedState = remember { mutableStateOf(false) }
+    private fun sectionSwitchTheme() {
+        checkedStateTheme = remember { mutableStateOf(false) }
         Row(
             Modifier.padding(top = 10.dp, bottom = 10.dp)
         ) {
@@ -242,16 +252,16 @@ class ConfigActivity : ComponentActivity() {
                                 Icon(
                                     modifier = Modifier
                                         .width(40.dp)
-                                        .height(40.dp)
-                                        .padding(end = 5.dp),
-                                    painter = painterResource(id = R.drawable.ic_theme_mode),
+                                        .height(40.dp),
+                                    painter = painterResource(id = R.drawable.ic_warning),
                                     contentDescription = stringResource(id = R.string.contentIconWarning),
                                     tint = MaterialTheme.colors.primary
                                 )
                                 Text(
                                     text = stringResource(id = R.string.descriptionWarningLocation),
                                     fontFamily = fonts,
-                                    fontWeight = FontWeight.Normal
+                                    fontWeight = FontWeight.Normal,
+                                    modifier = Modifier.padding(top = 15.dp,start = 15.dp)
                                 )
                             }
                             OutlinedButton(
@@ -260,8 +270,8 @@ class ConfigActivity : ComponentActivity() {
                                     .padding(top = 15.dp),
                                 onClick = {
                                     viewModel.setFlatTheme(true)
-                                    checkedState.value = !checkedState.value
-                                    switchTheme(checkedState.value)
+                                    checkedStateTheme.value = !checkedStateTheme.value
+                                    switchTheme(checkedStateTheme.value)
                                     openDialog.value = false
                                 }) {
                                 Text(text = stringResource(id = R.string.btnAccept))
@@ -296,14 +306,14 @@ class ConfigActivity : ComponentActivity() {
                     .align(alignment = Alignment.CenterVertically)
                     .padding(end = 5.dp)
             )
-            checkSwitchTheme(checkedState)
+            checkSwitchTheme(checkedStateTheme)
             Switch(
-                checked = checkedState.value,
+                checked = checkedStateTheme.value,
                 onCheckedChange = {
                     if (!viewModel.getFlatTheme()){
                         openDialog.value = true
                     }else{
-                        checkedState.value = it
+                        checkedStateTheme.value = it
                         switchTheme(it)
                     }
                 },
