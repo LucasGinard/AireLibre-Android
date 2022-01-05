@@ -33,6 +33,13 @@ import com.lucasginard.airelibre.utils.goToURL
 
 class AboutActivity : ComponentActivity() {
 
+    private lateinit var context: Context
+    private val fontFamily = FontFamily(
+        Font(R.font.disket_bold, weight = FontWeight.Bold),
+        Font(R.font.rubik_regular, weight = FontWeight.Normal)
+    )
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -51,203 +58,200 @@ class AboutActivity : ComponentActivity() {
                 .toBundle()
         )
     }
-}
 
-@Composable
-fun Greeting(activity: AboutActivity = AboutActivity()) {
-    val fonts = FontFamily(
-        Font(R.font.disket_bold, weight = FontWeight.Bold),
-        Font(R.font.rubik_regular, weight = FontWeight.Normal)
-    )
-    val context = LocalContext.current
-    Column(
-        modifier = Modifier
-            .padding(end = 20.dp, start = 20.dp)
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Image(
+
+    @Composable
+    fun Greeting(activity: AboutActivity = AboutActivity()) {
+        context = LocalContext.current
+        Column(
             modifier = Modifier
-                .padding(top = 0.dp, bottom = 20.dp, end = 20.dp, start = 20.dp)
-                .width(240.dp)
-                .height(240.dp),
-            painter = painterResource(id = R.drawable.playstore_icon),
-            contentDescription = stringResource(id = R.string.contentLogo),
+                .padding(end = 20.dp, start = 20.dp)
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                modifier = Modifier
+                    .padding(top = 0.dp, bottom = 20.dp, end = 20.dp, start = 20.dp)
+                    .width(240.dp)
+                    .height(240.dp),
+                painter = painterResource(id = R.drawable.playstore_icon),
+                contentDescription = stringResource(id = R.string.contentLogo),
+            )
+
+            sectionWhatisAire()
+            sectionSocialMedia()
+            descriptionContributeProject()
+            sectionLicenseLogo()
+
+            IconButton(
+                modifier = Modifier
+                    .then(Modifier.size(60.dp))
+                    .padding(top = 15.dp),
+                onClick = {
+                    activity.startActivity(
+                        Intent(activity, MainActivity::class.java),
+                        ActivityOptions.makeCustomAnimation(activity, R.anim.slide_in_right, R.anim.slide_out_left)
+                            .toBundle()
+                    )
+                },
+            ) {
+                Icon(
+                    modifier = Modifier.then(Modifier.size(60.dp)),
+                    painter = painterResource(id = R.drawable.ic_arrow_right),
+                    contentDescription = stringResource(id = R.string.contentOnBack),
+                    tint = MaterialTheme.colors.primary
+                )
+            }
+        }
+    }
+
+    @Composable
+    fun sectionWhatisAire() {
+        Text(
+            text = stringResource(id = R.string.whatsIsAireLibre),
+            fontFamily = fontFamily,
+            fontWeight = FontWeight.Bold,
+            fontSize = 15.sp
         )
 
-        sectionWhatisAire(fonts)
-        sectionSocialMedia(fonts,context)
-        descriptionContributeProject(fonts,context)
-        sectionLicenseLogo(fonts,context)
+        Text(
+            text = stringResource(id = R.string.descriptionWhatis),
+            fontFamily = fontFamily,
+            fontWeight = FontWeight.Normal,
+            fontSize = 14.sp,
+            textAlign = TextAlign.Center,
+        )
+    }
 
-        IconButton(
-            modifier = Modifier
-                .then(Modifier.size(60.dp))
-                .padding(top = 15.dp),
-            onClick = {
-                activity.startActivity(
-                    Intent(activity, MainActivity::class.java),
-                    ActivityOptions.makeCustomAnimation(activity, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .toBundle()
-                )
-            },
+    @Composable
+    fun sectionSocialMedia(){
+        Text(
+            modifier = Modifier.paddingFromBaseline(top = 30.dp),
+            text = stringResource(id = R.string.titleSocialMedia),
+            fontFamily = fontFamily,
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center,
+            fontSize = 15.sp
+        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            Icon(
-                modifier = Modifier.then(Modifier.size(60.dp)),
-                painter = painterResource(id = R.drawable.ic_arrow_right),
-                contentDescription = stringResource(id = R.string.contentOnBack),
-                tint = MaterialTheme.colors.primary
+            Image(
+                modifier = Modifier
+                    .padding(top = 15.dp,end = 20.dp)
+                    .height(45.dp)
+                    .clickable (
+                        onClick = {
+                            val intent = Intent()
+                            intent.goToURL(
+                                url = context.getString(R.string.linkTwitter),
+                                context = context
+                            )
+                        }
+                    ),
+                painter = painterResource(id = R.drawable.ic_twiter),
+                contentDescription = stringResource(id = R.string.btnTwitter),
+            )
+            Image(
+                modifier = Modifier
+                    .padding(top = 15.dp)
+                    .height(45.dp)
+                    .clickable(
+                        onClick = {
+                            val intent = Intent()
+                            intent.goToURL(
+                                url = context.getString(R.string.linkWebsite),
+                                context = context
+                            )
+                        }
+                    ),
+                painter = painterResource(id = R.drawable.ic_website),
+                contentDescription = stringResource(id = R.string.btnWebsite),
             )
         }
     }
-}
 
-@Composable
-fun sectionWhatisAire(fontFamily: FontFamily) {
-    Text(
-        text = stringResource(id = R.string.whatsIsAireLibre),
-        fontFamily = fontFamily,
-        fontWeight = FontWeight.Bold,
-        fontSize = 15.sp
-    )
-
-    Text(
-        text = stringResource(id = R.string.descriptionWhatis),
-        fontFamily = fontFamily,
-        fontWeight = FontWeight.Normal,
-        fontSize = 14.sp,
-        textAlign = TextAlign.Center,
-    )
-}
-
-@Composable
-fun sectionSocialMedia(fontFamily: FontFamily,context: Context){
-    Text(
-        modifier = Modifier.paddingFromBaseline(top = 30.dp),
-        text = stringResource(id = R.string.titleSocialMedia),
-        fontFamily = fontFamily,
-        fontWeight = FontWeight.Bold,
-        textAlign = TextAlign.Center,
-        fontSize = 15.sp
-    )
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Image(
-            modifier = Modifier
-                .padding(top = 15.dp,end = 20.dp)
-                .height(45.dp)
-                .clickable (
-                    onClick = {
-                        val intent = Intent()
-                        intent.goToURL(
-                            url = context.getString(R.string.linkTwitter),
-                            context = context
-                        )
-                    }
-                ),
-            painter = painterResource(id = R.drawable.ic_twiter),
-            contentDescription = stringResource(id = R.string.btnTwitter),
+    @Composable
+    fun descriptionContributeProject() {
+        Text(
+            modifier = Modifier.paddingFromBaseline(top = 30.dp),
+            text = stringResource(id = R.string.questionInteresant),
+            fontFamily = fontFamily,
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center,
+            fontSize = 15.sp
         )
-        Image(
+
+        Text(
+            text = stringResource(id = R.string.descriptionInteresant),
+            fontFamily = fontFamily,
+            fontWeight = FontWeight.Normal,
+            fontSize = 14.sp,
+            textAlign = TextAlign.Center,
+        )
+        Text(
+            text = stringResource(id = R.string.seeMore),
+            fontFamily = fontFamily,
+            fontWeight = FontWeight.Bold,
+            color = Color.Blue,
+            style = TextStyle(textDecoration = TextDecoration.Underline),
+            fontSize = 18.sp,
             modifier = Modifier
-                .padding(top = 15.dp)
-                .height(45.dp)
                 .clickable(
                     onClick = {
                         val intent = Intent()
                         intent.goToURL(
-                            url = context.getString(R.string.linkWebsite),
+                            url = context.getString(R.string.linkGitHub),
                             context = context
                         )
                     }
-                ),
-            painter = painterResource(id = R.drawable.ic_website),
-            contentDescription = stringResource(id = R.string.btnWebsite),
+                )
+                .paddingFromBaseline(top = 30.dp)
         )
     }
-}
 
-@Composable
-fun descriptionContributeProject(fontFamily: FontFamily,context: Context) {
-    Text(
-        modifier = Modifier.paddingFromBaseline(top = 30.dp),
-        text = stringResource(id = R.string.questionInteresant),
-        fontFamily = fontFamily,
-        fontWeight = FontWeight.Bold,
-        textAlign = TextAlign.Center,
-        fontSize = 15.sp
-    )
-
-    Text(
-        text = stringResource(id = R.string.descriptionInteresant),
-        fontFamily = fontFamily,
-        fontWeight = FontWeight.Normal,
-        fontSize = 14.sp,
-        textAlign = TextAlign.Center,
-    )
-    Text(
-        text = stringResource(id = R.string.seeMore),
-        fontFamily = fontFamily,
-        fontWeight = FontWeight.Bold,
-        color = Color.Blue,
-        style = TextStyle(textDecoration = TextDecoration.Underline),
-        fontSize = 18.sp,
-        modifier = Modifier
-            .clickable(
+    @Composable
+    fun sectionLicenseLogo(){
+        Text(
+            modifier = Modifier.paddingFromBaseline(top = 30.dp),
+            text = stringResource(id = R.string.licenseAireLibre),
+            textAlign = TextAlign.Center
+        )
+        Text(
+            text = stringResource(id = R.string.TitlelicenseLogo),
+            textAlign = TextAlign.Center ,
+            fontFamily = fontFamily,
+            fontWeight = FontWeight.Bold,
+            fontSize = 14.sp,
+            modifier = Modifier.paddingFromBaseline(top = 30.dp)
+        )
+        Text(
+            text = stringResource(id = R.string.desciptionlicenseLogo),
+            textAlign = TextAlign.Center,
+            fontFamily = fontFamily,
+            fontWeight = FontWeight.Bold,
+            color = Color.Blue,
+            fontSize = 14.sp,
+            style = TextStyle(textDecoration = TextDecoration.Underline),
+            modifier = Modifier.clickable(
                 onClick = {
                     val intent = Intent()
                     intent.goToURL(
-                        url = context.getString(R.string.linkGitHub),
+                        url = context.getString(R.string.linkIcon),
                         context = context
                     )
                 }
             )
-            .paddingFromBaseline(top = 30.dp)
-    )
-}
-
-@Composable
-fun sectionLicenseLogo(fontFamily: FontFamily,context: Context){
-    Text(
-        modifier = Modifier.paddingFromBaseline(top = 30.dp),
-        text = stringResource(id = R.string.licenseAireLibre),
-        textAlign = TextAlign.Center
-    )
-    Text(
-        text = stringResource(id = R.string.TitlelicenseLogo),
-        textAlign = TextAlign.Center ,
-        fontFamily = fontFamily,
-        fontWeight = FontWeight.Bold,
-        fontSize = 14.sp,
-        modifier = Modifier.paddingFromBaseline(top = 30.dp)
-    )
-    Text(
-        text = stringResource(id = R.string.desciptionlicenseLogo),
-        textAlign = TextAlign.Center,
-        fontFamily = fontFamily,
-        fontWeight = FontWeight.Bold,
-        color = Color.Blue,
-        fontSize = 14.sp,
-        style = TextStyle(textDecoration = TextDecoration.Underline),
-        modifier = Modifier.clickable(
-            onClick = {
-                val intent = Intent()
-                intent.goToURL(
-                    url = context.getString(R.string.linkIcon),
-                    context = context
-                )
-            }
         )
-    )
-}
+    }
 
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    AireLibreTheme {
-        Greeting()
+    @Preview(showBackground = true)
+    @Composable
+    fun DefaultPreview() {
+        AireLibreTheme {
+            Greeting()
+        }
     }
 }
