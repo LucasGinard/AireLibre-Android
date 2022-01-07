@@ -17,8 +17,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
@@ -28,16 +26,13 @@ import androidx.compose.ui.unit.sp
 import com.lucasginard.airelibre.R
 import com.lucasginard.airelibre.modules.about.ui.theme.AireLibreTheme
 import com.lucasginard.airelibre.modules.home.view.MainActivity
+import com.lucasginard.airelibre.utils.ComposablesUtils
 import com.lucasginard.airelibre.utils.ThemeState
 import com.lucasginard.airelibre.utils.goToURL
 
 class AboutActivity : ComponentActivity() {
 
     private lateinit var context: Context
-    private val fontFamily = FontFamily(
-        Font(R.font.disket_bold, weight = FontWeight.Bold),
-        Font(R.font.rubik_regular, weight = FontWeight.Normal)
-    )
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -111,14 +106,14 @@ class AboutActivity : ComponentActivity() {
     fun sectionWhatisAire() {
         Text(
             text = stringResource(id = R.string.whatsIsAireLibre),
-            fontFamily = fontFamily,
+            fontFamily = ComposablesUtils.fontFamily,
             fontWeight = FontWeight.Bold,
             fontSize = 15.sp
         )
 
         Text(
             text = stringResource(id = R.string.descriptionWhatis),
-            fontFamily = fontFamily,
+            fontFamily = ComposablesUtils.fontFamily,
             fontWeight = FontWeight.Normal,
             fontSize = 14.sp,
             textAlign = TextAlign.Center,
@@ -130,7 +125,7 @@ class AboutActivity : ComponentActivity() {
         Text(
             modifier = Modifier.paddingFromBaseline(top = 30.dp),
             text = stringResource(id = R.string.titleSocialMedia),
-            fontFamily = fontFamily,
+            fontFamily = ComposablesUtils.fontFamily,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
             fontSize = 15.sp
@@ -178,7 +173,7 @@ class AboutActivity : ComponentActivity() {
         Text(
             modifier = Modifier.paddingFromBaseline(top = 30.dp),
             text = stringResource(id = R.string.questionInteresant),
-            fontFamily = fontFamily,
+            fontFamily = ComposablesUtils.fontFamily,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
             fontSize = 15.sp
@@ -186,14 +181,14 @@ class AboutActivity : ComponentActivity() {
 
         Text(
             text = stringResource(id = R.string.descriptionInteresant),
-            fontFamily = fontFamily,
+            fontFamily = ComposablesUtils.fontFamily,
             fontWeight = FontWeight.Normal,
             fontSize = 14.sp,
             textAlign = TextAlign.Center,
         )
         Text(
             text = stringResource(id = R.string.seeMore),
-            fontFamily = fontFamily,
+            fontFamily = ComposablesUtils.fontFamily,
             fontWeight = FontWeight.Bold,
             color = Color.Blue,
             style = TextStyle(textDecoration = TextDecoration.Underline),
@@ -222,7 +217,7 @@ class AboutActivity : ComponentActivity() {
         Text(
             text = stringResource(id = R.string.TitlelicenseLogo),
             textAlign = TextAlign.Center ,
-            fontFamily = fontFamily,
+            fontFamily = ComposablesUtils.fontFamily,
             fontWeight = FontWeight.Bold,
             fontSize = 14.sp,
             modifier = Modifier.paddingFromBaseline(top = 30.dp)
@@ -230,7 +225,7 @@ class AboutActivity : ComponentActivity() {
         Text(
             text = stringResource(id = R.string.desciptionlicenseLogo),
             textAlign = TextAlign.Center,
-            fontFamily = fontFamily,
+            fontFamily = ComposablesUtils.fontFamily,
             fontWeight = FontWeight.Bold,
             color = Color.Blue,
             fontSize = 14.sp,

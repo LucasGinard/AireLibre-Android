@@ -12,20 +12,16 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import com.lucasginard.airelibre.R
@@ -34,6 +30,7 @@ import com.lucasginard.airelibre.modules.config.ui.theme.AireLibreTheme
 import com.lucasginard.airelibre.modules.config.viewModel.ConfigViewModel
 import com.lucasginard.airelibre.modules.config.viewModel.ConfigViewModelFactory
 import com.lucasginard.airelibre.modules.home.view.MainActivity
+import com.lucasginard.airelibre.utils.ComposablesUtils
 import com.lucasginard.airelibre.utils.ThemeState
 
 
@@ -44,10 +41,6 @@ class ConfigActivity : ComponentActivity() {
             ActivityResultLauncher<Array<String>>
 
     lateinit var checkedStateTheme:MutableState<Boolean>
-    private val fonts = FontFamily(
-        Font(R.font.rubik_bold, weight = FontWeight.Bold),
-        Font(R.font.rubik_regular, weight = FontWeight.Normal)
-    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -166,7 +159,7 @@ class ConfigActivity : ComponentActivity() {
         )
         Text(
             text = stringResource(id = R.string.titleConfig),
-            fontFamily = fonts,
+            fontFamily = ComposablesUtils.fonts,
             fontWeight = FontWeight.Bold,
             fontSize = 22.sp,
         )
@@ -175,7 +168,7 @@ class ConfigActivity : ComponentActivity() {
     @Composable
     private fun sectionSwitchLocation() {
         var checkedState = remember { mutableStateOf(false) }
-        //checkedState.value = checkPermissionLocation()
+        checkedState.value = checkPermissionLocation()
         Row(
             Modifier.padding(top = 20.dp, bottom = 10.dp)
         ) {
@@ -189,7 +182,7 @@ class ConfigActivity : ComponentActivity() {
             )
             Text(
                 text = stringResource(id = R.string.titleSwitchLocation),
-                fontFamily = fonts,
+                fontFamily = ComposablesUtils.fonts,
                 fontWeight = FontWeight.Normal,
                 modifier = Modifier
                     .align(alignment = Alignment.CenterVertically)
@@ -231,60 +224,13 @@ class ConfigActivity : ComponentActivity() {
         ) {
             var openDialog = remember { mutableStateOf(false) }
             if (openDialog.value) {
-                Dialog(onDismissRequest = { openDialog.value = false }) {
-                    Card(
-                        shape = RoundedCornerShape(8.dp),
-                        backgroundColor = MaterialTheme.colors.surface,
-                    ) {
-                        Column(
-                            modifier = Modifier
-                                .padding(16.dp),
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ){
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Icon(
-                                    modifier = Modifier
-                                        .width(40.dp)
-                                        .height(40.dp),
-                                    painter = painterResource(id = R.drawable.ic_warning),
-                                    contentDescription = stringResource(id = R.string.contentIconWarning),
-                                    tint = MaterialTheme.colors.primary
-                                )
-                                Text(
-                                    text = stringResource(id = R.string.descriptionWarningLocation),
-                                    fontFamily = fonts,
-                                    fontWeight = FontWeight.Normal,
-                                    modifier = Modifier.padding(top = 15.dp,start = 15.dp)
-                                )
-                            }
-                            OutlinedButton(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(top = 15.dp),
-                                onClick = {
-                                    viewModel.setFlatTheme(true)
-                                    checkedStateTheme.value = !checkedStateTheme.value
-                                    switchTheme(checkedStateTheme.value)
-                                    openDialog.value = false
-                                }) {
-                                Text(text = stringResource(id = R.string.btnAccept))
-                            }
-
-                            OutlinedButton(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(top = 5.dp),
-                                onClick = {
-                                    openDialog.value = false
-                                }) {
-                                Text(text = stringResource(id = R.string.btnCancel))
-                            }
-                        }
-                    }
-                }
+                ComposablesUtils.dialogCustom(
+                    openDialog = openDialog,
+                    btnAccept = {
+                        viewModel.setFlatTheme(true)
+                        checkedStateTheme.value = !checkedStateTheme.value
+                        switchTheme(checkedStateTheme.value)
+                    })
             }
             Image(
                 painter = painterResource(id = R.drawable.ic_theme_mode),
@@ -296,7 +242,7 @@ class ConfigActivity : ComponentActivity() {
             )
             Text(
                 text = stringResource(id = R.string.titleSwitchTheme),
-                fontFamily = fonts,
+                fontFamily = ComposablesUtils.fonts,
                 fontWeight = FontWeight.Normal,
                 modifier = Modifier
                     .align(alignment = Alignment.CenterVertically)
