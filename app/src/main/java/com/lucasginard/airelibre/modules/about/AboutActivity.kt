@@ -135,9 +135,9 @@ class AboutActivity : ComponentActivity() {
         ) {
             Image(
                 modifier = Modifier
-                    .padding(top = 15.dp,end = 20.dp)
+                    .padding(top = 15.dp, end = 20.dp)
                     .height(45.dp)
-                    .clickable (
+                    .clickable(
                         onClick = {
                             val intent = Intent()
                             intent.goToURL(
@@ -210,9 +210,52 @@ class AboutActivity : ComponentActivity() {
     @Composable
     fun sectionLicenseLogo(){
         Text(
-            modifier = Modifier.paddingFromBaseline(top = 30.dp),
+            modifier = Modifier.paddingFromBaseline(top = 30.dp,bottom = 10.dp),
             text = stringResource(id = R.string.licenseAireLibre),
             textAlign = TextAlign.Center
+        )
+        Text(
+            text = stringResource(id = R.string.licenseAireLibreLink),
+            textAlign = TextAlign.Center,
+            fontFamily = ComposablesUtils.fontFamily,
+            fontWeight = FontWeight.Bold,
+            color = Color.Blue,
+            fontSize = 14.sp,
+            style = TextStyle(textDecoration = TextDecoration.Underline),
+            modifier = Modifier.clickable(
+                onClick = {
+                    val intent = Intent()
+                    intent.goToURL(
+                        url = context.getString(R.string.linkLicense),
+                        context = context
+                    )
+                }
+            )
+        )
+        Text(
+            text = stringResource(id = R.string.titleDeveloper),
+            textAlign = TextAlign.Center ,
+            fontFamily = ComposablesUtils.fontFamily,
+            fontWeight = FontWeight.Bold,
+            fontSize = 14.sp,
+            modifier = Modifier.paddingFromBaseline(top = 30.dp)
+        )
+        Text(
+            text = stringResource(id = R.string.textNameDeveloper),
+            textAlign = TextAlign.Center,
+            fontFamily = ComposablesUtils.fontFamily,
+            fontWeight = FontWeight.Bold,
+            color = Color.Blue,
+            fontSize = 14.sp,
+            modifier = Modifier.clickable(
+                onClick = {
+                    val intent = Intent()
+                    intent.goToURL(
+                        url = context.getString(R.string.linkLucas),
+                        context = context
+                    )
+                }
+            )
         )
         Text(
             text = stringResource(id = R.string.TitlelicenseLogo),

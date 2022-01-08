@@ -4,8 +4,8 @@
 
     <!---HomeActivity-->
     <string name="tvCity">Ciudad:</string>
-    <string name="tvCityCloser">Ciudad mas cercana:</string>
-    <string name="tvTitleList">Lista de Ciudades:</string>
+    <string name="tvCityCloser">Sensor más cercano:</string>
+    <string name="tvTitleList">Lista de sensores:</string>
     <string name="tvEscale">Escala AQI</string>
     <string name="tvStatus">Estado</string>
     <string name="tvDistance">Distancia</string>
@@ -30,10 +30,13 @@
     <string name="questionInteresant">¿Querés saber más sobre el proyecto?</string>
     <string name="descriptionInteresant">Si querés colaborar,aprender a construir tu propio sensor, o saber en que se diferencia con otros proyectos similares Entrá:</string>
     <string name="seeMore">Ver proyecto</string>
-    <string name="licenseAireLibre">AireLibre es un proyecto libre y de código abierto bajo licencia AGPLv3📜.</string>
+    <string name="licenseAireLibre">AireLibre es un proyecto libre y de código abierto bajo 📜licencia:</string>
+    <string name="licenseAireLibreLink">AGPLv3</string>
     <string name="TitlelicenseLogo">Imagen Ilustrativa original de:</string>
     <string name="desciptionlicenseLogo">pch.vector - www.freepik.es</string>
     <string name="titleSocialMedia">Mantente al tanto de la contaminación del Aire en:</string>
+    <string name="titleDeveloper">App android desarrollada por:</string>
+    <string name="textNameDeveloper">Lucas Ginard</string>
 
     <!---ConfigActivity-->
     <string name="title_activity_config">ConfigActivity</string>
@@ -52,6 +55,8 @@
     <string name="linkTwitter">https://twitter.com/KoaNdeAire</string>
     <string name="linkWebsite">https://airelib.re</string>
     <string name="linkGitHub">https://github.com/melizeche/AireLibre/#faq</string>
+    <string name="linkLicense">https://es.wikipedia.org/wiki/GNU_Affero_General_Public_License</string>
+    <string name="linkLucas">https://www.linkedin.com/in/lucasginard/?originalSubdomain=py</string>
 
     <!---ContentDescriptions-->
     <string name="contentOnBack">OnBack</string>
