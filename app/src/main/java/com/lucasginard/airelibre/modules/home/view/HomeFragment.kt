@@ -219,10 +219,12 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             calculateMarkerLocation()
             if (_binding.btnReconnect.visibility == View.VISIBLE) {
                 _binding.btnReconnect.visibility = View.GONE
+                _binding.coordinatorLayout.visibility = View.VISIBLE
             }
         })
         viewModel.errorMessage.observe(requireActivity(), {
             _binding.btnReconnect.visibility = View.VISIBLE
+            _binding.coordinatorLayout.visibility = View.GONE
             if(activity != null){
                 Toast.makeText(requireContext(), getText(R.string.toastErrorNet), Toast.LENGTH_SHORT)
                     .show()
