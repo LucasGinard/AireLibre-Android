@@ -19,4 +19,20 @@ class ConfigViewModel constructor(private val repository: ConfigRepository) : Vi
     fun getTheme():Boolean{
         return repository.getThemeCustom()
     }
+
+    fun setFlatLocationDeny(flat:Boolean){
+        repository.saveNoFirstRequestLocation(flat)
+    }
+
+    fun getFlatLocationDeny():Boolean{
+        return repository.getIsNotFirstRequestLocation()
+    }
+
+    fun setFlatLocationSucess(flat:Boolean){
+        repository.saveFlatSucessPermissionLocation(flat)
+    }
+
+    fun getFlatLocationSucess():Boolean{
+        return repository.getFlatSucessPermissionLocation()
+    }
 }

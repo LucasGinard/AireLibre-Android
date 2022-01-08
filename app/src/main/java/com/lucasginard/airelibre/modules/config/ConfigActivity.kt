@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.ActivityOptions
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import androidx.activity.ComponentActivity
@@ -51,21 +52,25 @@ class ConfigActivity : ComponentActivity() {
         ) { permissions ->
             when {
                 permissions.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false) -> {
-                    ActivityCompat.requestPermissions(
-                        this,
-                        arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
-                        0
-                    )
+                    if (viewModel.getFlatLocationSucess()){
+                        showDialogLocation.value = true
+                    }else{
+                        viewModel.setFlatLocationSucess(true)
+                    }
                 }
                 permissions.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
-                    ActivityCompat.requestPermissions(
-                        this,
-                        arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
-                        0
-                    )
+
                 }
                 else -> {
-                    showDialogLocation.value = true
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
+                        if (viewModel.getFlatLocationDeny()){
+                            showDialogLocation.value = true
+                        }else{
+                            viewModel.setFlatLocationDeny(true)
+                        }
+                    } else{
+                        //para versiones inferiores a android 11.0.
+                    }
                 }
             }
         }
@@ -83,11 +88,12 @@ class ConfigActivity : ComponentActivity() {
 
     @Composable
     fun dialogDenyComposable() {
+        var textDialog = if(::checkedStateLocation.isInitialized && checkedStateLocation.value) R.string.descriptionAcceptLocation else R.string.descriptionDenyLocation
         showDialogLocation = remember { mutableStateOf(false) }
         if (showDialogLocation.value) {
             ComposablesUtils.dialogCustom(
                 openDialog = showDialogLocation,
-                text = R.string.descriptionDenyLocation ,
+                text = textDialog,
                 btnAccept = {
                     val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
                     val uri: Uri = Uri.fromParts("package", packageName, null)
@@ -208,9 +214,7 @@ class ConfigActivity : ComponentActivity() {
                 checked = checkedStateLocation.value,
                 onCheckedChange = {
                     checkedStateLocation.value = it
-                    if (it) {
-                        requestLocation()
-                    }
+                    requestLocation()
                 },
                 enabled = true,
                 modifier = Modifier

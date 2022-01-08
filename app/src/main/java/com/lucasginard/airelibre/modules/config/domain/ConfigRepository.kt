@@ -19,4 +19,22 @@ class ConfigRepository {
     fun saveIsThemeFlat(flatTheme:Boolean){
         AireLibreApp.prefs.flatTheme = flatTheme
     }
+
+    fun getIsNotFirstRequestLocation():Boolean{
+        return AireLibreApp.prefs.flatDenyPermissonLocation
+    }
+
+    fun saveNoFirstRequestLocation(flat:Boolean){
+        AireLibreApp.prefs.flatDenyPermissonLocation = flat
+    }
+
+    fun saveFlatSucessPermissionLocation(flat:Boolean){
+        AireLibreApp.prefs.flatAcceptPermissonLocation = flat
+    }
+
+    fun getFlatSucessPermissionLocation():Boolean{
+        return AireLibreApp.prefs.flatAcceptPermissonLocation
+    }
+
+
 }
