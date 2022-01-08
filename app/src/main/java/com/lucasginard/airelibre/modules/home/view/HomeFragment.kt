@@ -132,16 +132,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
     private fun configureOnClickListeners() {
         _binding.btnInfo.setOnClickListener {
-            _binding.tvHelp.apply {
-                if (this.visibility == View.GONE) {
-                    this.startAnimation(this.animationCreate(R.anim.fade_in))
-                    this.visibility = View.VISIBLE
-                    Executors.newSingleThreadScheduledExecutor().schedule({
-                        this.startAnimation(this.animationCreate(R.anim.fade_out))
-                        this.visibility = View.GONE
-                    }, 7, TimeUnit.SECONDS)
-                }
-            }
+            Toast.makeText(context,getText(R.string.tvHelp),Toast.LENGTH_LONG).show()
         }
 
         _binding.btnConfig.setOnClickListener {

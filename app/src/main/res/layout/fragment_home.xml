@@ -77,22 +77,6 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <TextView
-        android:id="@+id/tvHelp"
-        android:layout_width="329dp"
-        android:layout_height="95dp"
-        android:layout_marginBottom="65dp"
-        android:background="@drawable/info_background"
-        android:fontFamily="@font/disket_bold"
-        android:padding="10dp"
-        android:text="@string/tvHelp"
-        android:textColor="@color/black"
-        android:textSize="12sp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/linearInfoMarker"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btnReconnect"
         android:layout_width="wrap_content"
