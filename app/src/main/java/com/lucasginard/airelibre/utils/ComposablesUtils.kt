@@ -62,6 +62,7 @@ class ComposablesUtils {
                             )
                         }
                         OutlinedButton(
+                            shape = RoundedCornerShape(8.dp),
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(top = 15.dp),
@@ -73,6 +74,7 @@ class ComposablesUtils {
                         }
 
                         OutlinedButton(
+                            shape = RoundedCornerShape(8.dp),
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(top = 5.dp),

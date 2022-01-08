@@ -40,8 +40,8 @@
     <string name="titleConfig">Ajustes</string>
     <string name="titleSwitchLocation">Acceso a su ubicación:</string>
     <string name="titleSwitchTheme">Modo Oscuro:</string>
-    <string name="descriptionWarningTheme">Actualmente la App toma la configuración del dispositivo\nsi lo modifica ya no tendrá en cuenta la configuración del dispositivo</string>
-    <string name="descriptionDenyLocation"></string>
+    <string name="descriptionWarningTheme">Actualmente la App toma la configuración del dispositivo\nsi lo modifica ya no tendrá en cuenta la configuración del dispositivo.</string>
+    <string name="descriptionDenyLocation">Al rechazar las dos solicitudes de permiso.\ntendrá que permitir el acceso a su ubicación en \nAplicaciones -> AireLibre -> Permisos/Accesos\n\nAceptar para ir a ajustes.</string>
 
     <!---recyclerView-->
     <string name="tvLinkGo"><u>Ver mas</u></string>

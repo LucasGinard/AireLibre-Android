@@ -41,6 +41,8 @@ class ConfigActivity : ComponentActivity() {
             ActivityResultLauncher<Array<String>>
 
     lateinit var checkedStateTheme: MutableState<Boolean>
+    lateinit var showDialogLocation:MutableState<Boolean>
+    lateinit var checkedStateLocation :MutableState<Boolean>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,10 +65,7 @@ class ConfigActivity : ComponentActivity() {
                     )
                 }
                 else -> {
-                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                    val uri: Uri = Uri.fromParts("package", packageName, null)
-                    intent.data = uri
-                    startActivity(intent)
+                    showDialogLocation.value = true
                 }
             }
         }
@@ -79,6 +78,22 @@ class ConfigActivity : ComponentActivity() {
                     baseConfig(this)
                 }
             }
+        }
+    }
+
+    @Composable
+    fun dialogDenyComposable() {
+        showDialogLocation = remember { mutableStateOf(false) }
+        if (showDialogLocation.value) {
+            ComposablesUtils.dialogCustom(
+                openDialog = showDialogLocation,
+                text = R.string.descriptionDenyLocation ,
+                btnAccept = {
+                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                    val uri: Uri = Uri.fromParts("package", packageName, null)
+                    intent.data = uri
+                    startActivity(intent)
+                })
         }
     }
 
@@ -96,6 +111,7 @@ class ConfigActivity : ComponentActivity() {
         if (!viewModel.getFlatTheme()) {
             //
         }
+        if (::checkedStateLocation.isInitialized) checkedStateLocation.value = checkPermissionLocation()
     }
 
     override fun onBackPressed() {
@@ -120,7 +136,7 @@ class ConfigActivity : ComponentActivity() {
             sectionTitle()
             sectionSwitchLocation()
             sectionSwitchTheme()
-
+            dialogDenyComposable()
 
             IconButton(
                 modifier = Modifier
@@ -167,8 +183,8 @@ class ConfigActivity : ComponentActivity() {
 
     @Composable
     private fun sectionSwitchLocation() {
-        var checkedState = remember { mutableStateOf(false) }
-        checkedState.value = checkPermissionLocation()
+        checkedStateLocation = remember { mutableStateOf(false) }
+        checkedStateLocation.value = checkPermissionLocation()
         Row(
             Modifier.padding(top = 20.dp, bottom = 10.dp)
         ) {
@@ -189,9 +205,9 @@ class ConfigActivity : ComponentActivity() {
                     .padding(end = 5.dp)
             )
             Switch(
-                checked = checkedState.value,
+                checked = checkedStateLocation.value,
                 onCheckedChange = {
-                    checkedState.value = it
+                    checkedStateLocation.value = it
                     if (it) {
                         requestLocation()
                     }
