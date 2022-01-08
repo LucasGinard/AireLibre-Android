@@ -3,7 +3,7 @@
     <string name="titleName">Aire | Libre</string>
 
     <!---HomeActivity-->
-    <string name="tvCity">Ciudad:</string>
+    <string name="tvCity">Sensor:</string>
     <string name="tvCityCloser">Sensor más cercano:</string>
     <string name="tvTitleList">Lista de sensores:</string>
     <string name="tvEscale">Escala AQI</string>
