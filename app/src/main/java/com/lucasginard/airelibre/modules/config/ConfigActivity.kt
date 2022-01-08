@@ -40,7 +40,7 @@ class ConfigActivity : ComponentActivity() {
     private lateinit var locationPermissionRequest:
             ActivityResultLauncher<Array<String>>
 
-    lateinit var checkedStateTheme:MutableState<Boolean>
+    lateinit var checkedStateTheme: MutableState<Boolean>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -93,7 +93,7 @@ class ConfigActivity : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (!viewModel.getFlatTheme()){
+        if (!viewModel.getFlatTheme()) {
             //
         }
     }
@@ -226,6 +226,7 @@ class ConfigActivity : ComponentActivity() {
             if (openDialog.value) {
                 ComposablesUtils.dialogCustom(
                     openDialog = openDialog,
+                    text = R.string.descriptionWarningTheme,
                     btnAccept = {
                         viewModel.setFlatTheme(true)
                         checkedStateTheme.value = !checkedStateTheme.value
@@ -252,9 +253,9 @@ class ConfigActivity : ComponentActivity() {
             Switch(
                 checked = checkedStateTheme.value,
                 onCheckedChange = {
-                    if (!viewModel.getFlatTheme()){
+                    if (!viewModel.getFlatTheme()) {
                         openDialog.value = true
-                    }else{
+                    } else {
                         checkedStateTheme.value = it
                         switchTheme(it)
                     }
@@ -267,17 +268,17 @@ class ConfigActivity : ComponentActivity() {
     }
 
     @Composable
-    private fun checkSwitchTheme(checkedState:MutableState<Boolean>){
-        if (!viewModel.getFlatTheme()){
+    private fun checkSwitchTheme(checkedState: MutableState<Boolean>) {
+        if (!viewModel.getFlatTheme()) {
             checkedState.value = isSystemInDarkTheme()
-        }else{
+        } else {
             checkedState.value = viewModel.getTheme()
         }
     }
 
-    private fun switchTheme(switch:Boolean){
+    private fun switchTheme(switch: Boolean) {
         viewModel.setFlatTheme(true)
-        when (switch){
+        when (switch) {
             true -> {
                 ThemeState.isDark = true
                 viewModel.setTheme(true)

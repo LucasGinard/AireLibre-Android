@@ -40,7 +40,8 @@
     <string name="titleConfig">Ajustes</string>
     <string name="titleSwitchLocation">Acceso a su ubicación:</string>
     <string name="titleSwitchTheme">Modo Oscuro:</string>
-    <string name="descriptionWarningLocation">Actualmente la App detecta la configuración del dispositivo\nsi lo modifica ya no tendrá en cuenta la configuración del dispositivo:</string>
+    <string name="descriptionWarningTheme">Actualmente la App toma la configuración del dispositivo\nsi lo modifica ya no tendrá en cuenta la configuración del dispositivo</string>
+    <string name="descriptionDenyLocation"></string>
 
     <!---recyclerView-->
     <string name="tvLinkGo"><u>Ver mas</u></string>

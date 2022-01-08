@@ -31,7 +31,7 @@ class ComposablesUtils {
         )
 
         @Composable
-        fun dialogCustom(openDialog: MutableState<Boolean>, btnAccept: () -> Unit, btnCancel: () -> Unit ?= {},icon: Painter = painterResource(id = R.drawable.ic_warning)){
+        fun dialogCustom(openDialog: MutableState<Boolean>,text:Int, btnAccept: () -> Unit, btnCancel: () -> Unit ?= {},icon: Painter = painterResource(id = R.drawable.ic_warning)){
             Dialog(onDismissRequest = { openDialog.value = false }) {
                 Card(
                     shape = RoundedCornerShape(8.dp),
@@ -55,7 +55,7 @@ class ComposablesUtils {
                                 tint = MaterialTheme.colors.primary
                             )
                             Text(
-                                text = stringResource(id = R.string.descriptionWarningLocation),
+                                text = stringResource(id = text),
                                 fontFamily = fonts,
                                 fontWeight = FontWeight.Normal,
                                 modifier = Modifier.padding(top = 15.dp,start = 15.dp)
