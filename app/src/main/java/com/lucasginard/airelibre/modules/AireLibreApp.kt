@@ -1,6 +1,8 @@
 package com.lucasginard.airelibre.modules
 
 import android.app.Application
+import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.lucasginard.airelibre.BuildConfig
 import com.lucasginard.airelibre.modules.data.SharedPref
 
 class AireLibreApp: Application() {
@@ -11,5 +13,8 @@ class AireLibreApp: Application() {
     override fun onCreate() {
         super.onCreate()
         prefs = SharedPref(applicationContext)
+        if(BuildConfig.DEBUG){
+            FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(false)
+        }
     }
 }
