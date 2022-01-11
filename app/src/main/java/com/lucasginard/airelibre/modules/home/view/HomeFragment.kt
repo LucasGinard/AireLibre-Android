@@ -12,6 +12,13 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.painterResource
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -28,6 +35,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.lucasginard.airelibre.databinding.FragmentHomeBinding
 import com.lucasginard.airelibre.modules.about.AboutActivity
 import com.lucasginard.airelibre.modules.config.ConfigActivity
+import com.lucasginard.airelibre.modules.config.ui.theme.AireLibreTheme
 import com.lucasginard.airelibre.modules.data.APIService
 import com.lucasginard.airelibre.modules.home.domain.HomeRepository
 import com.lucasginard.airelibre.modules.home.model.CityResponse
@@ -53,6 +61,8 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var onSwipeTouchListener: OnSwipeTouchListener
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
+
+    private lateinit var booleanDialog:MutableState<Boolean>
 
     private var mapView: MapView? = null
     private val retrofit = APIService.getInstance()
@@ -103,6 +113,17 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        _binding.composeDialog.apply {
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+            setContent {
+                AireLibreTheme(darkTheme = ThemeState.isDark) {
+                    Surface(color = MaterialTheme.colors.background) {
+                        booleanDialog = remember { androidx.compose.runtime.mutableStateOf(false) }
+                        if (booleanDialog.value) DialogCardsAQICompose(booleanDialog)
+                    }
+                }
+            }
+        }
         requestLocation()
         configureUI()
         configureService()
@@ -132,7 +153,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
     private fun configureOnClickListeners() {
         _binding.btnInfo.setOnClickListener {
-            Toast.makeText(context,getText(R.string.tvHelp),Toast.LENGTH_LONG).show()
+            booleanDialog.value = true
         }
 
         _binding.btnConfig.setOnClickListener {
