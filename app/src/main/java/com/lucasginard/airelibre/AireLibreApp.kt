@@ -1,8 +1,7 @@
-package com.lucasginard.airelibre.modules
+package com.lucasginard.airelibre
 
 import android.app.Application
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.lucasginard.airelibre.BuildConfig
 import com.lucasginard.airelibre.modules.data.SharedPref
 
 class AireLibreApp: Application() {

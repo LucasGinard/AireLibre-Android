@@ -1,6 +1,6 @@
 package com.lucasginard.airelibre.modules.config.domain
 
-import com.lucasginard.airelibre.modules.AireLibreApp
+import com.lucasginard.airelibre.AireLibreApp
 
 class ConfigRepository {
 
