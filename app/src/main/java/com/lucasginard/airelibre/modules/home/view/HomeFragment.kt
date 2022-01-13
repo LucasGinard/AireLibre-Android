@@ -12,13 +12,11 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.Image
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.compose.ui.res.painterResource
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -38,6 +36,7 @@ import com.lucasginard.airelibre.modules.config.ConfigActivity
 import com.lucasginard.airelibre.modules.config.ui.theme.AireLibreTheme
 import com.lucasginard.airelibre.modules.data.APIService
 import com.lucasginard.airelibre.modules.home.domain.HomeRepository
+import com.lucasginard.airelibre.modules.home.model.CardsAQI
 import com.lucasginard.airelibre.modules.home.model.CityResponse
 import com.lucasginard.airelibre.modules.home.viewModel.HomeViewModel
 import com.lucasginard.airelibre.modules.home.viewModel.HomeViewModelFactory
@@ -63,6 +62,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
 
     private lateinit var booleanDialog:MutableState<Boolean>
+    private var listCards = ArrayList<CardsAQI>()
 
     private var mapView: MapView? = null
     private val retrofit = APIService.getInstance()
@@ -119,7 +119,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                 AireLibreTheme(darkTheme = ThemeState.isDark) {
                     Surface(color = MaterialTheme.colors.background) {
                         booleanDialog = remember { androidx.compose.runtime.mutableStateOf(false) }
-                        if (booleanDialog.value) DialogCardsAQICompose(booleanDialog)
+                        if (booleanDialog.value) DialogCardsAQICompose(booleanDialog,listCards)
                     }
                 }
             }
@@ -153,6 +153,8 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
     private fun configureOnClickListeners() {
         _binding.btnInfo.setOnClickListener {
+            listCards.clear()
+            listCards = viewModel.getCards(requireActivity())
             booleanDialog.value = true
         }
 

@@ -8,4 +8,11 @@
     <color name="white">#FFFFFFFF</color>
     <color name="danger">#FF0202</color>
     <color name="link">#176EFF</color>
+
+    <color name="cardGreen">#A2DC61</color>
+    <color name="cardYellow">#F6D550</color>
+    <color name="cardOrange">#EE9955</color>
+    <color name="cardRed">#E9686C</color>
+    <color name="cardPurple">#A97BBC</color>
+    <color name="cardDanger">#9B5974</color>
 </resources>
