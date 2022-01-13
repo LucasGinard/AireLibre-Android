@@ -23,6 +23,7 @@
     <string name="tvDescriptionPurple">Condición de emergencia.</string>
     <string name="tvDescriptionDanger">Alerta sanitaria, efectos graves para toda la población.</string>
     <string name="toastErrorNet">Sin conexión compruebe su conexión</string>
+    <string name="titleAQIInfo">¿Qué es AQI?</string>
 
     <!---AboutActivity-->
     <string name="whatsIsAireLibre">¿Qué es AireLibre?</string>
@@ -69,5 +70,6 @@
     <string name="btnTwitter">twitterBot</string>
     <string name="btnWebsite">webSite</string>
 
-
+    <!---Emojis-->
+    <string name="emojiWorld">🌎</string>
 </resources>
