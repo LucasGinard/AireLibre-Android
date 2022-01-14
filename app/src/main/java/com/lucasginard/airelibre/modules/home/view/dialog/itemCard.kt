@@ -1,4 +1,4 @@
-package com.lucasginard.airelibre.modules.home.view
+package com.lucasginard.airelibre.modules.home.view.dialog
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -19,22 +19,23 @@ fun itemCard(card: CardsAQI) {
     val font = ComposablesUtils.fontFamily
     Column(
         modifier = Modifier
+            .padding(bottom = 5.dp)
             .background(colorResource(id = card.backgroundColor))
             .fillMaxWidth()
-            .padding(24.dp),
+            .padding(10.dp)
     ) {
         Text(
             text = card.titleEscale,
             fontFamily = font,
             fontWeight = FontWeight.Bold,
-            fontSize = 10.sp,
+            fontSize = if (card.titleEscale.contains("Muy insalubre")) 13.sp else 15.sp,
             color = colorResource(id = R.color.black)
         )
         Text(
             text = card.descriptionEscale,
             fontFamily = font,
             fontWeight = FontWeight.Normal,
-            fontSize = 12.sp,
+            fontSize = 13.sp,
             color = colorResource(id = R.color.black)
         )
     }
@@ -47,7 +48,7 @@ fun CustomItemPreview() {
     itemCard(
         card = CardsAQI(
             "Test",
-            "Descricopn del card",
+            "Descripcion del card",
             R.color.cardRed
         )
     )

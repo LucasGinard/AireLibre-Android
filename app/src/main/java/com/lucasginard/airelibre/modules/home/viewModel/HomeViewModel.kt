@@ -42,12 +42,12 @@ class HomeViewModel constructor(private val repository: HomeRepository) : ViewMo
 
     fun getCards(activity: Activity):ArrayList<CardsAQI>{
         val listCards = ArrayList<CardsAQI>()
-        listCards.add(CardsAQI("0-50 | Libre",activity.getString(R.string.tvDescriptionGreen),R.color.cardGreen))
-        listCards.add(CardsAQI("51-100 | Maso",activity.getString(R.string.tvDescriptionYellow),R.color.cardYellow))
-        listCards.add(CardsAQI("101-150 | No tan bien",activity.getString(R.string.tvDescriptionOrange),R.color.cardOrange))
-        listCards.add(CardsAQI("151-200 | Insalubre",activity.getString(R.string.tvDescriptionRed),R.color.cardRed))
-        listCards.add(CardsAQI("201-300 | Muy insalubre",activity.getString(R.string.tvDescriptionPurple),R.color.cardPurple))
-        listCards.add(CardsAQI("300+ | Peligroso",activity.getString(R.string.tvDescriptionDanger),R.color.cardDanger))
+        listCards.add(CardsAQI(activity.getString(R.string.textTitleGreen),activity.getString(R.string.tvDescriptionGreen),R.color.cardGreen))
+        listCards.add(CardsAQI(activity.getString(R.string.textTitleYellow),activity.getString(R.string.tvDescriptionYellow),R.color.cardYellow))
+        listCards.add(CardsAQI(activity.getString(R.string.textTitleOrange),activity.getString(R.string.tvDescriptionOrange),R.color.cardOrange))
+        listCards.add(CardsAQI(activity.getString(R.string.textTitleRed),activity.getString(R.string.tvDescriptionRed),R.color.cardRed))
+        listCards.add(CardsAQI(activity.getString(R.string.textTitlePurple),activity.getString(R.string.tvDescriptionPurple),R.color.cardPurple))
+        listCards.add(CardsAQI(activity.getString(R.string.textTitleDanger),activity.getString(R.string.tvDescriptionDanger),R.color.cardDanger))
         return listCards
     }
 

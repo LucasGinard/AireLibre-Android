@@ -38,6 +38,7 @@ import com.lucasginard.airelibre.modules.data.APIService
 import com.lucasginard.airelibre.modules.home.domain.HomeRepository
 import com.lucasginard.airelibre.modules.home.model.CardsAQI
 import com.lucasginard.airelibre.modules.home.model.CityResponse
+import com.lucasginard.airelibre.modules.home.view.dialog.DialogCardsAQICompose
 import com.lucasginard.airelibre.modules.home.viewModel.HomeViewModel
 import com.lucasginard.airelibre.modules.home.viewModel.HomeViewModelFactory
 import com.lucasginard.airelibre.utils.*

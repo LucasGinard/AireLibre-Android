@@ -50,6 +50,13 @@
 
     <!---recyclerView-->
     <string name="tvLinkGo"><u>Ver mas</u></string>
+    <!---LazyColumn-->
+    <string name="textTitleGreen">0-50 | Libre</string>
+    <string name="textTitleYellow">51-100 | Maso</string>
+    <string name="textTitleOrange">101-150 | No tan bien</string>
+    <string name="textTitleRed">151-200 | Insalubre</string>
+    <string name="textTitlePurple">201-300 | Muy insalubre</string>
+    <string name="textTitleDanger">300+ | Peligroso</string>
 
     <!---links-->
     <string name="linkIcon">https://www.freepik.es/vector-gratis/familia-activa-feliz-caminando-al-aire-libre_7732632.htm</string>

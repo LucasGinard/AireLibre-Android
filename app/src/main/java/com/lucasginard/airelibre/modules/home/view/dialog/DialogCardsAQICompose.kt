@@ -1,4 +1,4 @@
-package com.lucasginard.airelibre.modules.home.view
+package com.lucasginard.airelibre.modules.home.view.dialog
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -74,6 +74,7 @@ fun DialogCardsAQICompose(openDialog: MutableState<Boolean>,list:ArrayList<Cards
                     )
                 }
                 LazyColumn(
+                    modifier = Modifier.height(300.dp),
                     contentPadding = PaddingValues(12.dp)
                 ) {
                     for (x in list){
