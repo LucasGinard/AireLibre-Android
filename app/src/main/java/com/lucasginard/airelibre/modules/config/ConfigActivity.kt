@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
+import com.lucasginard.airelibre.BuildConfig
 import com.lucasginard.airelibre.R
 import com.lucasginard.airelibre.modules.config.domain.ConfigRepository
 import com.lucasginard.airelibre.modules.config.ui.theme.AireLibreTheme
@@ -142,6 +143,7 @@ class ConfigActivity : ComponentActivity() {
             sectionTitle()
             sectionSwitchLocation()
             sectionSwitchTheme()
+            sectionTextVersion()
             dialogDenyComposable()
 
             IconButton(
@@ -285,6 +287,16 @@ class ConfigActivity : ComponentActivity() {
                     .align(alignment = Alignment.CenterVertically)
             )
         }
+    }
+
+    @Composable
+    private fun sectionTextVersion(){
+        Text(
+            text = "${getString(R.string.titleVersion)} ${BuildConfig.VERSION_NAME}",
+            modifier = Modifier.padding(top = 10.dp ,bottom =  10.dp),
+            fontFamily = ComposablesUtils.fonts,
+            fontWeight = FontWeight.Normal,
+        )
     }
 
     @Composable

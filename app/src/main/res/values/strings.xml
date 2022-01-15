@@ -24,6 +24,7 @@
     <string name="tvDescriptionDanger">Alerta sanitaria, efectos graves para toda la población.</string>
     <string name="toastErrorNet">Sin conexión compruebe su conexión</string>
     <string name="titleAQIInfo">¿Qué es AQI?</string>
+    <string name="titleVersion">📱Versión:</string>
 
     <!---AboutActivity-->
     <string name="whatsIsAireLibre">¿Qué es AireLibre?</string>
