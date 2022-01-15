@@ -4,6 +4,7 @@ import android.app.ActivityOptions
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.*
@@ -28,19 +29,20 @@ import com.lucasginard.airelibre.modules.about.ui.theme.AireLibreTheme
 import com.lucasginard.airelibre.modules.home.view.MainActivity
 import com.lucasginard.airelibre.utils.ComposablesUtils
 import com.lucasginard.airelibre.utils.ThemeState
+import com.lucasginard.airelibre.utils.getModeTheme
 import com.lucasginard.airelibre.utils.goToURL
 
 class AboutActivity : ComponentActivity() {
 
     private lateinit var context: Context
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             AireLibreTheme(ThemeState.isDark) {
                 Surface(color = MaterialTheme.colors.background) {
-                    Greeting(this)
+                    context = LocalContext.current
+                    baseAbout(this)
                 }
             }
         }
@@ -56,8 +58,11 @@ class AboutActivity : ComponentActivity() {
 
 
     @Composable
-    fun Greeting(activity: AboutActivity = AboutActivity()) {
+    fun baseAbout(activity: AboutActivity = AboutActivity()) {
         context = LocalContext.current
+        if (ThemeState.isDefault && ::context.isInitialized) {
+            ThemeState.isDark = this.getModeTheme(context)
+        }
         Column(
             modifier = Modifier
                 .padding(end = 20.dp, start = 20.dp)
@@ -289,7 +294,7 @@ class AboutActivity : ComponentActivity() {
     @Composable
     fun DefaultPreview() {
         AireLibreTheme {
-            Greeting()
+            baseAbout()
         }
     }
 }

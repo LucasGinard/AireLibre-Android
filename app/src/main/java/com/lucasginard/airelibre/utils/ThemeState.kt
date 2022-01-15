@@ -6,4 +6,5 @@ import androidx.compose.runtime.setValue
 
 object ThemeState {
     var isDark by mutableStateOf(true)
+    var isDefault by mutableStateOf(true)
 }

@@ -395,8 +395,10 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             btnArrow = _binding.coordinatorLayout.findViewById(R.id.btnArrow)
             if (!viewModel.isNotDefaultTheme()){
                 ThemeState.isDark = this.getModeTheme(requireContext())
+                ThemeState.isDefault = true
             }else{
                 ThemeState.isDark = viewModel.getTheme()
+                ThemeState.isDefault = false
             }
             if (ThemeState.isDark){
                 GoogleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(context, R.raw.mapstyle_night))
