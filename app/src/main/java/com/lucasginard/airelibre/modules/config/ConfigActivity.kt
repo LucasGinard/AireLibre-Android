@@ -11,6 +11,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -45,7 +47,9 @@ class ConfigActivity : ComponentActivity() {
     lateinit var checkedStateTheme: MutableState<Boolean>
     lateinit var showDialogLocation:MutableState<Boolean>
     lateinit var checkedStateLocation :MutableState<Boolean>
+    lateinit var visibilityRestoreTheme :MutableState<Boolean>
 
+    @ExperimentalAnimationApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         locationPermissionRequest = registerForActivityResult(
@@ -115,7 +119,7 @@ class ConfigActivity : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (!viewModel.getFlatTheme()) {
+        if (!viewModel.isNotDefaultTheme()) {
             //
         }
         if (::checkedStateLocation.isInitialized) checkedStateLocation.value = checkPermissionLocation()
@@ -129,6 +133,7 @@ class ConfigActivity : ComponentActivity() {
         )
     }
 
+    @ExperimentalAnimationApi
     @Composable
     fun baseConfig(activity: ConfigActivity) {
         Column(
@@ -238,6 +243,7 @@ class ConfigActivity : ComponentActivity() {
         return permission == 0 || permissionl == 0
     }
 
+    @ExperimentalAnimationApi
     @Composable
     private fun sectionSwitchTheme() {
         checkedStateTheme = remember { mutableStateOf(false) }
@@ -250,7 +256,7 @@ class ConfigActivity : ComponentActivity() {
                     openDialog = openDialog,
                     text = R.string.descriptionWarningTheme,
                     btnAccept = {
-                        viewModel.setFlatTheme(true)
+                        viewModel.setNotIsDefaultTheme(true)
                         checkedStateTheme.value = !checkedStateTheme.value
                         switchTheme(checkedStateTheme.value)
                     })
@@ -271,11 +277,12 @@ class ConfigActivity : ComponentActivity() {
                     .align(alignment = Alignment.CenterVertically)
                     .padding(end = 5.dp)
             )
-            checkSwitchTheme(checkedStateTheme)
+            checkSwitchTheme(checkedStateTheme,isSystemInDarkTheme())
+            val themeSystem = isSystemInDarkTheme()
             Switch(
                 checked = checkedStateTheme.value,
                 onCheckedChange = {
-                    if (!viewModel.getFlatTheme()) {
+                    if (!viewModel.isNotDefaultTheme()) {
                         openDialog.value = true
                     } else {
                         checkedStateTheme.value = it
@@ -286,6 +293,27 @@ class ConfigActivity : ComponentActivity() {
                 modifier = Modifier
                     .align(alignment = Alignment.CenterVertically)
             )
+            visibilityRestoreTheme = remember { mutableStateOf(false) }
+            visibilityRestoreTheme.value = viewModel.isNotDefaultTheme()
+            AnimatedVisibility(
+                visible = visibilityRestoreTheme.value
+            ) {
+                IconButton(
+                    onClick = {
+                        viewModel.setNotIsDefaultTheme(false)
+                        checkSwitchTheme(checkedStateTheme,themeSystem)
+                        visibilityRestoreTheme.value = !visibilityRestoreTheme.value
+                    }
+                ) {
+                    Icon(
+                        modifier = Modifier.then(Modifier.size(35.dp)),
+                        painter = painterResource(id = R.drawable.ic_rollback),
+                        contentDescription = stringResource(id = R.string.contentOnBack),
+                        tint = MaterialTheme.colors.primary
+                    )
+                }
+            }
+
         }
     }
 
@@ -299,17 +327,18 @@ class ConfigActivity : ComponentActivity() {
         )
     }
 
-    @Composable
-    private fun checkSwitchTheme(checkedState: MutableState<Boolean>) {
-        if (!viewModel.getFlatTheme()) {
-            checkedState.value = isSystemInDarkTheme()
+    private fun checkSwitchTheme(checkedState: MutableState<Boolean>,themeSystem:Boolean) {
+        if (!viewModel.isNotDefaultTheme()) {
+            checkedState.value = themeSystem
+            ThemeState.isDark = checkedState.value
         } else {
             checkedState.value = viewModel.getTheme()
+            ThemeState.isDark = checkedState.value
         }
     }
 
     private fun switchTheme(switch: Boolean) {
-        viewModel.setFlatTheme(true)
+        viewModel.setNotIsDefaultTheme(true)
         when (switch) {
             true -> {
                 ThemeState.isDark = true
@@ -322,6 +351,7 @@ class ConfigActivity : ComponentActivity() {
         }
     }
 
+    @ExperimentalAnimationApi
     @Preview(showBackground = true)
     @Composable
     fun DefaultPreview2() {

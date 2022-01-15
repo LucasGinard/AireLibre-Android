@@ -5,7 +5,7 @@ import com.lucasginard.airelibre.modules.config.domain.ConfigRepository
 
 class ConfigViewModel constructor(private val repository: ConfigRepository) : ViewModel() {
 
-    fun setFlatTheme(flat:Boolean){
+    fun setNotIsDefaultTheme(flat:Boolean){
         repository.saveIsThemeFlat(flat)
     }
 
@@ -13,9 +13,10 @@ class ConfigViewModel constructor(private val repository: ConfigRepository) : Vi
         repository.saveThemeCustom(flat)
     }
 
-    fun getFlatTheme():Boolean{
+    fun isNotDefaultTheme():Boolean{
         return repository.getIsThemeSave()
     }
+
     fun getTheme():Boolean{
         return repository.getThemeCustom()
     }

@@ -32,7 +32,7 @@ class HomeViewModel constructor(private val repository: HomeRepository) : ViewMo
         })
     }
 
-    fun getFlatTheme():Boolean{
+    fun isNotDefaultTheme():Boolean{
         return repository.getIsThemeSave()
     }
 

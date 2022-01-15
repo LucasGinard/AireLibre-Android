@@ -393,7 +393,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     private fun mapTheme(){
         if (::GoogleMap.isInitialized && context != null){
             btnArrow = _binding.coordinatorLayout.findViewById(R.id.btnArrow)
-            if (!viewModel.getFlatTheme()){
+            if (!viewModel.isNotDefaultTheme()){
                 ThemeState.isDark = this.getModeTheme(requireContext())
             }else{
                 ThemeState.isDark = viewModel.getTheme()
