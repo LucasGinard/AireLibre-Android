@@ -2,6 +2,7 @@ package com.lucasginard.airelibre.modules.config
 
 import android.Manifest
 import android.app.ActivityOptions
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -19,6 +20,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -36,6 +38,7 @@ import com.lucasginard.airelibre.modules.config.viewModel.ConfigViewModelFactory
 import com.lucasginard.airelibre.modules.home.view.MainActivity
 import com.lucasginard.airelibre.utils.ComposablesUtils
 import com.lucasginard.airelibre.utils.ThemeState
+import com.lucasginard.airelibre.utils.getModeTheme
 
 
 class ConfigActivity : ComponentActivity() {
@@ -48,6 +51,7 @@ class ConfigActivity : ComponentActivity() {
     lateinit var showDialogLocation:MutableState<Boolean>
     lateinit var checkedStateLocation :MutableState<Boolean>
     lateinit var visibilityRestoreTheme :MutableState<Boolean>
+    private lateinit var context: Context
 
     @ExperimentalAnimationApi
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -85,6 +89,7 @@ class ConfigActivity : ComponentActivity() {
         setContent {
             AireLibreTheme(darkTheme = ThemeState.isDark) {
                 Surface(color = MaterialTheme.colors.background) {
+                    context = LocalContext.current
                     baseConfig(this)
                 }
             }
@@ -119,8 +124,8 @@ class ConfigActivity : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (!viewModel.isNotDefaultTheme()) {
-            //
+        if (!viewModel.isNotDefaultTheme() && ::context.isInitialized) {
+            ThemeState.isDark = this.getModeTheme(context)
         }
         if (::checkedStateLocation.isInitialized) checkedStateLocation.value = checkPermissionLocation()
     }
