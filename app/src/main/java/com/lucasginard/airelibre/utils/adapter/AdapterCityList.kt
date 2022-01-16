@@ -32,4 +32,11 @@ class AdapterCityList(var cityList: ArrayList<CityResponse>,val fragment: HomeFr
         cityList.addAll(aux)
         notifyDataSetChanged()
     }
+
+    fun orderListAQI(){
+        val aux = cityList.sortedByDescending { it.quality.index }
+        cityList.clear()
+        cityList.addAll(aux)
+        notifyDataSetChanged()
+    }
 }

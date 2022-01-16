@@ -150,6 +150,9 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             recycler.layoutManager = LinearLayoutManager(context)
         }
         recycler.adapter = adapter
+        if (::adapter.isInitialized && !flatPermisson){
+            adapter.orderListAQI()
+        }
     }
 
     private fun configureOnClickListeners() {
