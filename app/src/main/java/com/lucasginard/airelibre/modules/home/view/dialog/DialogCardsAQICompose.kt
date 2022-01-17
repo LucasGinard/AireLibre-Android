@@ -77,10 +77,8 @@ fun DialogCardsAQICompose(openDialog: MutableState<Boolean>,list:ArrayList<Cards
                     modifier = Modifier.height(300.dp),
                     contentPadding = PaddingValues(12.dp)
                 ) {
-                    for (x in list){
-                        item{
-                            itemCard(x)
-                        }
+                    items(list.size){
+                        itemCard(list[it])
                     }
                 }
             }

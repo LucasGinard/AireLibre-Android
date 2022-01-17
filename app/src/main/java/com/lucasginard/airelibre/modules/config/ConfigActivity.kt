@@ -151,6 +151,7 @@ class ConfigActivity : ComponentActivity() {
         ) {
 
             sectionTitle()
+            sectionThemeCheck()
             sectionSwitchLocation()
             sectionSwitchTheme()
             sectionTextVersion()
@@ -197,6 +198,20 @@ class ConfigActivity : ComponentActivity() {
             fontWeight = FontWeight.Bold,
             fontSize = 22.sp,
         )
+    }
+
+    @Composable
+    fun sectionThemeCheck(){
+        Column(
+            Modifier.padding(top = 20.dp, bottom = 10.dp)
+        ){
+            Text(
+                text = stringResource(id = R.string.titleCheckTheme),
+                fontFamily = ComposablesUtils.fonts,
+                fontWeight = FontWeight.Normal,
+                modifier = Modifier
+            )
+        }
     }
 
     @Composable
