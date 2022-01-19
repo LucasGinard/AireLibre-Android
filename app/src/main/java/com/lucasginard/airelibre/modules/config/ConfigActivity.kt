@@ -151,7 +151,7 @@ class ConfigActivity : ComponentActivity() {
         ) {
 
             sectionTitle()
-            sectionThemeCheck()
+            //sectionThemeCheck()
             sectionSwitchLocation()
             sectionSwitchTheme()
             sectionTextVersion()
