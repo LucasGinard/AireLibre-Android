@@ -26,17 +26,41 @@ class AdapterCityList(var cityList: ArrayList<CityResponse>,val fragment: HomeFr
 
     override fun getItemCount(): Int = cityList.size
 
-    fun orderList(){
-        val aux = cityList.sortedBy { it.distance }
+    private fun orderListDown(orderName:String){
+        val aux = when(orderName){
+            "Distance" ->{
+                cityList.sortedBy { it.distance }
+            }
+            "AQI"->{
+                cityList.sortedBy { it.quality.index }
+            }
+            else -> cityList
+        }
         cityList.clear()
         cityList.addAll(aux)
         notifyDataSetChanged()
     }
 
-    fun orderListAQI(){
-        val aux = cityList.sortedByDescending { it.quality.index }
+    private fun orderListUp(orderName: String){
+        val aux = when(orderName){
+            "Distance" ->{
+                cityList.sortedByDescending { it.distance }
+            }
+            "AQI"->{
+                cityList.sortedByDescending { it.quality.index }
+            }
+            else -> cityList
+        }
         cityList.clear()
         cityList.addAll(aux)
         notifyDataSetChanged()
+    }
+
+    fun orderList(orderName:String,isDown:Boolean){
+        if (isDown){
+            orderListDown(orderName)
+        }else{
+            orderListUp(orderName)
+        }
     }
 }

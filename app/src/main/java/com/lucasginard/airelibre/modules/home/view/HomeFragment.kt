@@ -8,6 +8,7 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
 import android.view.*
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.Toast
@@ -55,6 +56,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     private lateinit var adapter: AdapterCityList
     private lateinit var cityCloser: CityResponse
     private lateinit var btnArrow:ImageView
+    private lateinit var btnOrder:ImageButton
 
     private lateinit var GoogleMap: GoogleMap
     private lateinit var lastLocation: Location
@@ -137,6 +139,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         _binding.btnReconnect.apply {
             this.imageTintList = ContextCompat.getColorStateList(this.context, R.color.white)
         }
+        btnOrder = _binding.coordinatorLayout.findViewById(R.id.btnOrder)
     }
 
     private fun configureAdapter(arrayList: ArrayList<CityResponse>) {
@@ -151,7 +154,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         }
         recycler.adapter = adapter
         if (::adapter.isInitialized && !flatPermisson){
-            adapter.orderListAQI()
+            adapter.orderList("AQI",false)
         }
     }
 
@@ -223,6 +226,16 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
             }
         }
+
+        btnOrder.setOnClickListener {
+            if (btnOrder.rotation == 90f){
+                btnOrder.rotation = -90f
+                adapter.orderList("Distance",true)
+            } else{
+                btnOrder.rotation = 90f
+                adapter.orderList("Distance",false)
+            }
+        }
     }
 
     private fun configureService() {
@@ -252,7 +265,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun configureMaps(saved: Bundle?) {
-        mapView = _binding.mapView
+        mapView = _binding.mapViewFragment
         mapView?.onCreate(saved)
         mapView?.onResume()
         try {
@@ -263,7 +276,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         mapView?.getMapAsync(this)
         //Button Center Location:
         val locationButton =
-            (_binding.mapView.findViewById<View>(Integer.parseInt("1"))?.parent as View).findViewById<View>(
+            (_binding.mapViewFragment.findViewById<View>(Integer.parseInt("1"))?.parent as View).findViewById<View>(
                 Integer.parseInt("2")
             )
         val rlp = locationButton.layoutParams as RelativeLayout.LayoutParams
@@ -274,7 +287,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
     private fun configureMarkers(arrayList: ArrayList<CityResponse>) {
         for (x in arrayList) {
-            if (::GoogleMap.isInitialized) {
+            if (::GoogleMap.isInitialized && mapView != null) {
                 GoogleMap.addMarker(
                     MarkerOptions()
                         .position(LatLng(x.latitude, x.longitude))
@@ -387,7 +400,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                 makerLamda(cerca.description)
                 _binding.tvTitleCity.text = getText(R.string.tvCityCloser)
                 if (::adapter.isInitialized){
-                    adapter.orderList()
+                    adapter.orderList("Distance",true)
                 }
             }
         }

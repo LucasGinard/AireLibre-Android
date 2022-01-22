@@ -5,7 +5,7 @@
     <!---HomeActivity-->
     <string name="tvCity">Sensor:</string>
     <string name="tvCityCloser">Sensor más cercano:</string>
-    <string name="tvTitleList">Lista de sensores:</string>
+    <string name="tvTitleList">Lista de sensores</string>
     <string name="tvEscale">Escala AQI</string>
     <string name="tvStatus">Estado</string>
     <string name="tvDistance">Distancia</string>
