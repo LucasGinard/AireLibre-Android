@@ -8,7 +8,6 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
 import android.view.*
-import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.Toast
@@ -56,7 +55,8 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     private lateinit var adapter: AdapterCityList
     private lateinit var cityCloser: CityResponse
     private lateinit var btnArrow:ImageView
-    private lateinit var btnOrder:ImageButton
+    private lateinit var btnOrderList:ImageView
+    private lateinit var recycler:RecyclerView
 
     private lateinit var GoogleMap: GoogleMap
     private lateinit var lastLocation: Location
@@ -139,7 +139,8 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         _binding.btnReconnect.apply {
             this.imageTintList = ContextCompat.getColorStateList(this.context, R.color.white)
         }
-        btnOrder = _binding.coordinatorLayout.findViewById(R.id.btnOrder)
+        btnOrderList = _binding.coordinatorLayout.findViewById(R.id.btnOrder)
+        recycler = _binding.coordinatorLayout.findViewById(R.id.rvLista)
     }
 
     private fun configureAdapter(arrayList: ArrayList<CityResponse>) {
@@ -148,7 +149,6 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         }else{
             AdapterCityList(arrayList, this)
         }
-        val recycler = _binding.coordinatorLayout.findViewById<RecyclerView>(R.id.rvLista)
         if (context != null){
             recycler.layoutManager = LinearLayoutManager(context)
         }
@@ -227,13 +227,15 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             }
         }
 
-        btnOrder.setOnClickListener {
-            if (btnOrder.rotation == 90f){
-                btnOrder.rotation = -90f
+        btnOrderList.setOnClickListener {
+            if (btnOrderList.rotation == 90f){
+                btnOrderList.rotation = -90f
                 adapter.orderList("Distance",true)
+                onResume()
             } else{
-                btnOrder.rotation = 90f
+                btnOrderList.rotation = 90f
                 adapter.orderList("Distance",false)
+                onResume()
             }
         }
     }
