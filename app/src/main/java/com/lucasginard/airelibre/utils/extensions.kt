@@ -80,3 +80,14 @@ fun Fragment.textsAQI(
     }
     viewQuality.text = index.toString()
 }
+
+fun View.animationList(rotation:Float) {
+    this.animate()
+        .rotation(
+            if (this.rotation == 90F)
+                -90F
+            else 90F
+        )
+        .withEndAction { this.rotation = rotation }
+        .start()
+}

@@ -229,13 +229,11 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
         btnOrderList.setOnClickListener {
             if (btnOrderList.rotation == 90f){
-                btnOrderList.rotation = -90f
+                btnOrderList.animationList(-90f)
                 adapter.orderList("Distance",true)
-                onResume()
             } else{
-                btnOrderList.rotation = 90f
+                btnOrderList.animationList(90f)
                 adapter.orderList("Distance",false)
-                onResume()
             }
         }
     }
