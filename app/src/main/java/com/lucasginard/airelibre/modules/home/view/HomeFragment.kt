@@ -8,10 +8,7 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
 import android.view.*
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.RelativeLayout
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.MenuRes
 import androidx.appcompat.widget.PopupMenu
@@ -61,6 +58,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     private lateinit var btnOrderList:ImageView
     private lateinit var recycler:RecyclerView
     private lateinit var btnFilter:ImageButton
+    private lateinit var tvFilter:TextView
     private lateinit var filterAdapter:String
 
     private lateinit var GoogleMap: GoogleMap
@@ -148,6 +146,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         btnOrderList = _binding.coordinatorLayout.findViewById(R.id.btnOrder)
         recycler = _binding.coordinatorLayout.findViewById(R.id.rvLista)
         btnFilter = _binding.coordinatorLayout.findViewById(R.id.btnFilter)
+        tvFilter = _binding.coordinatorLayout.findViewById(R.id.tvFilter)
     }
 
     private fun configureAdapter(arrayList: ArrayList<CityResponse>) {
@@ -161,7 +160,8 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         }
         recycler.adapter = adapter
         if (::adapter.isInitialized && !flatPermisson){
-            adapter.orderList("AQI",false)
+            filterAdapter = getString(R.string.itemAQI)
+            adapter.orderList(filterAdapter,false)
         }
     }
 
@@ -237,10 +237,10 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         btnOrderList.setOnClickListener {
             if (btnOrderList.rotation == 90f){
                 btnOrderList.animationList(-90f)
-                adapter.orderList("Distance",true)
+                adapter.orderList(filterAdapter,true)
             } else{
                 btnOrderList.animationList(90f)
-                adapter.orderList("Distance",false)
+                adapter.orderList(filterAdapter,false)
             }
         }
 
@@ -254,12 +254,14 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         popup.menuInflater.inflate(menuRes, popup.menu)
         popup.setOnMenuItemClickListener { menuItem: MenuItem ->
             when(menuItem.title){
-                getText(R.string.itemDistance) -> {
+                getText(R.string.tvDistance) -> {
                     filterAdapter = getString(R.string.itemDistance)
+                    tvFilter.text = getText(R.string.tvDistance)
                     true
                 }
                 getText(R.string.itemAQI) -> {
                     filterAdapter = getString(R.string.itemAQI)
+                    tvFilter.text = filterAdapter
                     true
                 }
                 else -> false
@@ -430,7 +432,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                 makerLamda(cerca.description)
                 _binding.tvTitleCity.text = getText(R.string.tvCityCloser)
                 if (::adapter.isInitialized){
-                    adapter.orderList("Distance",true)
+                    adapter.orderList(filterAdapter,true)
                 }
             }
         }
