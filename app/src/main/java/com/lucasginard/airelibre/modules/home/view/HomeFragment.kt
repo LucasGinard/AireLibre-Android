@@ -8,10 +8,13 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
 import android.view.*
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.MenuRes
+import androidx.appcompat.widget.PopupMenu
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.MutableState
@@ -57,6 +60,8 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     private lateinit var btnArrow:ImageView
     private lateinit var btnOrderList:ImageView
     private lateinit var recycler:RecyclerView
+    private lateinit var btnFilter:ImageButton
+    private lateinit var filterAdapter:String
 
     private lateinit var GoogleMap: GoogleMap
     private lateinit var lastLocation: Location
@@ -139,8 +144,10 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         _binding.btnReconnect.apply {
             this.imageTintList = ContextCompat.getColorStateList(this.context, R.color.white)
         }
+        filterAdapter = getString(R.string.itemDistance)
         btnOrderList = _binding.coordinatorLayout.findViewById(R.id.btnOrder)
         recycler = _binding.coordinatorLayout.findViewById(R.id.rvLista)
+        btnFilter = _binding.coordinatorLayout.findViewById(R.id.btnFilter)
     }
 
     private fun configureAdapter(arrayList: ArrayList<CityResponse>) {
@@ -236,6 +243,29 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                 adapter.orderList("Distance",false)
             }
         }
+
+        btnFilter.setOnClickListener { v: View ->
+            showItemsFilter(v, R.menu.popup_menu_filter)
+        }
+    }
+
+    private fun showItemsFilter(v: View, @MenuRes menuRes: Int) {
+        val popup = PopupMenu(requireContext(), v)
+        popup.menuInflater.inflate(menuRes, popup.menu)
+        popup.setOnMenuItemClickListener { menuItem: MenuItem ->
+            when(menuItem.title){
+                getText(R.string.itemDistance) -> {
+                    filterAdapter = getString(R.string.itemDistance)
+                    true
+                }
+                getText(R.string.itemAQI) -> {
+                    filterAdapter = getString(R.string.itemAQI)
+                    true
+                }
+                else -> false
+            }
+        }
+        popup.show()
     }
 
     private fun configureService() {

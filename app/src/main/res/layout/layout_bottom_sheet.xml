@@ -58,7 +58,7 @@
                 android:text="@string/tvTitleList"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/imageButton2"
+                app:layout_constraintEnd_toStartOf="@+id/btnFilter"
                 app:layout_constraintHorizontal_bias="0.4"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -112,7 +112,7 @@
                 tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
 
             <ImageButton
-                android:id="@+id/imageButton2"
+                android:id="@+id/btnFilter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/ic_filter"

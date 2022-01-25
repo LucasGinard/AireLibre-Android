@@ -25,6 +25,8 @@
     <string name="toastErrorNet">Sin conexión compruebe su conexión</string>
     <string name="titleAQIInfo">¿Qué es AQI?</string>
     <string name="titleVersion">📱Versión:</string>
+    <string name="itemAQI">AQI</string>
+    <string name="itemDistance">Distance</string>
 
     <!---AboutActivity-->
     <string name="whatsIsAireLibre">¿Qué es AireLibre?</string>
