@@ -162,6 +162,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         if (::adapter.isInitialized && !flatPermisson){
             filterAdapter = getString(R.string.itemAQI)
             adapter.orderList(filterAdapter,false)
+            tvFilter.text = filterAdapter
         }
     }
 
@@ -252,6 +253,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     private fun showItemsFilter(v: View, @MenuRes menuRes: Int) {
         val popup = PopupMenu(requireContext(), v)
         popup.menuInflater.inflate(menuRes, popup.menu)
+        popup.menu.getItem(0).isVisible = flatPermisson
         popup.setOnMenuItemClickListener { menuItem: MenuItem ->
             when(menuItem.title){
                 getText(R.string.tvDistance) -> {
