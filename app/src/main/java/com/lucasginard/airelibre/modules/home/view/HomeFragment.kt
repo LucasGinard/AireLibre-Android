@@ -74,6 +74,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     private val retrofit = APIService.getInstance()
     private var listCitys = ArrayList<CityResponse>()
     private var flatPermisson = false
+    private var isDown = true
     val makerLamda = fun(maker: String) {
         _binding.linearInfoMarker.visibility = View.VISIBLE
         _binding.linearInfoMarker.startAnimation(
@@ -161,7 +162,8 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         recycler.adapter = adapter
         if (::adapter.isInitialized && !flatPermisson){
             filterAdapter = getString(R.string.itemAQI)
-            adapter.orderList(filterAdapter,false)
+            isDown = false
+            adapter.orderList(filterAdapter,isDown)
             tvFilter.text = filterAdapter
         }
     }
@@ -238,10 +240,12 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         btnOrderList.setOnClickListener {
             if (btnOrderList.rotation == 90f){
                 btnOrderList.animationList(-90f)
-                adapter.orderList(filterAdapter,true)
+                isDown = true
+                adapter.orderList(filterAdapter,isDown)
             } else{
                 btnOrderList.animationList(90f)
-                adapter.orderList(filterAdapter,false)
+                isDown = false
+                adapter.orderList(filterAdapter,isDown)
             }
         }
 
@@ -259,11 +263,13 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                 getText(R.string.tvDistance) -> {
                     filterAdapter = getString(R.string.itemDistance)
                     tvFilter.text = getText(R.string.tvDistance)
+                    adapter.orderList(filterAdapter,isDown)
                     true
                 }
                 getText(R.string.itemAQI) -> {
                     filterAdapter = getString(R.string.itemAQI)
                     tvFilter.text = filterAdapter
+                    adapter.orderList(filterAdapter,isDown)
                     true
                 }
                 else -> false
