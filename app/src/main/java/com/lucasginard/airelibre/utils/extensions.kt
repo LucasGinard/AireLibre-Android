@@ -9,6 +9,7 @@ import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.TextView
+import androidx.compose.ui.graphics.Color
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.lucasginard.airelibre.R
@@ -91,3 +92,6 @@ fun View.animationList(rotation:Float) {
         .withEndAction { this.rotation = rotation }
         .start()
 }
+
+val String.color
+    get() = Color(android.graphics.Color.parseColor(this))

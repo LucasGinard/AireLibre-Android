@@ -268,7 +268,7 @@
     </LinearLayout>
 
     <androidx.compose.ui.platform.ComposeView
-        android:id="@+id/composeDialog"
+        android:id="@+id/layoutCompose"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"

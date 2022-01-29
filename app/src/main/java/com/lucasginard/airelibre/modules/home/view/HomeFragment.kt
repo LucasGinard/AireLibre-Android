@@ -12,11 +12,24 @@ import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.MenuRes
 import androidx.appcompat.widget.PopupMenu
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -120,13 +133,14 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        _binding.composeDialog.apply {
+        _binding.layoutCompose.apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 AireLibreTheme(darkTheme = ThemeState.isDark) {
                     Surface(color = MaterialTheme.colors.background) {
                         booleanDialog = remember { androidx.compose.runtime.mutableStateOf(false) }
                         if (booleanDialog.value) DialogCardsAQICompose(booleanDialog,listCards)
+                        topBarCompose({},{})
                     }
                 }
             }
@@ -474,5 +488,58 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
     companion object {
         fun newInstance() = HomeFragment()
+    }
+}
+
+@Composable
+fun topBarCompose(onClickAbout:() -> Unit,onClickConfig:() -> Unit){
+    Row(
+        modifier = Modifier.wrapContentSize(align = Alignment.Center)
+            .background("#047745".color)
+            .padding(8.dp)
+            .clip(RoundedCornerShape(bottomEnd = 70.dp)),
+        verticalAlignment = Alignment.Top,
+        horizontalArrangement = Arrangement.Center,
+    ) {
+        IconButton(
+            modifier = Modifier
+                .then(Modifier.size(60.dp))
+                .padding(top = 15.dp),
+            onClick = {
+                onClickAbout()
+            },
+        ) {
+            Icon(
+                modifier = Modifier.then(Modifier.size(60.dp)),
+                painter = painterResource(id = R.drawable.icon_about),
+                contentDescription = stringResource(id = R.string.contentOnBack),
+                tint = Color.White
+            )
+        }
+        Text(
+            modifier = Modifier
+                .padding(top = 25.dp,start = 10.dp,end = 10.dp),
+            text = stringResource(id = R.string.titleName),
+            fontFamily = ComposablesUtils.fontFamily,
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center,
+            color = Color.White,
+            fontSize = 15.sp
+        )
+        IconButton(
+            modifier = Modifier
+                .then(Modifier.size(60.dp))
+                .padding(top = 15.dp),
+            onClick = {
+                onClickConfig()
+            },
+        ) {
+            Icon(
+                modifier = Modifier.then(Modifier.size(60.dp)),
+                painter = painterResource(id = R.drawable.icon_config),
+                contentDescription = stringResource(id = R.string.contentOnBack),
+                tint = Color.White
+            )
+        }
     }
 }
