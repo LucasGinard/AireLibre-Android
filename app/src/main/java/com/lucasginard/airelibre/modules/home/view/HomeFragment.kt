@@ -140,7 +140,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                     Surface(color = MaterialTheme.colors.background) {
                         booleanDialog = remember { androidx.compose.runtime.mutableStateOf(false) }
                         if (booleanDialog.value) DialogCardsAQICompose(booleanDialog,listCards)
-                        topBarCompose({},{})
+                        //topBarCompose({},{})
                     }
                 }
             }
@@ -176,7 +176,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         recycler.adapter = adapter
         if (::adapter.isInitialized && !flatPermisson){
             filterAdapter = getString(R.string.itemAQI)
-            isDown = false
+            isDown = true
             adapter.orderList(filterAdapter,isDown)
             tvFilter.text = filterAdapter
         }
@@ -296,7 +296,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         viewModel = ViewModelProvider(this, HomeViewModelFactory(HomeRepository(retrofit))).get(
             HomeViewModel::class.java
         )
-        viewModel.getListCitys.observe(requireActivity(), {
+        viewModel.getListCitys.observe(requireActivity()) {
             listCitys.clear()
             listCitys.addAll(it)
             configureMarkers(listCitys)
@@ -306,15 +306,14 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                 _binding.btnReconnect.visibility = View.GONE
                 _binding.coordinatorLayout.visibility = View.VISIBLE
             }
-        })
-        viewModel.errorMessage.observe(requireActivity(), {
+        }
+        viewModel.errorMessage.observe(requireActivity()) {
             _binding.btnReconnect.visibility = View.VISIBLE
             _binding.coordinatorLayout.visibility = View.GONE
-            if(activity != null){
-                Toast.makeText(requireContext(), getText(R.string.toastErrorNet), Toast.LENGTH_SHORT)
-                    .show()
+            if (activity != null) {
+                Toast.makeText(requireContext(), getText(R.string.toastErrorNet), Toast.LENGTH_SHORT).show()
             }
-        })
+        }
         viewModel.getAllCity()
     }
 
