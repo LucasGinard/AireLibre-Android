@@ -9,6 +9,7 @@ import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.TextView
+import android.widget.Toast
 import androidx.compose.ui.graphics.Color
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -92,6 +93,21 @@ fun View.animationList(rotation:Float) {
         .withEndAction { this.rotation = rotation }
         .start()
 }
+fun View.animationRefresh() {
+    this.animate()
+        .rotation(
+            360f
+        )
+        .withEndAction { this.rotation }
+        .start()
+}
 
+fun Fragment.ToastCustom(text: String) {
+    Toast.makeText(
+        this.context,
+        text,
+        Toast.LENGTH_SHORT
+    ).show()
+}
 val String.color
     get() = Color(android.graphics.Color.parseColor(this))

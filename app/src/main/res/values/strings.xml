@@ -5,7 +5,7 @@
     <!---HomeActivity-->
     <string name="tvCity">Sensor:</string>
     <string name="tvCityCloser">Sensor más cercano:</string>
-    <string name="tvTitleList">Lista de sensores</string>
+    <string name="tvTitleList">Sensores</string>
     <string name="tvEscale">Escala AQI</string>
     <string name="tvStatus">Estado</string>
     <string name="tvDistance">Distancia</string>
@@ -23,6 +23,7 @@
     <string name="tvDescriptionPurple">Condición de emergencia.</string>
     <string name="tvDescriptionDanger">Alerta sanitaria, efectos graves para toda la población.</string>
     <string name="toastErrorNet">Sin conexión compruebe su conexión</string>
+    <string name="toastErrorRetry">Hubo un problema intente de nuevo</string>
     <string name="titleAQIInfo">¿Qué es AQI?</string>
     <string name="titleVersion">📱Versión:</string>
     <string name="itemAQI">AQI</string>

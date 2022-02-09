@@ -44,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="4dp"
                 android:contentDescription="@string/app_name"
-                android:src="@drawable/ic_city"
+                android:src="@drawable/ic_sensors"
                 app:layout_constraintBottom_toBottomOf="@+id/textViewGone"
                 app:layout_constraintEnd_toStartOf="@+id/textViewGone"
                 app:layout_constraintTop_toTopOf="@+id/textViewGone" />
@@ -59,7 +59,7 @@
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.3"
+                app:layout_constraintHorizontal_bias="0.2"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.44" />
@@ -101,12 +101,12 @@
                 android:id="@+id/btnOrder"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
+                android:layout_marginEnd="4dp"
                 android:background="@drawable/ic_arrow_left"
                 android:backgroundTint="#FFFFFF"
                 android:rotation="-90"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/dividerRefresh"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.94"
                 tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
@@ -120,6 +120,28 @@
                 app:layout_constraintEnd_toStartOf="@+id/tvFilter"
                 app:layout_constraintTop_toTopOf="@+id/tvFilter"
                 tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+
+            <View
+                android:id="@+id/dividerRefresh"
+                android:layout_width="1dp"
+                android:layout_height="0dp"
+                android:layout_marginEnd="4dp"
+                android:background="@color/white"
+                app:layout_constraintBottom_toBottomOf="@+id/btnOrder"
+                app:layout_constraintEnd_toStartOf="@+id/btnRefreshList"
+                app:layout_constraintTop_toTopOf="@+id/btnOrder" />
+
+            <ImageButton
+                android:id="@+id/btnRefreshList"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/ic_rollback"
+                android:backgroundTint="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/btnOrder" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
