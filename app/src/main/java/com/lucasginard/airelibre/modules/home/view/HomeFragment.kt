@@ -453,7 +453,10 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                 makerLamda(cerca.description)
                 _binding.tvTitleCity.text = getText(R.string.tvCityCloser)
                 if (::adapter.isInitialized){
-                    adapter.orderList(filterAdapter,true)
+                    filterAdapter = getString(R.string.itemDistance)
+                    tvFilter.text = getText(R.string.tvDistance)
+                    isDown = true
+                    adapter.orderList(filterAdapter,isDown)
                 }
             }
         }
