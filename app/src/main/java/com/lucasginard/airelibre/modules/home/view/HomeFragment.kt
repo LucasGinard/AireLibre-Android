@@ -259,7 +259,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         btnRefresh.setOnClickListener {
             btnRefresh.animationRefresh()
             Handler(Looper.getMainLooper()).postDelayed({
-                configureService()
+                viewModel.getAllCity()
             }, 100)
         }
     }
