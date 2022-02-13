@@ -110,8 +110,8 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         }
         if (::cityCloser.isInitialized) {
             if (cityCloser.description == maker) {
-                _binding.tvTitleCity.text = getText(R.string.tvCityCloser)
-            } else _binding.tvTitleCity.text = getText(R.string.tvCity)
+                _binding.tvTitleCity.text = context?.getText(R.string.tvCityCloser) ?: "Sensor más cercano:"
+            } else _binding.tvTitleCity.text = context?.getText(R.string.tvCity) ?: ">Sensor:"
         } else {
             _binding.tvTitleCity.text = getText(R.string.tvCity)
         }
@@ -145,7 +145,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         _binding.btnReconnect.apply {
             this.imageTintList = ContextCompat.getColorStateList(this.context, R.color.white)
         }
-        filterAdapter = getString(R.string.itemDistance)
+        filterAdapter = context?.getString(R.string.itemDistance) ?: "Distance"
         btnOrderList = _binding.coordinatorLayout.findViewById(R.id.btnOrder)
         recycler = _binding.coordinatorLayout.findViewById(R.id.rvLista)
         btnFilter = _binding.coordinatorLayout.findViewById(R.id.btnFilter)
@@ -164,7 +164,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         }
         recycler.adapter = adapter
         if (::adapter.isInitialized && !flatPermisson){
-            filterAdapter = getString(R.string.itemAQI)
+            filterAdapter = context?.getString(R.string.itemAQI) ?: "AQI"
             isDown = true
             adapter.orderList(filterAdapter,isDown)
             tvFilter.text = filterAdapter
@@ -271,13 +271,13 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         popup.setOnMenuItemClickListener { menuItem: MenuItem ->
             when(menuItem.title){
                 getText(R.string.tvDistance) -> {
-                    filterAdapter = getString(R.string.itemDistance)
+                    filterAdapter = context?.getString(R.string.itemDistance) ?: "Distance"
                     tvFilter.text = getText(R.string.tvDistance)
                     adapter.orderList(filterAdapter,isDown)
                     true
                 }
                 getText(R.string.itemAQI) -> {
-                    filterAdapter = getString(R.string.itemAQI)
+                    filterAdapter = context?.getString(R.string.itemAQI) ?: "AQI"
                     tvFilter.text = filterAdapter
                     adapter.orderList(filterAdapter,isDown)
                     true
@@ -305,12 +305,12 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         }
         viewModel.errorMessage.observe(requireActivity()) {
             if (listCitys.isNotEmpty()){
-                this.ToastCustom(getString(R.string.toastErrorRetry))
+                this.ToastCustom(context?.getString(R.string.toastErrorRetry) ?: "Hubo un problema intente de nuevo")
             }else{
                 _binding.btnReconnect.visibility = View.VISIBLE
                 _binding.coordinatorLayout.visibility = View.GONE
                 if (activity != null) {
-                    this.ToastCustom(getString(R.string.toastErrorNet))
+                    this.ToastCustom(context?.getString(R.string.toastErrorNet) ?: "Sin conexión compruebe su conexión")
                 }
             }
         }
@@ -451,10 +451,10 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             if (cerca != null) {
                 cityCloser = cerca
                 makerLamda(cerca.description)
-                _binding.tvTitleCity.text = getText(R.string.tvCityCloser)
+                _binding.tvTitleCity.text = context?.getText(R.string.tvCityCloser) ?: "Sensor más cercano:"
                 if (::adapter.isInitialized){
-                    filterAdapter = getString(R.string.itemDistance)
-                    tvFilter.text = getText(R.string.tvDistance)
+                    filterAdapter = context?.getString(R.string.itemDistance) ?: "Distance"
+                    tvFilter.text = context?.getText(R.string.tvDistance) ?: "Distancia"
                     isDown = true
                     adapter.orderList(filterAdapter,isDown)
                 }
