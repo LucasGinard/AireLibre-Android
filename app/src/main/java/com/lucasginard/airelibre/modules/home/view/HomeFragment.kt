@@ -110,10 +110,10 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         }
         if (::cityCloser.isInitialized) {
             if (cityCloser.description == maker) {
-                _binding.tvTitleCity.text = context?.getText(R.string.tvCityCloser) ?: "Sensor más cercano:"
-            } else _binding.tvTitleCity.text = context?.getText(R.string.tvCity) ?: ">Sensor:"
+                _binding.tvTitleCity.text = context?.getText(R.string.tvSensorCloser) ?: "Sensor más cercano:"
+            } else _binding.tvTitleCity.text = context?.getText(R.string.tvSensor) ?: "Sensor:"
         } else {
-            _binding.tvTitleCity.text = getText(R.string.tvCity)
+            _binding.tvTitleCity.text = context?.getText(R.string.tvSensor) ?: "Sensor:"
         }
     }
 
@@ -451,7 +451,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             if (cerca != null) {
                 cityCloser = cerca
                 makerLamda(cerca.description)
-                _binding.tvTitleCity.text = context?.getText(R.string.tvCityCloser) ?: "Sensor más cercano:"
+                _binding.tvTitleCity.text = context?.getText(R.string.tvSensorCloser) ?: "Sensor más cercano:"
                 if (::adapter.isInitialized){
                     filterAdapter = context?.getString(R.string.itemDistance) ?: "Distance"
                     tvFilter.text = context?.getText(R.string.tvDistance) ?: "Distancia"
