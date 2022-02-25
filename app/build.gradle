@@ -83,5 +83,8 @@ dependencies {
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
     //Location
     implementation 'com.google.android.gms:play-services-location:18.0.0'
+    //newSplash
+    implementation 'androidx.core:core-splashscreen:1.0.0-beta01'
+
 
 }

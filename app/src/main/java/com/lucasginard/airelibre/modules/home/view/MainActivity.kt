@@ -3,6 +3,7 @@ package com.lucasginard.airelibre.modules.home.view
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.lucasginard.airelibre.R
 import com.lucasginard.airelibre.databinding.ActivityMainBinding
@@ -13,6 +14,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        installSplashScreen()
         bindding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(bindding.root)
         configureFragment()
