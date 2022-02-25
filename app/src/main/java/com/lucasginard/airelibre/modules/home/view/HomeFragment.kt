@@ -293,28 +293,37 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             HomeViewModel::class.java
         )
         viewModel.getListCitys.observe(requireActivity()) {
-            listCitys.clear()
-            listCitys.addAll(it)
-            configureMarkers(listCitys)
-            configureAdapter(listCitys)
-            calculateMarkerLocation()
-            if (_binding.btnReconnect.visibility == View.VISIBLE) {
-                _binding.btnReconnect.visibility = View.GONE
-                _binding.coordinatorLayout.visibility = View.VISIBLE
+            if (it.isNotEmpty()){
+                listCitys.clear()
+                listCitys.addAll(it)
+                configureMarkers(listCitys)
+                configureAdapter(listCitys)
+                calculateMarkerLocation()
+                if (_binding.btnReconnect.visibility == View.VISIBLE) {
+                    _binding.btnReconnect.visibility = View.GONE
+                    _binding.coordinatorLayout.visibility = View.VISIBLE
+                }
+            }else {
+                errorConnectService()
             }
+
         }
         viewModel.errorMessage.observe(requireActivity()) {
-            if (listCitys.isNotEmpty()){
-                this.ToastCustom(context?.getString(R.string.toastErrorRetry) ?: "Hubo un problema intente de nuevo")
-            }else{
-                _binding.btnReconnect.visibility = View.VISIBLE
-                _binding.coordinatorLayout.visibility = View.GONE
-                if (activity != null) {
-                    this.ToastCustom(context?.getString(R.string.toastErrorNet) ?: "Sin conexión compruebe su conexión")
-                }
-            }
+            errorConnectService()
         }
         viewModel.getAllCity()
+    }
+
+    private fun errorConnectService(){
+        if (listCitys.isNotEmpty()){
+            this.ToastCustom(context?.getString(R.string.toastErrorRetry) ?: "Hubo un problema intente de nuevo")
+        }else{
+            _binding.btnReconnect.visibility = View.VISIBLE
+            _binding.coordinatorLayout.visibility = View.GONE
+            if (activity != null) {
+                this.ToastCustom(context?.getString(R.string.toastErrorNet) ?: "Sin conexión compruebe su conexión")
+            }
+        }
     }
 
     private fun configureMaps(saved: Bundle?) {
