@@ -103,6 +103,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tvTitleCity" />
 
     <ImageView
+        android:id="@+id/imageView2"
         android:layout_width="20dp"
         android:layout_height="0dp"
         android:src="@drawable/ic_location_link"
@@ -123,4 +124,30 @@
         app:layout_constraintHorizontal_bias="0.52"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvDistance" />
+
+    <ImageView
+        android:id="@+id/imShare"
+        android:layout_width="20dp"
+        android:layout_height="0dp"
+        android:src="@drawable/ic_share"
+        app:layout_constraintBottom_toBottomOf="@+id/tvShare"
+        app:layout_constraintEnd_toStartOf="@+id/tvShare"
+        app:layout_constraintTop_toTopOf="@+id/tvShare"
+        app:tint="@color/link" />
+
+    <TextView
+        android:id="@+id/tvShare"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:autoLink="phone"
+        android:fontFamily="@font/rubik_bold"
+        android:text="@string/tvShareGo"
+        android:textColor="@color/link"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.52"
+        app:layout_constraintStart_toEndOf="@+id/tvLink"
+        app:layout_constraintTop_toBottomOf="@+id/tvDistance" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

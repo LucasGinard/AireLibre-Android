@@ -83,6 +83,29 @@ fun Fragment.textsAQI(
     viewQuality.text = index.toString()
 }
 
+fun String.textAQI(aqiEscale:Int,context: Context):String {
+    when (aqiEscale) {
+        in 0..50 -> {
+             return context?.getString(R.string.tvDescriptionGreen)
+        }
+        in 51..100 -> {
+            return context?.getString(R.string.tvDescriptionYellow)
+        }
+        in 101..150 -> {
+            return context?.getString(R.string.tvDescriptionOrange)
+        }
+        in 151..200 -> {
+            return context?.getString(R.string.tvDescriptionRed)
+        }
+        in 201..300 -> {
+            return context?.getString(R.string.tvDescriptionPurple)
+        }
+        else -> {
+            return context?.getString(R.string.tvDescriptionDanger)
+        }
+    }
+}
+
 fun View.animationList(rotation:Float) {
     this.animate()
         .rotation(
