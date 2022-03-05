@@ -1,20 +1,19 @@
 package com.lucasginard.airelibre.modules.about
 
-import android.app.ActivityOptions
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.*
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -24,44 +23,30 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.fragment.app.Fragment
 import com.lucasginard.airelibre.R
 import com.lucasginard.airelibre.modules.about.ui.theme.AireLibreTheme
-import com.lucasginard.airelibre.modules.home.view.MainActivity
-import com.lucasginard.airelibre.utils.ComposablesUtils
-import com.lucasginard.airelibre.utils.ThemeState
-import com.lucasginard.airelibre.utils.getModeTheme
-import com.lucasginard.airelibre.utils.goToURL
+import com.lucasginard.airelibre.utils.*
 
-class AboutActivity : ComponentActivity() {
+class AboutFragment: Fragment() {
 
-    private lateinit var context: Context
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            AireLibreTheme(ThemeState.isDark) {
-                Surface(color = MaterialTheme.colors.background) {
-                    context = LocalContext.current
-                    baseAbout(this)
-                }
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ) = contentView {
+        AireLibreTheme(ThemeState.isDark) {
+            Surface(color = MaterialTheme.colors.background) {
+                baseAbout()
             }
         }
     }
 
-    override fun onBackPressed() {
-        startActivity(
-            Intent(this, MainActivity::class.java),
-            ActivityOptions.makeCustomAnimation(this, R.anim.slide_in_right, R.anim.slide_out_left)
-                .toBundle()
-        )
-    }
-
 
     @Composable
-    fun baseAbout(activity: AboutActivity = AboutActivity()) {
-        context = LocalContext.current
-        if (ThemeState.isDefault && ::context.isInitialized) {
-            ThemeState.isDark = this.getModeTheme(context)
+    fun baseAbout() {
+        if (ThemeState.isDefault) {
+            ThemeState.isDark = this.getModeTheme(requireContext())
         }
         Column(
             modifier = Modifier
@@ -90,11 +75,11 @@ class AboutActivity : ComponentActivity() {
                     .then(Modifier.size(60.dp))
                     .padding(top = 15.dp),
                 onClick = {
-                    activity.startActivity(
-                        Intent(activity, MainActivity::class.java),
-                        ActivityOptions.makeCustomAnimation(activity, R.anim.slide_in_right, R.anim.slide_out_left)
-                            .toBundle()
-                    )
+//                    activity.startActivity(
+//                        Intent(activity, MainActivity::class.java),
+//                        ActivityOptions.makeCustomAnimation(activity, R.anim.slide_in_right, R.anim.slide_out_left)
+//                            .toBundle()
+//                    )
                 },
             ) {
                 Icon(
@@ -146,8 +131,8 @@ class AboutActivity : ComponentActivity() {
                         onClick = {
                             val intent = Intent()
                             intent.goToURL(
-                                url = context.getString(R.string.linkTwitter),
-                                context = context
+                                url = requireContext().getString(R.string.linkTwitter),
+                                context = requireContext()
                             )
                         }
                     ),
@@ -162,8 +147,8 @@ class AboutActivity : ComponentActivity() {
                         onClick = {
                             val intent = Intent()
                             intent.goToURL(
-                                url = context.getString(R.string.linkWebsite),
-                                context = context
+                                url = requireContext().getString(R.string.linkWebsite),
+                                context = requireContext()
                             )
                         }
                     ),
@@ -203,8 +188,8 @@ class AboutActivity : ComponentActivity() {
                     onClick = {
                         val intent = Intent()
                         intent.goToURL(
-                            url = context.getString(R.string.linkGitHub),
-                            context = context
+                            url = requireContext().getString(R.string.linkGitHub),
+                            context = requireContext()
                         )
                     }
                 )
@@ -231,8 +216,8 @@ class AboutActivity : ComponentActivity() {
                 onClick = {
                     val intent = Intent()
                     intent.goToURL(
-                        url = context.getString(R.string.linkLicense),
-                        context = context
+                        url = requireContext().getString(R.string.linkLicense),
+                        context = requireContext()
                     )
                 }
             )
@@ -256,8 +241,8 @@ class AboutActivity : ComponentActivity() {
                 onClick = {
                     val intent = Intent()
                     intent.goToURL(
-                        url = context.getString(R.string.linkLucas),
-                        context = context
+                        url = requireContext().getString(R.string.linkLucas),
+                        context = requireContext()
                     )
                 }
             )
@@ -282,8 +267,8 @@ class AboutActivity : ComponentActivity() {
                 onClick = {
                     val intent = Intent()
                     intent.goToURL(
-                        url = context.getString(R.string.linkIcon),
-                        context = context
+                        url = requireContext().getString(R.string.linkIcon),
+                        context = requireContext()
                     )
                 }
             )
@@ -296,5 +281,9 @@ class AboutActivity : ComponentActivity() {
         AireLibreTheme {
             baseAbout()
         }
+    }
+
+    companion object {
+        fun newInstance() = AboutFragment()
     }
 }

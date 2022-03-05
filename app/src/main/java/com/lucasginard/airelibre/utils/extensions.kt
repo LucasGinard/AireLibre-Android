@@ -10,7 +10,10 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.TextView
 import android.widget.Toast
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.lucasginard.airelibre.R
@@ -134,3 +137,26 @@ fun Fragment.ToastCustom(text: String) {
 }
 val String.color
     get() = Color(android.graphics.Color.parseColor(this))
+
+fun Fragment.requireContentView(
+    compositionStrategy: ViewCompositionStrategy = ViewCompositionStrategy.DisposeOnDetachedFromWindow,
+    context: Context = requireContext(),
+    content: @Composable () -> Unit
+): ComposeView {
+    val view = ComposeView(context)
+    view.setViewCompositionStrategy(compositionStrategy)
+    view.setContent(content)
+    return view
+}
+
+fun Fragment.contentView(
+    compositionStrategy: ViewCompositionStrategy = ViewCompositionStrategy.DisposeOnDetachedFromWindow,
+    context: Context? = getContext(),
+    content: @Composable () -> Unit
+): ComposeView? {
+    context ?: return null
+    val view = ComposeView(context)
+    view.setViewCompositionStrategy(compositionStrategy)
+    view.setContent(content)
+    return view
+}

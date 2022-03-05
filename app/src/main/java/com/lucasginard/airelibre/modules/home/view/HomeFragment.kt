@@ -2,8 +2,6 @@ package com.lucasginard.airelibre.modules.home.view
 
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
-import android.app.ActivityOptions
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
@@ -32,8 +30,6 @@ import com.google.android.gms.maps.model.*
 import com.lucasginard.airelibre.R
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.lucasginard.airelibre.databinding.FragmentHomeBinding
-import com.lucasginard.airelibre.modules.about.AboutActivity
-import com.lucasginard.airelibre.modules.config.ConfigActivity
 import com.lucasginard.airelibre.modules.config.ui.theme.AireLibreTheme
 import com.lucasginard.airelibre.modules.data.APIService
 import com.lucasginard.airelibre.modules.home.domain.HomeRepository
@@ -178,22 +174,6 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             booleanDialog.value = true
         }
 
-        _binding.btnConfig.setOnClickListener {
-            activity?.startActivity(
-                Intent(activity, ConfigActivity::class.java)
-                    .putExtra("flatPermission",flatPermisson),
-                ActivityOptions.makeCustomAnimation(activity, R.anim.slide_in_right, R.anim.slide_out_left)
-                    .toBundle()
-            )
-        }
-
-        _binding.btnAbout.setOnClickListener {
-            activity?.startActivity(
-                Intent(activity, AboutActivity::class.java),
-                ActivityOptions.makeCustomAnimation(activity, R.anim.slide_left, R.anim.slide_right)
-                    .toBundle()
-            )
-        }
 
         _binding.btnClose.setOnClickListener {
             _binding.linearInfoMarker.apply {
@@ -484,9 +464,11 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             if (ThemeState.isDark){
                 GoogleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(context, R.raw.mapstyle_night))
                 btnArrow.setTint(R.color.white)
+                _binding.tvTitle.setTextColor(ContextCompat.getColor(requireContext(),R.color.white))
             }else{
                 GoogleMap.mapType = com.google.android.gms.maps.GoogleMap.MAP_TYPE_NORMAL
                 btnArrow.setTint(R.color.black)
+                _binding.tvTitle.setTextColor(ContextCompat.getColor(requireContext(),R.color.black))
             }
         }
     }

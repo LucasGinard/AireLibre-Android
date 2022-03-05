@@ -20,10 +20,6 @@
             android:label="@string/title_activity_config"
             android:theme="@style/Theme.AireLibre.NoActionBar" />
         <activity
-            android:name=".modules.about.AboutActivity"
-            android:exported="true"
-            android:theme="@style/Theme.AireLibre.NoActionBar" />
-        <activity
             android:name=".modules.home.view.MainActivity"
             android:exported="true"
             android:hardwareAccelerated="true"

@@ -4,9 +4,13 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.lucasginard.airelibre.R
 import com.lucasginard.airelibre.databinding.ActivityMainBinding
+import com.lucasginard.airelibre.modules.about.AboutFragment
+import com.lucasginard.airelibre.modules.config.ConfigFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -18,6 +22,33 @@ class MainActivity : AppCompatActivity() {
         bindding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(bindding.root)
         configureFragment()
+        configureNav()
+    }
+
+    private fun configureNav() {
+        bindding.navView.selectedItemId = R.id.nav_home
+        bindding.navView.setOnItemSelectedListener{
+            val fm: FragmentManager = supportFragmentManager
+            val ft: FragmentTransaction = fm.beginTransaction()
+            when(it.itemId){
+                R.id.nav_home ->{
+                    ft.replace(bindding.fragmentHome.id, HomeFragment.newInstance())
+                    ft.commit()
+                    true
+                }
+                R.id.nav_config ->{
+                    ft.replace(bindding.fragmentHome.id, ConfigFragment.newInstance())
+                    ft.commit()
+                    true
+                }
+                R.id.nav_about ->{
+                    ft.replace(bindding.fragmentHome.id, AboutFragment.newInstance())
+                    ft.commit()
+                    true
+                }
+                else -> {false}
+            }
+        }
     }
 
     private fun configureFragment() {
