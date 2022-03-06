@@ -24,6 +24,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -39,10 +40,7 @@ import com.lucasginard.airelibre.modules.config.domain.ConfigRepository
 import com.lucasginard.airelibre.modules.config.ui.theme.AireLibreTheme
 import com.lucasginard.airelibre.modules.config.viewModel.ConfigViewModel
 import com.lucasginard.airelibre.modules.config.viewModel.ConfigViewModelFactory
-import com.lucasginard.airelibre.utils.ComposablesUtils
-import com.lucasginard.airelibre.utils.ThemeState
-import com.lucasginard.airelibre.utils.contentView
-import com.lucasginard.airelibre.utils.getModeTheme
+import com.lucasginard.airelibre.utils.*
 
 class ConfigFragment: Fragment() {
 
@@ -91,7 +89,7 @@ class ConfigFragment: Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    )= contentView {
+    )= requireContentView(ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)) {
         viewModel = ViewModelProvider(this, ConfigViewModelFactory(ConfigRepository())).get(
             ConfigViewModel::class.java
         )

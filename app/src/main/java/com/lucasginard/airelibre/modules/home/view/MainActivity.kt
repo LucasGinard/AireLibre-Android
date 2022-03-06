@@ -1,7 +1,7 @@
 package com.lucasginard.airelibre.modules.home.view
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.FragmentManager
@@ -30,23 +30,30 @@ class MainActivity : AppCompatActivity() {
         bindding.navView.setOnItemSelectedListener{
             val fm: FragmentManager = supportFragmentManager
             val ft: FragmentTransaction = fm.beginTransaction()
-            when(it.itemId){
-                R.id.nav_home ->{
-                    ft.replace(bindding.fragmentHome.id, HomeFragment.newInstance())
-                    ft.commit()
-                    true
+            if (bindding.navView.selectedItemId != it.itemId){
+                when(it.itemId){
+                    R.id.nav_home ->{
+                        ft.replace(bindding.fragmentHome.id, HomeFragment.newInstance())
+                        ft.commit()
+                        onResume()
+                        true
+                    }
+                    R.id.nav_config ->{
+                        ft.replace(bindding.fragmentHome.id, ConfigFragment.newInstance())
+                        ft.commit()
+                        onResume()
+                        true
+                    }
+                    R.id.nav_about ->{
+                        ft.replace(bindding.fragmentHome.id, AboutFragment.newInstance())
+                        ft.commit()
+                        onResume()
+                        true
+                    }
+                    else -> {false}
                 }
-                R.id.nav_config ->{
-                    ft.replace(bindding.fragmentHome.id, ConfigFragment.newInstance())
-                    ft.commit()
-                    true
-                }
-                R.id.nav_about ->{
-                    ft.replace(bindding.fragmentHome.id, AboutFragment.newInstance())
-                    ft.commit()
-                    true
-                }
-                else -> {false}
+            }else{
+                false
             }
         }
     }
@@ -59,11 +66,20 @@ class MainActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         val map = bindding.fragmentHome.findViewById<CoordinatorLayout>(R.id.coordinator_layout)
-        val listState = BottomSheetBehavior.from(map.findViewById(R.id.bottomSheet))
-        if (listState.state == BottomSheetBehavior.STATE_EXPANDED){
-            listState.state = BottomSheetBehavior.STATE_COLLAPSED
-        }else{
-            moveTaskToBack(true)
+        if (map != null){
+            val listState = BottomSheetBehavior.from(map.findViewById(R.id.bottomSheet))
+            if (listState.state == BottomSheetBehavior.STATE_EXPANDED){
+                listState.state = BottomSheetBehavior.STATE_COLLAPSED
+                return
+            }
+        } else if(bindding.navView.selectedItemId == R.id.nav_about || bindding.navView.selectedItemId == R.id.nav_config){
+            val fm: FragmentManager = supportFragmentManager
+            val ft: FragmentTransaction = fm.beginTransaction()
+            ft.replace(bindding.fragmentHome.id, HomeFragment.newInstance())
+            ft.commit()
+            bindding.navView.selectedItemId = R.id.nav_home
+            return
         }
+        moveTaskToBack(true)
     }
 }

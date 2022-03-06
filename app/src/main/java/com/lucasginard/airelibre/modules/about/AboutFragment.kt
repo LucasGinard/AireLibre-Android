@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -34,7 +35,7 @@ class AboutFragment: Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = contentView {
+    ) = requireContentView(ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)) {
         AireLibreTheme(ThemeState.isDark) {
             Surface(color = MaterialTheme.colors.background) {
                 baseAbout()
@@ -56,39 +57,10 @@ class AboutFragment: Fragment() {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Image(
-                modifier = Modifier
-                    .padding(top = 0.dp, bottom = 20.dp, end = 20.dp, start = 20.dp)
-                    .width(240.dp)
-                    .height(240.dp),
-                painter = painterResource(id = R.drawable.playstore_icon),
-                contentDescription = stringResource(id = R.string.contentLogo),
-            )
-
             sectionWhatisAire()
             sectionSocialMedia()
             descriptionContributeProject()
             sectionLicenseLogo()
-
-            IconButton(
-                modifier = Modifier
-                    .then(Modifier.size(60.dp))
-                    .padding(top = 15.dp),
-                onClick = {
-//                    activity.startActivity(
-//                        Intent(activity, MainActivity::class.java),
-//                        ActivityOptions.makeCustomAnimation(activity, R.anim.slide_in_right, R.anim.slide_out_left)
-//                            .toBundle()
-//                    )
-                },
-            ) {
-                Icon(
-                    modifier = Modifier.then(Modifier.size(60.dp)),
-                    painter = painterResource(id = R.drawable.ic_arrow_right),
-                    contentDescription = stringResource(id = R.string.contentOnBack),
-                    tint = MaterialTheme.colors.primary
-                )
-            }
         }
     }
 
