@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
+import android.graphics.*
 import android.net.Uri
 import android.view.View
 import android.view.animation.Animation
@@ -17,6 +18,7 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.lucasginard.airelibre.R
+
 
 fun View.setTint(color: Int = R.color.primaryColor) {
     this.backgroundTintList = ContextCompat.getColorStateList(this.context, color)
@@ -159,4 +161,29 @@ fun Fragment.contentView(
     view.setViewCompositionStrategy(compositionStrategy)
     view.setContent(content)
     return view
+}
+
+fun Fragment.getBitmapMarker(context: Context, resourceId: Int, mText: String): Bitmap? {
+    val background = ContextCompat.getDrawable(context, resourceId)
+    background!!.setBounds(0, 0, background.intrinsicWidth, background.intrinsicHeight)
+    val bitmap = Bitmap.createBitmap(
+        background.intrinsicWidth,
+        background.intrinsicHeight,
+        Bitmap.Config.ARGB_8888
+    )
+    val canvas = Canvas(bitmap)
+    background.draw(canvas)
+    val r = Rect()
+    canvas.getClipBounds(r)
+    val cHeight = r.height()
+    val cWidth = r.width()
+    val paint = Paint()
+    paint.textAlign = Paint.Align.LEFT
+    paint.textSize = 20f
+    paint.isFakeBoldText = true
+    paint.getTextBounds(mText, 0, mText.length, r)
+    val x = cWidth / 2f - r.width() / 2f - r.left
+    val y = cHeight / 2.5f + r.height() / 2f - r.bottom
+    canvas.drawText(mText, x, y, paint)
+    return bitmap
 }

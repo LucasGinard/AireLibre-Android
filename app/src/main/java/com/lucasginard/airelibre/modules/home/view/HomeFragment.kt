@@ -27,8 +27,8 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.*
-import com.lucasginard.airelibre.R
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.lucasginard.airelibre.R
 import com.lucasginard.airelibre.databinding.FragmentHomeBinding
 import com.lucasginard.airelibre.modules.config.ui.theme.AireLibreTheme
 import com.lucasginard.airelibre.modules.data.APIService
@@ -39,10 +39,9 @@ import com.lucasginard.airelibre.modules.home.view.dialog.DialogCardsAQICompose
 import com.lucasginard.airelibre.modules.home.viewModel.HomeViewModel
 import com.lucasginard.airelibre.modules.home.viewModel.HomeViewModelFactory
 import com.lucasginard.airelibre.utils.*
+import com.lucasginard.airelibre.utils.adapter.AdapterCityList
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
-import kotlin.collections.ArrayList
-import com.lucasginard.airelibre.utils.adapter.AdapterCityList
 
 
 class HomeFragment : Fragment(), OnMapReadyCallback {
@@ -334,7 +333,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                     MarkerOptions()
                         .position(LatLng(x.latitude, x.longitude))
                         .title(x.description)
-                        .icon(setImageMarker(x.quality.index))
+                        .icon(setMarkerIcon(x))
                 )
                 GoogleMap.setOnMarkerClickListener { maker ->
                     makerLamda(maker.title!!)
@@ -344,15 +343,18 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    private fun setImageMarker(index: Int): BitmapDescriptor {
-        return when (index) {
-            in 0..50 -> BitmapDescriptorFactory.fromResource(R.drawable.icon_maps_green)
-            in 51..100 -> BitmapDescriptorFactory.fromResource(R.drawable.icon_maps_yellow)
-            in 101..150 -> BitmapDescriptorFactory.fromResource(R.drawable.icon_maps_orange)
-            in 151..200 -> BitmapDescriptorFactory.fromResource(R.drawable.icon_maps_red)
-            in 201..300 -> BitmapDescriptorFactory.fromResource(R.drawable.icon_maps_purple)
-            else -> BitmapDescriptorFactory.fromResource(R.drawable.icon_maps_danger)
+    private fun setMarkerIcon(sensor:CityResponse): BitmapDescriptor? {
+        val image = when (sensor.quality.index) {
+            in 0..50 -> R.drawable.icon_maps_green
+            in 51..100 -> R.drawable.icon_maps_yellow
+            in 101..150 -> R.drawable.icon_maps_orange
+            in 151..200 -> R.drawable.icon_maps_red
+            in 201..300 -> R.drawable.icon_maps_purple
+            else -> R.drawable.icon_maps_danger
         }
+        return if(context != null) {
+            BitmapDescriptorFactory.fromBitmap(this.getBitmapMarker(requireContext(), image,"${sensor.quality.index}"))
+        } else BitmapDescriptorFactory.fromResource(image)
     }
 
 
