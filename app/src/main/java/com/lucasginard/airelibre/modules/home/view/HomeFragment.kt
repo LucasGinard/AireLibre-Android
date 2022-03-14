@@ -161,8 +161,9 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         if (::adapter.isInitialized && !flatPermisson){
             filterAdapter = context?.getString(R.string.itemAQI) ?: "AQI"
             isDown = true
-            adapter.orderList(filterAdapter,isDown)
+            orderList()
             tvFilter.text = filterAdapter
+            btnFilter.visibility = View.GONE
         }
     }
 
@@ -186,15 +187,14 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
         _binding.btnReconnect.setOnClickListener {
             configureService()
+            orderList()
         }
 
 
         onSwipeTouchListener = OnSwipeTouchListener(requireContext(), _binding.linearInfoMarker)
         bottomSheetBehavior = BottomSheetBehavior.from(_binding.coordinatorLayout.findViewById(R.id.bottomSheet))
-
         bottomSheetBehavior.addBottomSheetCallback(object :
             BottomSheetBehavior.BottomSheetCallback() {
-
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
                 // handle onSlide
             }
@@ -223,11 +223,11 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             if (btnOrderList.rotation == 90f){
                 btnOrderList.animationList(-90f)
                 isDown = true
-                adapter.orderList(filterAdapter,isDown)
+                orderList()
             } else{
                 btnOrderList.animationList(90f)
                 isDown = false
-                adapter.orderList(filterAdapter,isDown)
+                orderList()
             }
         }
 
@@ -246,19 +246,18 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     private fun showItemsFilter(v: View, @MenuRes menuRes: Int) {
         val popup = PopupMenu(requireContext(), v)
         popup.menuInflater.inflate(menuRes, popup.menu)
-        popup.menu.getItem(0).isVisible = flatPermisson
         popup.setOnMenuItemClickListener { menuItem: MenuItem ->
             when(menuItem.title){
                 getText(R.string.tvDistance) -> {
                     filterAdapter = context?.getString(R.string.itemDistance) ?: "Distance"
                     tvFilter.text = getText(R.string.tvDistance)
-                    adapter.orderList(filterAdapter,isDown)
+                    orderList()
                     true
                 }
                 getText(R.string.itemAQI) -> {
                     filterAdapter = context?.getString(R.string.itemAQI) ?: "AQI"
                     tvFilter.text = filterAdapter
-                    adapter.orderList(filterAdapter,isDown)
+                    orderList()
                     true
                 }
                 else -> false
@@ -417,6 +416,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                         }
                     }
                     GoogleMap.isMyLocationEnabled = true
+                    if (btnFilter.visibility == View.GONE) btnFilter.visibility = View.VISIBLE
                 }
             }
         }
@@ -447,10 +447,16 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                     filterAdapter = context?.getString(R.string.itemDistance) ?: "Distance"
                     tvFilter.text = context?.getText(R.string.tvDistance) ?: "Distancia"
                     isDown = true
-                    adapter.orderList(filterAdapter,isDown)
+                    orderList()
                 }
             }
         }
+    }
+
+    private fun orderList(){
+        adapter.orderList(filterAdapter,isDown)
+        recycler.swapAdapter(adapter,true)
+        recycler.scrollBy(0,0)
     }
 
     private fun mapTheme(){
