@@ -249,7 +249,7 @@ class AboutFragment: Fragment() {
 
     @Preview(showBackground = true)
     @Composable
-    fun DefaultPreview() {
+    fun DefaultPreviewAbout() {
         AireLibreTheme {
             baseAbout()
         }

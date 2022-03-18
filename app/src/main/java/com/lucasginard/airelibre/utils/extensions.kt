@@ -179,10 +179,10 @@ fun Fragment.getBitmapMarker(context: Context, resourceId: Int, mText: String): 
     val cWidth = r.width()
     val paint = Paint()
     paint.textAlign = Paint.Align.LEFT
-    paint.textSize = 20f
+    paint.textSize = 24f
     paint.isFakeBoldText = true
     paint.getTextBounds(mText, 0, mText.length, r)
-    val x = cWidth / 2f - r.width() / 2f - r.left
+    val x = cWidth / 2f - r.width() / 3f - r.left
     val y = cHeight / 2.5f + r.height() / 2f - r.bottom
     canvas.drawText(mText, x, y, paint)
     return bitmap
