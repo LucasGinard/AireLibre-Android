@@ -27,9 +27,8 @@ class CityViewHolder (view: View): RecyclerView.ViewHolder(view) {
         }else{
             binding.tvDistance.visibility = View.VISIBLE
             binding.tvSensorTitle.visibility = View.VISIBLE
-            var distance = ""
-            var distanceType = ""
-            distance = if (local.distance!! < 1F){
+            val distanceType:String
+            val distance = if (local.distance!! < 1F){
                 val converMeter = local.distance!! * 1000
                 distanceType ="metros"
                 converMeter.toString().substringBefore(".")

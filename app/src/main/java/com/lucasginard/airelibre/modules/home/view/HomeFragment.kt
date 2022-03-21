@@ -352,18 +352,17 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             else -> R.drawable.icon_maps_danger
         }
         return if(context != null) {
-            BitmapDescriptorFactory.fromBitmap(this.getBitmapMarker(requireContext(), image,"${sensor.quality.index}"))
+            this.getBitmapMarker(requireContext(), image,"${sensor.quality.index}")?.let { BitmapDescriptorFactory.fromBitmap(it) }
         } else BitmapDescriptorFactory.fromResource(image)
     }
 
-
-    override fun onMapReady(googleMap: GoogleMap?) {
+    override fun onMapReady(googleMap: GoogleMap) {
         googleMap.let {
-            GoogleMap = it!!
+            GoogleMap = it
         }
         val py = LatLng(-25.250, -57.536)
-        googleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(py, 10f))
-        googleMap?.uiSettings?.isMapToolbarEnabled = true
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(py, 10f))
+        googleMap.uiSettings.isMapToolbarEnabled = true
         mapTheme()
         updateLocation()
     }
@@ -469,7 +468,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                 ThemeState.isDefault = false
             }
             if (ThemeState.isDark){
-                GoogleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(context, R.raw.mapstyle_night))
+                GoogleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(requireContext(), R.raw.mapstyle_night))
                 btnArrow.setTint(R.color.white)
                 _binding.tvTitle.setTextColor(ContextCompat.getColor(requireContext(),R.color.white))
             }else{
