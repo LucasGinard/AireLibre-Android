@@ -271,7 +271,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             HomeViewModel::class.java
         )
         viewModel.getListCitys.observe(requireActivity()) {
-            if (it.isNotEmpty()){
+            if (it != null){
                 listCitys.clear()
                 listCitys.addAll(it)
                 configureMarkers(listCitys)
@@ -455,7 +455,6 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
     private fun orderList(){
         adapter.orderList(filterAdapter,isDown)
-        recycler.swapAdapter(adapter,true)
         recycler.scrollBy(0,0)
     }
 
