@@ -2,17 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/nav_about"
+        android:id="@+id/aboutFragment"
         android:title="About"
         android:icon="@drawable/icon_about"
         />
     <item
-        android:id="@+id/nav_home"
+        android:id="@+id/homeFragment"
         android:title="Home"
         android:icon="@drawable/ic_sensors"
         />
     <item
-        android:id="@+id/nav_config"
+        android:id="@+id/configFragment"
         android:title="Config"
         android:icon="@drawable/icon_config"
         />

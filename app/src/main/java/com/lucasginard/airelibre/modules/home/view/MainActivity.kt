@@ -6,11 +6,11 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.lucasginard.airelibre.R
 import com.lucasginard.airelibre.databinding.ActivityMainBinding
-import com.lucasginard.airelibre.modules.about.AboutFragment
-import com.lucasginard.airelibre.modules.config.ConfigFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,63 +21,28 @@ class MainActivity : AppCompatActivity() {
         installSplashScreen()
         bindding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(bindding.root)
-        configureFragment()
         configureNav()
     }
 
     private fun configureNav() {
-        bindding.navView.selectedItemId = R.id.nav_home
-        bindding.navView.setOnItemSelectedListener{
-            val fm: FragmentManager = supportFragmentManager
-            val ft: FragmentTransaction = fm.beginTransaction()
-            if (bindding.navView.selectedItemId != it.itemId){
-                when(it.itemId){
-                    R.id.nav_home ->{
-                        ft.replace(bindding.fragmentHome.id, HomeFragment.newInstance())
-                        ft.commit()
-                        onResume()
-                        true
-                    }
-                    R.id.nav_config ->{
-                        ft.replace(bindding.fragmentHome.id, ConfigFragment.newInstance())
-                        ft.commit()
-                        onResume()
-                        true
-                    }
-                    R.id.nav_about ->{
-                        ft.replace(bindding.fragmentHome.id, AboutFragment.newInstance())
-                        ft.commit()
-                        onResume()
-                        true
-                    }
-                    else -> {false}
-                }
-            }else{
-                false
-            }
-        }
-    }
-
-    private fun configureFragment() {
-        val ft = supportFragmentManager.beginTransaction()
-        ft.replace(bindding.fragmentHome.id, HomeFragment.newInstance())
-        ft.commit()
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragment) as NavHostFragment
+        bindding.navView.setupWithNavController(navHostFragment.navController)
     }
 
     override fun onBackPressed() {
-        val map = bindding.fragmentHome.findViewById<CoordinatorLayout>(R.id.coordinator_layout)
+        val map = bindding.fragment.findViewById<CoordinatorLayout>(R.id.coordinator_layout)
         if (map != null){
             val listState = BottomSheetBehavior.from(map.findViewById(R.id.bottomSheet))
             if (listState.state == BottomSheetBehavior.STATE_EXPANDED){
                 listState.state = BottomSheetBehavior.STATE_COLLAPSED
                 return
             }
-        } else if(bindding.navView.selectedItemId == R.id.nav_about || bindding.navView.selectedItemId == R.id.nav_config){
+        } else if(bindding.navView.selectedItemId == R.id.aboutFragment || bindding.navView.selectedItemId == R.id.configFragment){
             val fm: FragmentManager = supportFragmentManager
             val ft: FragmentTransaction = fm.beginTransaction()
-            ft.replace(bindding.fragmentHome.id, HomeFragment.newInstance())
+            ft.replace(bindding.fragment.id, HomeFragment.newInstance())
             ft.commit()
-            bindding.navView.selectedItemId = R.id.nav_home
+            bindding.navView.selectedItemId = R.id.homeFragment
             return
         }
         moveTaskToBack(true)
