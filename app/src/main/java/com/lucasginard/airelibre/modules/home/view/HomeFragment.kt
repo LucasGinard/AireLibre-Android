@@ -129,16 +129,20 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             }
         }
         requestLocation()
+        return _binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         configureUI()
         configureService()
         configureOnClickListeners()
         configureMaps(savedInstanceState)
-        return _binding.root
     }
 
     private fun configureUI() {
         _binding.btnReconnect.apply {
-            this.imageTintList = ContextCompat.getColorStateList(this.context, R.color.white)
+            this.imageTintList = ContextCompat.getColorStateList(requireContext(), R.color.white)
         }
         filterAdapter = context?.getString(R.string.itemDistance) ?: "Distance"
         btnOrderList = _binding.coordinatorLayout.findViewById(R.id.btnOrder)
@@ -187,14 +191,12 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
         _binding.btnReconnect.setOnClickListener {
             configureService()
-            orderList()
         }
 
 
         onSwipeTouchListener = OnSwipeTouchListener(requireContext(), _binding.linearInfoMarker)
         bottomSheetBehavior = BottomSheetBehavior.from(_binding.coordinatorLayout.findViewById(R.id.bottomSheet))
-        bottomSheetBehavior.addBottomSheetCallback(object :
-            BottomSheetBehavior.BottomSheetCallback() {
+        bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
                 // handle onSlide
             }
@@ -221,11 +223,11 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
         btnOrderList.setOnClickListener {
             if (btnOrderList.rotation == 90f){
-                btnOrderList.animationList(-90f)
+                btnOrderList.animationArrow(-90f)
                 isDown = true
                 orderList()
             } else{
-                btnOrderList.animationList(90f)
+                btnOrderList.animationArrow(90f)
                 isDown = false
                 orderList()
             }
