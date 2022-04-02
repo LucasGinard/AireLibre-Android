@@ -135,6 +135,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         configureUI()
+        configureAdapter()
         configureService()
         configureOnClickListeners()
         configureMaps(savedInstanceState)
@@ -152,11 +153,11 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         btnRefresh = _binding.coordinatorLayout.findViewById(R.id.btnRefreshList)
     }
 
-    private fun configureAdapter(arrayList: ArrayList<CityResponse>) {
+    private fun configureAdapter() {
         adapter = if (::GoogleMap.isInitialized){
-            AdapterCityList(arrayList, this, GoogleMap)
+            AdapterCityList(listCitys, this, GoogleMap)
         }else{
-            AdapterCityList(arrayList, this)
+            AdapterCityList(listCitys, this)
         }
         if (context != null){
             recycler.layoutManager = LinearLayoutManager(context)
@@ -276,8 +277,8 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             if (it != null){
                 listCitys.clear()
                 listCitys.addAll(it)
+                adapter.notifyDataSetChanged()
                 configureMarkers(listCitys)
-                configureAdapter(listCitys)
                 calculateMarkerLocation()
                 if (_binding.btnReconnect.visibility == View.VISIBLE) {
                     _binding.btnReconnect.visibility = View.GONE
