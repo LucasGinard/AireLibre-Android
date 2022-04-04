@@ -111,7 +111,7 @@ fun String.textAQI(aqiEscale:Int,context: Context):String {
     }
 }
 
-fun View.animationList(rotation:Float) {
+fun View.animationArrow(rotation:Float) {
     this.animate()
         .rotation(
             if (this.rotation == 90F)

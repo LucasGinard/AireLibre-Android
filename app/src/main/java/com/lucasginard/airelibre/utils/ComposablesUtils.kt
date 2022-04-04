@@ -13,9 +13,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.lucasginard.airelibre.R
+import com.lucasginard.airelibre.modules.about.ui.theme.AireLibreTheme
+import com.lucasginard.airelibre.utils.ComposablesUtils.Companion.dialogCustom
 
 class ComposablesUtils {
 
@@ -88,5 +91,13 @@ class ComposablesUtils {
                 }
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun DefaultPreviewUtils() {
+    AireLibreTheme {
+
     }
 }

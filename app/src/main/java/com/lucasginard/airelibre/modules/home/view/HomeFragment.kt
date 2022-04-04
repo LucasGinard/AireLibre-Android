@@ -181,12 +181,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
 
         _binding.btnClose.setOnClickListener {
-            _binding.linearInfoMarker.apply {
-                _binding.linearInfoMarker.startAnimation(this.animationCreate(R.anim.slide_down))
-                Executors.newSingleThreadScheduledExecutor().schedule({
-                    this.visibility = View.GONE
-                }, 1, TimeUnit.SECONDS)
-            }
+            _binding.linearInfoMarker.visibility = View.GONE
         }
 
 
@@ -486,6 +481,16 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         super.onResume()
         mapView?.onResume()
         mapTheme()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mapView?.onPause()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mapView?.onDestroy()
     }
 
     companion object {

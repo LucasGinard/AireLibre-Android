@@ -35,7 +35,7 @@ class AboutFragment: Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = requireContentView(ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)) {
+    ) = contentView(ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)) {
         AireLibreTheme(ThemeState.isDark) {
             Surface(color = MaterialTheme.colors.background) {
                 baseAbout()
@@ -46,7 +46,7 @@ class AboutFragment: Fragment() {
 
     @Composable
     fun baseAbout() {
-        if (ThemeState.isDefault) {
+        if (ThemeState.isDefault && context != null) {
             ThemeState.isDark = this.getModeTheme(requireContext())
         }
         Column(
