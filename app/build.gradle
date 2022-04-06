@@ -86,7 +86,9 @@ dependencies {
     //Location
     implementation 'com.google.android.gms:play-services-location:19.0.1'
     //newSplash
-    implementation 'androidx.core:core-splashscreen:1.0.0-beta01'
+    implementation 'androidx.core:core-splashscreen:1.0.0-beta02'
+    //update
+    implementation 'com.google.android.play:core-ktx:1.8.1'
 
 
 }

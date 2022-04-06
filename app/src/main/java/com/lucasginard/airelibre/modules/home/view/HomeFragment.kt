@@ -28,6 +28,10 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.*
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.play.core.appupdate.AppUpdateManager
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.UpdateAvailability
 import com.lucasginard.airelibre.R
 import com.lucasginard.airelibre.databinding.FragmentHomeBinding
 import com.lucasginard.airelibre.modules.config.ui.theme.AireLibreTheme
@@ -40,8 +44,6 @@ import com.lucasginard.airelibre.modules.home.viewModel.HomeViewModel
 import com.lucasginard.airelibre.modules.home.viewModel.HomeViewModelFactory
 import com.lucasginard.airelibre.utils.*
 import com.lucasginard.airelibre.utils.adapter.AdapterCityList
-import java.util.concurrent.Executors
-import java.util.concurrent.TimeUnit
 
 
 class HomeFragment : Fragment(), OnMapReadyCallback {
@@ -63,6 +65,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var onSwipeTouchListener: OnSwipeTouchListener
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
+    private lateinit var appUpdate:AppUpdateManager
 
     private lateinit var booleanDialog:MutableState<Boolean>
     private var listCards = ArrayList<CardsAQI>()
@@ -72,6 +75,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     private var listCitys = ArrayList<CityResponse>()
     private var flatPermisson = false
     private var isDown = true
+    private val REQUEST_UPDATE = 100
     val makerLamda = fun(maker: String) {
         _binding.linearInfoMarker.visibility = View.VISIBLE
         _binding.linearInfoMarker.startAnimation(
@@ -139,6 +143,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         configureService()
         configureOnClickListeners()
         configureMaps(savedInstanceState)
+        checkUpdate()
     }
 
     private fun configureUI() {
@@ -473,6 +478,15 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                 GoogleMap.mapType = com.google.android.gms.maps.GoogleMap.MAP_TYPE_NORMAL
                 btnArrow.setTint(R.color.black)
                 _binding.tvTitle.setTextColor(ContextCompat.getColor(requireContext(),R.color.black))
+            }
+        }
+    }
+
+    private fun checkUpdate() {
+        appUpdate = AppUpdateManagerFactory.create(requireContext())
+        appUpdate.appUpdateInfo.addOnSuccessListener {
+            if (it.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE && it.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)){
+                appUpdate.startUpdateFlowForResult(it,AppUpdateType.IMMEDIATE,requireActivity(),REQUEST_UPDATE)
             }
         }
     }
