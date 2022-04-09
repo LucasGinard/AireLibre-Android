@@ -186,6 +186,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
 
         _binding.btnClose.setOnClickListener {
+            _binding.linearInfoMarker.startAnimation(it.animationCreate(R.anim.slide_down))
             _binding.linearInfoMarker.visibility = View.GONE
         }
 
