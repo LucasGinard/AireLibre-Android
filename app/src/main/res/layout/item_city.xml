@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginStart="8dp"
@@ -15,37 +16,36 @@
         android:id="@+id/tvTitleCity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginStart="2dp"
         android:fontFamily="@font/rubik_bold"
         android:gravity="center"
         android:text="Surubi-i, Mariano"
         android:textColor="@color/black"
         android:textSize="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toBottomOf="@+id/imageView3"
+        app:layout_constraintStart_toEndOf="@+id/imageView3"
+        app:layout_constraintTop_toTopOf="@+id/imageView3" />
 
     <TextView
         android:id="@+id/tvState"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginEnd="55dp"
         android:fontFamily="@font/rubik_bold"
         android:text="@string/tvStatus"
         android:textColor="@color/black"
         android:textSize="12sp"
-        app:layout_constraintEnd_toStartOf="@+id/tvSensorTitle"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvTitleCity" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvTitleAQI" />
 
     <TextView
         android:id="@+id/stateIcon"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/emojiGreen"
         android:textColor="#2E7D32"
-        android:textSize="16sp"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="@+id/tvState"
         app:layout_constraintStart_toStartOf="@+id/tvState"
         app:layout_constraintTop_toBottomOf="@+id/tvState" />
@@ -54,53 +54,82 @@
         android:id="@+id/tvTitleAQI"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_marginStart="55dp"
         android:layout_marginTop="16dp"
         android:fontFamily="@font/rubik_bold"
         android:gravity="center"
         android:text="@string/tvEscale"
         android:textColor="@color/black"
         android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/tvSensorTitle"
-        app:layout_constraintTop_toBottomOf="@+id/tvTitleCity" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvDistance" />
 
     <TextView
         android:id="@+id/tvAQI"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/disket_regular"
         android:gravity="center"
         android:text="@string/emojiGreen"
         android:textColor="@color/black"
-        android:textSize="16sp"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="@+id/tvTitleAQI"
         app:layout_constraintStart_toStartOf="@+id/tvTitleAQI"
         app:layout_constraintTop_toBottomOf="@+id/tvTitleAQI" />
 
     <TextView
         android:id="@+id/tvDistance"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
         android:gravity="center"
         android:text="10km"
         android:textColor="@color/black"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="@+id/tvSensorTitle"
-        app:layout_constraintStart_toStartOf="@+id/tvSensorTitle"
-        app:layout_constraintTop_toBottomOf="@+id/tvSensorTitle" />
-
-    <TextView
-        android:id="@+id/tvSensorTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:fontFamily="@font/rubik_bold"
-        android:text="@string/tvDistance"
-        android:textColor="@color/black"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvTitleCity" />
+
+    <ImageView
+        android:id="@+id/imShare"
+        android:layout_width="20dp"
+        android:layout_height="0dp"
+        android:src="@drawable/ic_share"
+        app:layout_constraintBottom_toTopOf="@+id/stateIcon"
+        app:layout_constraintEnd_toStartOf="@+id/tvState"
+        app:layout_constraintTop_toTopOf="@+id/tvState"
+        app:tint="@color/link" />
+
+    <TextView
+        android:id="@+id/tvShare"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:autoLink="phone"
+        android:fontFamily="@font/rubik_bold"
+        android:text="@string/tvShareGo"
+        android:textColor="@color/link"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tvLink"
+        app:layout_constraintTop_toTopOf="@+id/tvLink" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="3dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvTitleCity" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_sensors"
+        app:tint="@color/black" />
+
+    <ImageView
+        android:id="@+id/tvSensorTitle"
+        android:layout_width="20dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvDistance"
+        app:layout_constraintEnd_toStartOf="@+id/tvDistance"
+        app:layout_constraintTop_toTopOf="@+id/tvDistance"
+        app:srcCompat="@drawable/icon_distance_sensor" />
 
     <ImageView
         android:id="@+id/imageView2"
@@ -115,7 +144,7 @@
         android:id="@+id/tvLink"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:autoLink="phone"
         android:fontFamily="@font/rubik_bold"
         android:text="@string/tvLinkGo"
@@ -123,31 +152,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.52"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvDistance" />
-
-    <ImageView
-        android:id="@+id/imShare"
-        android:layout_width="20dp"
-        android:layout_height="0dp"
-        android:src="@drawable/ic_share"
-        app:layout_constraintBottom_toBottomOf="@+id/tvShare"
-        app:layout_constraintEnd_toStartOf="@+id/tvShare"
-        app:layout_constraintTop_toTopOf="@+id/tvShare"
-        app:tint="@color/link" />
-
-    <TextView
-        android:id="@+id/tvShare"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
-        android:autoLink="phone"
-        android:fontFamily="@font/rubik_bold"
-        android:text="@string/tvShareGo"
-        android:textColor="@color/link"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.52"
-        app:layout_constraintStart_toEndOf="@+id/tvLink"
-        app:layout_constraintTop_toBottomOf="@+id/tvDistance" />
-
+        app:layout_constraintTop_toBottomOf="@+id/tvAQI" />
 </androidx.constraintlayout.widget.ConstraintLayout>

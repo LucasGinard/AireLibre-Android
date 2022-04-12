@@ -128,7 +128,7 @@ class ConfigFragment: Fragment() {
 
     override fun onResume() {
         super.onResume()
-        if (!viewModel.isNotDefaultTheme()) {
+        if (::viewModel.isInitialized && !viewModel.isNotDefaultTheme()) {
             ThemeState.isDark = this.getModeTheme(requireContext())
         }
         if (::checkedStateLocation.isInitialized) checkedStateLocation.value = checkPermissionLocation()
