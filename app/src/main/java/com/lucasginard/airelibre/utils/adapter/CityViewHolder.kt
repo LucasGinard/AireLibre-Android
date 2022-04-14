@@ -43,7 +43,7 @@ class CityViewHolder (view: View): RecyclerView.ViewHolder(view) {
     private fun configureOnClickListener(maps: GoogleMap?,local: CityResponse,fragment: HomeFragment) {
         binding.tvLink.setOnClickListener {
             maps?.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(local.latitude,local.longitude), 13f))
-            fragment.makerLamda(local.description)
+            fragment.markerLamda(local.description)
         }
 
         binding.tvShare.setOnClickListener {

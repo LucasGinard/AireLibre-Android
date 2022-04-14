@@ -3,6 +3,7 @@ package com.lucasginard.airelibre.modules.home.view
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.content.pm.PackageManager
+import android.graphics.Typeface
 import android.location.Location
 import android.os.Bundle
 import android.os.Handler
@@ -26,6 +27,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.*
+import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter
 import com.google.android.gms.maps.model.*
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.play.core.appupdate.AppUpdateManager
@@ -76,14 +78,14 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     private var flatPermisson = false
     private var isDown = true
     private val REQUEST_UPDATE = 100
-    val makerLamda = fun(maker: String) {
+    val markerLamda = fun(marker: String) {
         _binding.linearInfoMarker.visibility = View.VISIBLE
         _binding.linearInfoMarker.startAnimation(
             _binding.linearInfoMarker.animationCreate(
                 R.anim.slide_up
             )
         )
-        val cityObject = listCitys.find { it.description == maker }
+        val cityObject = listCitys.find { it.description == marker }
         if (cityObject != null){
             _binding.tvCiudad.text = cityObject.description
             cityObject.quality.index.let {
@@ -108,7 +110,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             btnArrow.background = ContextCompat.getDrawable(requireContext(),R.drawable.ic_arrow_up)
         }
         if (::cityCloser.isInitialized) {
-            if (cityCloser.description == maker) {
+            if (cityCloser.description == marker) {
                 _binding.tvTitleCity.text = context?.getText(R.string.tvSensorCloser) ?: "Sensor más cercano:"
             } else _binding.tvTitleCity.text = context?.getText(R.string.tvSensor) ?: "Sensor:"
         } else {
@@ -338,13 +340,41 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                         .title(x.description)
                         .icon(setMarkerIcon(x))
                 )
-                GoogleMap.setOnMarkerClickListener { maker ->
-                    makerLamda(maker.title!!)
-                    true
-                }
             }
         }
+        GoogleMap.setInfoWindowAdapter(object : InfoWindowAdapter {
+            override fun getInfoWindow(arg0: Marker): View? {
+                return null
+            }
+
+            override fun getInfoContents(marker: Marker): View {
+                val sensor = listCitys.find { it.description == marker.title }
+                val info = LinearLayout(context)
+                info.orientation = LinearLayout.VERTICAL
+                if (sensor != null) {
+                    info.setBackgroundColor(this@HomeFragment.colorBackground(sensor.quality.index,requireContext()))
+                }
+                val title = TextView(context)
+                title.setTextColor(ContextCompat.getColor(requireContext(),R.color.black))
+                title.gravity = Gravity.CENTER
+                title.setTypeface(null, Typeface.BOLD)
+                title.text = marker.title
+                val snippet = TextView(context)
+                snippet.setTextColor(ContextCompat.getColor(requireContext(),R.color.teal_200))
+                snippet.text = marker.snippet
+                info.addView(title)
+                info.addView(snippet)
+                return info
+            }
+        })
+        GoogleMap.setOnMarkerClickListener { marker ->
+            markerLamda(marker.title!!)
+            marker.showInfoWindow()
+            true
+        }
     }
+
+
 
     private fun setMarkerIcon(sensor:CityResponse): BitmapDescriptor? {
         val image = when (sensor.quality.index) {
@@ -444,7 +474,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             val cerca = listCitys.find { it.latitude == posicionMasCercana.latitude && it.longitude == posicionMasCercana.longitude }
             if (cerca != null) {
                 cityCloser = cerca
-                makerLamda(cerca.description)
+                markerLamda(cerca.description)
                 _binding.tvTitleCity.text = context?.getText(R.string.tvSensorCloser) ?: "Sensor más cercano:"
                 if (::adapter.isInitialized){
                     filterAdapter = context?.getString(R.string.itemDistance) ?: "Distance"

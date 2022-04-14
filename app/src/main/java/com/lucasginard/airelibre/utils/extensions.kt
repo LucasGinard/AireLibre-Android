@@ -110,6 +110,28 @@ fun String.textAQI(aqiEscale:Int,context: Context):String {
         }
     }
 }
+fun Fragment.colorBackground(quality:Int,context:Context):Int {
+    when (quality) {
+        in 0..50 -> {
+            return context.getColor(R.color.cardGreen)
+        }
+        in 51..100 -> {
+            return context.getColor(R.color.cardYellow)
+        }
+        in 101..150 -> {
+            return context.getColor(R.color.cardOrange)
+        }
+        in 151..200 -> {
+            return context.getColor(R.color.cardRed)
+        }
+        in 201..300 -> {
+            return context.getColor(R.color.cardPurple)
+        }
+        else -> {
+            return context.getColor(R.color.cardDanger)
+        }
+    }
+}
 
 fun View.animationArrow(rotation:Float) {
     this.animate()

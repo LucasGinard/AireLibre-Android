@@ -107,6 +107,7 @@
         android:fontFamily="@font/rubik_bold"
         android:text="@string/tvShareGo"
         android:textColor="@color/link"
+        android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/tvState"
         app:layout_constraintTop_toTopOf="@+id/tvState" />
@@ -149,6 +150,7 @@
         android:fontFamily="@font/rubik_bold"
         android:text="@string/tvLinkGo"
         android:textColor="@color/link"
+        android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.52"
         app:layout_constraintStart_toStartOf="parent"
