@@ -41,6 +41,10 @@ class CityViewHolder (view: View): RecyclerView.ViewHolder(view) {
     }
 
     private fun configureOnClickListener(maps: GoogleMap?,local: CityResponse,fragment: HomeFragment) {
+        binding.btnInfoAQI.setOnClickListener {
+            fragment.infoAQI()
+        }
+
         binding.tvLink.setOnClickListener {
             maps?.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(local.latitude,local.longitude), 13f))
             fragment.markerLamda(local.description)

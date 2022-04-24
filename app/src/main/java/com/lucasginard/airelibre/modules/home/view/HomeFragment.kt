@@ -13,13 +13,15 @@ import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.MenuRes
 import androidx.appcompat.widget.PopupMenu
-import androidx.compose.material.*
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -78,6 +80,11 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     private var flatPermisson = false
     private var isDown = true
     private val REQUEST_UPDATE = 100
+    val infoAQI = fun(){
+        listCards.clear()
+        listCards = viewModel.getCards(requireActivity())
+        booleanDialog.value = true
+    }
     val markerLamda = fun(marker: String) {
         _binding.linearInfoMarker.visibility = View.VISIBLE
         _binding.linearInfoMarker.startAnimation(
@@ -181,9 +188,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
     private fun configureOnClickListeners() {
         _binding.btnInfo.setOnClickListener {
-            listCards.clear()
-            listCards = viewModel.getCards(requireActivity())
-            booleanDialog.value = true
+            infoAQI()
         }
 
 
@@ -351,10 +356,14 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                 val sensor = listCitys.find { it.description == marker.title }
                 val info = LinearLayout(context)
                 info.orientation = LinearLayout.VERTICAL
-                if (sensor != null) {
-                    info.setBackgroundColor(this@HomeFragment.colorBackground(sensor.quality.index,requireContext()))
-                }
                 val title = TextView(context)
+                val descriptionAQI = TextView(context)
+                if (sensor != null) {
+                    descriptionAQI.text = descriptionAQI.descriptionAQI(sensor.quality.index)
+                    descriptionAQI.setTextColor(descriptionAQI.colorBackground(sensor.quality.index,requireContext()))
+                }
+                descriptionAQI.typeface = ResourcesCompat.getFont(requireContext(),R.font.disket_bold)
+                descriptionAQI.textSize = 15f
                 title.setTextColor(ContextCompat.getColor(requireContext(),R.color.black))
                 title.gravity = Gravity.CENTER
                 title.setTypeface(null, Typeface.BOLD)
@@ -363,7 +372,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                 snippet.setTextColor(ContextCompat.getColor(requireContext(),R.color.teal_200))
                 snippet.text = marker.snippet
                 info.addView(title)
-                info.addView(snippet)
+                info.addView(descriptionAQI)
                 return info
             }
         })

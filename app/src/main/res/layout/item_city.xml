@@ -53,7 +53,7 @@
         android:id="@+id/tvTitleAQI"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_marginStart="55dp"
+        android:layout_marginStart="40dp"
         android:layout_marginTop="16dp"
         android:fontFamily="@font/rubik_bold"
         android:gravity="center"
@@ -72,7 +72,7 @@
         android:text="@string/emojiGreen"
         android:textColor="@color/black"
         android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="@+id/tvTitleAQI"
+        app:layout_constraintEnd_toEndOf="@+id/btnInfoAQI"
         app:layout_constraintStart_toStartOf="@+id/tvTitleAQI"
         app:layout_constraintTop_toBottomOf="@+id/tvTitleAQI" />
 
@@ -155,4 +155,19 @@
         app:layout_constraintHorizontal_bias="0.52"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvAQI" />
+
+    <ImageButton
+        android:id="@+id/btnInfoAQI"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginBottom="3dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/app_name"
+        android:scaleType="centerInside"
+        app:layout_constraintBottom_toBottomOf="@+id/tvTitleAQI"
+        app:layout_constraintStart_toEndOf="@+id/tvTitleAQI"
+        app:layout_constraintTop_toTopOf="@+id/tvTitleAQI"
+        app:srcCompat="@drawable/ic_info_aqi"
+        app:tint="@color/black"
+        tools:ignore="TouchTargetSizeCheck" />
 </androidx.constraintlayout.widget.ConstraintLayout>

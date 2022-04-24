@@ -110,7 +110,31 @@ fun String.textAQI(aqiEscale:Int,context: Context):String {
         }
     }
 }
-fun Fragment.colorBackground(quality:Int,context:Context):Int {
+
+fun TextView.descriptionAQI(index:Int):String{
+    when (index) {
+        in 0..50 -> {
+            return "Libre"
+        }
+        in 51..100 -> {
+            return "Maso"
+        }
+        in 101..150 -> {
+            return "No tan bien"
+        }
+        in 151..200 -> {
+            return "Insalubre"
+        }
+        in 201..300 -> {
+            return "Muy insalubre"
+        }
+        else -> {
+            return "Peligroso"
+        }
+    }
+}
+
+fun TextView.colorBackground(quality:Int,context:Context):Int {
     when (quality) {
         in 0..50 -> {
             return context.getColor(R.color.cardGreen)
