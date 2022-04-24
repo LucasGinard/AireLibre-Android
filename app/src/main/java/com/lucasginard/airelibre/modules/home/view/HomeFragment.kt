@@ -73,6 +73,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
     private lateinit var booleanDialog:MutableState<Boolean>
     private var listCards = ArrayList<CardsAQI>()
+    private var markerList = ArrayList<Marker>()
 
     private var mapView: MapView? = null
     private val retrofit = APIService.getInstance()
@@ -112,6 +113,8 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                 )
             )
         }
+        markerList.find { it.title  == marker }?.showInfoWindow()
+
         if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_EXPANDED) {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
             btnArrow.background = ContextCompat.getDrawable(requireContext(),R.drawable.ic_arrow_up)
@@ -344,7 +347,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                         .position(LatLng(x.latitude, x.longitude))
                         .title(x.description)
                         .icon(setMarkerIcon(x))
-                )
+                )?.let { markerList.add(it) }
             }
         }
         GoogleMap.setInfoWindowAdapter(object : InfoWindowAdapter {
