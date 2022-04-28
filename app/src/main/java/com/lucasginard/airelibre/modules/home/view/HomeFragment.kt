@@ -194,17 +194,14 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             infoAQI()
         }
 
-
         _binding.btnClose.setOnClickListener {
             _binding.linearInfoMarker.startAnimation(it.animationCreate(R.anim.slide_down))
             _binding.linearInfoMarker.visibility = View.GONE
         }
 
-
         _binding.btnReconnect.setOnClickListener {
             configureService()
         }
-
 
         onSwipeTouchListener = OnSwipeTouchListener(requireContext(), _binding.linearInfoMarker)
         bottomSheetBehavior = BottomSheetBehavior.from(_binding.coordinatorLayout.findViewById(R.id.bottomSheet))
@@ -371,9 +368,6 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                 title.gravity = Gravity.CENTER
                 title.setTypeface(null, Typeface.BOLD)
                 title.text = marker.title
-                val snippet = TextView(context)
-                snippet.setTextColor(ContextCompat.getColor(requireContext(),R.color.teal_200))
-                snippet.text = marker.snippet
                 info.addView(title)
                 info.addView(descriptionAQI)
                 return info
@@ -385,8 +379,6 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             true
         }
     }
-
-
 
     private fun setMarkerIcon(sensor:CityResponse): BitmapDescriptor? {
         val image = when (sensor.quality.index) {
