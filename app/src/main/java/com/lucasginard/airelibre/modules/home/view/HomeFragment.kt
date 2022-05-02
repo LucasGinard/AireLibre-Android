@@ -6,8 +6,6 @@ import android.content.pm.PackageManager
 import android.graphics.Typeface
 import android.location.Location
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.*
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
@@ -248,9 +246,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
         btnRefresh.setOnClickListener {
             btnRefresh.animationRefresh()
-            Handler(Looper.getMainLooper()).postDelayed({
-                viewModel.getAllCity()
-            }, 100)
+            viewModel.getAllCity()
         }
     }
 
@@ -283,6 +279,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         )
         viewModel.getListCitys.observe(requireActivity()) {
             if (it != null){
+                markerList.clear()
                 listCitys.clear()
                 listCitys.addAll(it)
                 adapter.notifyDataSetChanged()
@@ -479,6 +476,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             if (cerca != null) {
                 cityCloser = cerca
                 markerLamda(cerca.description)
+                markerList.find { it.title == cerca.description }?.showInfoWindow()
                 _binding.tvTitleCity.text = context?.getText(R.string.tvSensorCloser) ?: "Sensor más cercano:"
                 if (::adapter.isInitialized){
                     filterAdapter = context?.getString(R.string.itemDistance) ?: "Distance"

@@ -14,10 +14,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/ic_arrow_up"
+        android:contentDescription="@string/app_name"
         android:paddingBottom="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ImageContrastCheck" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/tvTtileList"
@@ -104,6 +106,7 @@
                 android:layout_marginEnd="4dp"
                 android:background="@drawable/ic_arrow_left"
                 android:backgroundTint="#FFFFFF"
+                android:contentDescription="@string/app_name"
                 android:rotation="-90"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/dividerRefresh"
@@ -116,6 +119,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/ic_filter"
+                android:contentDescription="@string/emojiDanger"
                 app:layout_constraintBottom_toBottomOf="@+id/tvFilter"
                 app:layout_constraintEnd_toStartOf="@+id/tvFilter"
                 app:layout_constraintTop_toTopOf="@+id/tvFilter"
@@ -127,7 +131,7 @@
                 android:layout_height="0dp"
                 android:layout_marginEnd="4dp"
                 android:background="@color/white"
-                android:visibility="invisible"
+                android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="@+id/btnOrder"
                 app:layout_constraintEnd_toStartOf="@+id/btnRefreshList"
                 app:layout_constraintTop_toTopOf="@+id/btnOrder" />
@@ -139,10 +143,12 @@
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/ic_rollback"
                 android:backgroundTint="@color/white"
-                android:visibility="gone"
+                android:contentDescription="@string/btnAccept"
+                android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/btnOrder" />
+                app:layout_constraintTop_toTopOf="@+id/btnOrder"
+                tools:ignore="TouchTargetSizeCheck" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
