@@ -114,22 +114,22 @@ fun String.textAQI(aqiEscale:Int,context: Context):String {
 fun TextView.descriptionAQI(index:Int):String{
     when (index) {
         in 0..50 -> {
-            return "Libre"
+            return context.getString(R.string.titleGreen)
         }
         in 51..100 -> {
-            return "Maso"
+            return context.getString(R.string.titleYellow)
         }
         in 101..150 -> {
-            return "No tan bien"
+            return context.getString(R.string.titleOrange)
         }
         in 151..200 -> {
-            return "Insalubre"
+            return context.getString(R.string.titleRed)
         }
         in 201..300 -> {
-            return "Muy insalubre"
+            return context.getString(R.string.titlePurple)
         }
         else -> {
-            return "Peligroso"
+            return context.getString(R.string.titleDanger)
         }
     }
 }

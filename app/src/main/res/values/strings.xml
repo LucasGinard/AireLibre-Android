@@ -63,6 +63,13 @@
     <string name="textTitleRed">151-200 | Insalubre</string>
     <string name="textTitlePurple">201-300 | Muy insalubre</string>
     <string name="textTitleDanger">300+ | Peligroso</string>
+    <!---LazyColumnTitleAQI-->
+    <string name="titleGreen">Libre</string>
+    <string name="titleYellow">Maso</string>
+    <string name="titleOrange">No tan bien</string>
+    <string name="titleRed">Insalubre</string>
+    <string name="titlePurple">Muy insalubre</string>
+    <string name="titleDanger">Peligroso</string>
 
     <!---links-->
     <string name="linkIcon">https://www.freepik.es/vector-gratis/familia-activa-feliz-caminando-al-aire-libre_7732632.htm</string>

@@ -19,7 +19,6 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -46,7 +45,6 @@ import com.lucasginard.airelibre.modules.home.viewModel.HomeViewModel
 import com.lucasginard.airelibre.modules.home.viewModel.HomeViewModelFactory
 import com.lucasginard.airelibre.utils.*
 import com.lucasginard.airelibre.utils.adapter.AdapterCityList
-
 
 class HomeFragment : Fragment(), OnMapReadyCallback {
 
@@ -359,8 +357,8 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                     descriptionAQI.text = descriptionAQI.descriptionAQI(sensor.quality.index)
                     descriptionAQI.setTextColor(descriptionAQI.colorBackground(sensor.quality.index,requireContext()))
                 }
-                descriptionAQI.typeface = ResourcesCompat.getFont(requireContext(),R.font.disket_bold)
                 descriptionAQI.textSize = 15f
+                descriptionAQI.setTypeface(null, Typeface.BOLD)
                 title.setTextColor(ContextCompat.getColor(requireContext(),R.color.black))
                 title.gravity = Gravity.CENTER
                 title.setTypeface(null, Typeface.BOLD)
