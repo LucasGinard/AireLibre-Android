@@ -5,11 +5,13 @@ import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Query
+import kotlin.collections.ArrayList
 
 interface APIService {
 
     @GET("api/v1/aqi")
-    fun getList(): Call<ArrayList<CityResponse>>
+    fun getList(@Query("start") date:String): Call<ArrayList<CityResponse>>
 
     companion object {
         var retrofitService: APIService? = null
