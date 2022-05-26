@@ -52,6 +52,7 @@
     <string name="descriptionWarningTheme">Actualmente la App toma la configuración del dispositivo\nsi lo modifica ya no tendrá en cuenta la configuración del dispositivo.</string>
     <string name="descriptionDenyLocation">Al rechazar las dos solicitudes de permiso.\ntendrá que permitir el acceso a su ubicación en \nAjustes -> Aplicaciones -> AireLibre -> Permisos/Accesos\n\nAceptar para ir a ajustes.</string>
     <string name="descriptionAcceptLocation">Al aceptar los permisos no podemos negarle tendra que ir en permisos a su ubicación en \nAjustes -> Aplicaciones -> AireLibre -> Permisos/Accesos\n\nAceptar para ir a ajustes.</string>
+    <string name="titleMapCustom">Personaliza tu mapa:</string>
 
     <!---recyclerView-->
     <string name="tvLinkGo"><u>Ver mas</u></string>
@@ -89,7 +90,21 @@
     <string name="btnCancel">Cancelar</string>
     <string name="btnTwitter">twitterBot</string>
     <string name="btnWebsite">webSite</string>
-
+    list.add(MapData(R.drawable.map_blue,"Azul"))
+    list.add(MapData(R.drawable.map_cyber,"Cyber"))
+    list.add(MapData(R.drawable.map_fallout,"Fallout"))
+    list.add(MapData(R.drawable.map_gta,"GTA"))
+    return list
     <!---Emojis-->
     <string name="emojiWorld">🌎</string>
+
+    <!---MapsNames-->
+    <string name="mapDefault">Prefijado</string>
+    <string name="mapUber">Uber</string>
+    <string name="mapRetro">Retro</string>
+    <string name="mapLightBlue">Celeste</string>
+    <string name="mapBlue">Azul</string>
+    <string name="mapCyber">Futurista</string>
+    <string name="mapFallout">Fallout</string>
+    <string name="mapGTA">GTA</string>
 </resources>

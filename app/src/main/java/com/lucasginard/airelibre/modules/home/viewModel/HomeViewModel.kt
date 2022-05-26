@@ -50,6 +50,8 @@ class HomeViewModel constructor(private val repository: HomeRepository) : ViewMo
         listCards.add(CardsAQI(activity.getString(R.string.textTitleDanger),activity.getString(R.string.tvDescriptionDanger),R.color.cardDanger))
         return listCards
     }
-
+    fun getCustomMap():String{
+        return repository.getStyleMap()
+    }
 
 }

@@ -37,6 +37,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.lucasginard.airelibre.BuildConfig
 import com.lucasginard.airelibre.R
 import com.lucasginard.airelibre.modules.config.domain.ConfigRepository
+import com.lucasginard.airelibre.modules.config.listMaps.SelectMapCards
 import com.lucasginard.airelibre.modules.config.ui.theme.AireLibreTheme
 import com.lucasginard.airelibre.modules.config.viewModel.ConfigViewModel
 import com.lucasginard.airelibre.modules.config.viewModel.ConfigViewModelFactory
@@ -150,6 +151,7 @@ class ConfigFragment: Fragment() {
             //sectionThemeCheck()
             sectionSwitchLocation()
             sectionSwitchTheme()
+            SelectMapCards(viewModel,requireContext())
             sectionTextVersion()
             dialogDenyComposable()
 

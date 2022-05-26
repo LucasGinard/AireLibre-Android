@@ -9,6 +9,7 @@ class SharedPref(context: Context) {
     val SHARED_THEME = "custom_theme"
     val SHARED_LOCATION_DENY = "location_deny"
     val SHARED_LOCATION_ACCEPT = "location_accept"
+    val SHARED_MAP_CUSTOM = "map_custom"
     val prefs: SharedPreferences = context.getSharedPreferences(PREFS_NAME, 0)
 
     var flatTheme: Boolean
@@ -26,4 +27,9 @@ class SharedPref(context: Context) {
     var flatAcceptPermissonLocation: Boolean
         get() = prefs.getBoolean(SHARED_LOCATION_ACCEPT, false)
         set(value) = prefs.edit().putBoolean(SHARED_LOCATION_ACCEPT, value).apply()
+
+    var customMap: String
+        get() = prefs.getString(SHARED_MAP_CUSTOM, "Prefijado")!!
+        set(value) = prefs.edit().putString(SHARED_MAP_CUSTOM, value).apply()
+
 }

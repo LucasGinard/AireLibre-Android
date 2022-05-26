@@ -17,6 +17,10 @@ class HomeRepository constructor(private val retrofitService: APIService) {
         return AireLibreApp.prefs.themeCustom
     }
 
+    fun getStyleMap():String{
+        return AireLibreApp.prefs.customMap
+    }
+
     fun getISODate(): String {
         val calendar = Calendar.getInstance()
         var date = calendar.time

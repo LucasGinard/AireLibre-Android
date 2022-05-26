@@ -501,15 +501,62 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                 ThemeState.isDark = viewModel.getTheme()
                 ThemeState.isDefault = false
             }
-            if (ThemeState.isDark){
-                GoogleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(requireContext(), R.raw.mapstyle_night))
-                btnArrow.setTint(R.color.white)
-                _binding.tvTitle.setTextColor(ContextCompat.getColor(requireContext(),R.color.white))
+            val mapStyle = viewModel.getCustomMap()
+            if (mapStyle == getString(R.string.mapDefault)){
+                if (ThemeState.isDark){
+                    GoogleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(requireContext(), R.raw.mapstyle_night))
+                    changeColorTitleMap(false)
+                }else{
+                    GoogleMap.mapType = com.google.android.gms.maps.GoogleMap.MAP_TYPE_NORMAL
+                    changeColorTitleMap(true)
+                }
             }else{
-                GoogleMap.mapType = com.google.android.gms.maps.GoogleMap.MAP_TYPE_NORMAL
-                btnArrow.setTint(R.color.black)
-                _binding.tvTitle.setTextColor(ContextCompat.getColor(requireContext(),R.color.black))
+                getCustomMap(mapStyle)
             }
+
+        }
+    }
+
+    private fun getCustomMap(mapStyle:String){
+        when(mapStyle){
+            getString(R.string.mapGTA) -> {
+                GoogleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(requireContext(), R.raw.mapstyle_gta))
+                changeColorTitleMap(false)
+            }
+            getString(R.string.mapUber) ->{
+                GoogleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(requireContext(), R.raw.mapstyle_uber))
+                changeColorTitleMap(true)
+            }
+            getString(R.string.mapBlue) ->{
+                GoogleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(requireContext(), R.raw.mapstyle_blue))
+                changeColorTitleMap(false)
+            }
+            getString(R.string.mapRetro) ->{
+                GoogleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(requireContext(), R.raw.mapstyle_retro))
+                changeColorTitleMap(true)
+            }
+            getString(R.string.mapLightBlue) ->{
+                GoogleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(requireContext(), R.raw.mapstyle_light_blue))
+                changeColorTitleMap(true)
+            }
+            getString(R.string.mapFallout) ->{
+                GoogleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(requireContext(), R.raw.mapstyle_fallout))
+                changeColorTitleMap(false)
+            }
+            getString(R.string.mapCyber) ->{
+                GoogleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(requireContext(), R.raw.mapstyle_cyber))
+                changeColorTitleMap(false)
+            }
+        }
+    }
+
+    private fun changeColorTitleMap(isDark:Boolean){
+        if (isDark){
+            btnArrow.setTint(R.color.black)
+            _binding.tvTitle.setTextColor(ContextCompat.getColor(requireContext(),R.color.black))
+        }else{
+            btnArrow.setTint(R.color.white)
+            _binding.tvTitle.setTextColor(ContextCompat.getColor(requireContext(),R.color.white))
         }
     }
 

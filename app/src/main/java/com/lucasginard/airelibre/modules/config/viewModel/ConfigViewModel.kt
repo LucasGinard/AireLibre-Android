@@ -1,7 +1,10 @@
 package com.lucasginard.airelibre.modules.config.viewModel
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
+import com.lucasginard.airelibre.R
 import com.lucasginard.airelibre.modules.config.domain.ConfigRepository
+import com.lucasginard.airelibre.modules.config.model.MapData
 
 class ConfigViewModel constructor(private val repository: ConfigRepository) : ViewModel() {
 
@@ -36,4 +39,23 @@ class ConfigViewModel constructor(private val repository: ConfigRepository) : Vi
     fun getFlatLocationSucess():Boolean{
         return repository.getFlatSucessPermissionLocation()
     }
+
+    fun setCustomMap(mapType:String){
+        repository.saveMapTypeCustom(mapType)
+    }
+
+    fun getListMaps(context: Context):ArrayList<MapData>{
+        val list = ArrayList<MapData>()
+        list.add(MapData(R.drawable.map_default,context.getString(R.string.mapDefault)))
+        list.add(MapData(R.drawable.map_uber,context.getString(R.string.mapUber)))
+        list.add(MapData(R.drawable.map_retro,context.getString(R.string.mapRetro)))
+        list.add(MapData(R.drawable.map_light_blue,context.getString(R.string.mapLightBlue)))
+        list.add(MapData(R.drawable.map_blue,context.getString(R.string.mapBlue)))
+        list.add(MapData(R.drawable.map_cyber,context.getString(R.string.mapCyber)))
+        list.add(MapData(R.drawable.map_fallout,context.getString(R.string.mapFallout)))
+        list.add(MapData(R.drawable.map_gta,context.getString(R.string.mapGTA)))
+        return list
+    }
+
+
 }

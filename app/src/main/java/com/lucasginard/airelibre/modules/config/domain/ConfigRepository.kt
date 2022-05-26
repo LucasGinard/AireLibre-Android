@@ -36,5 +36,9 @@ class ConfigRepository {
         return AireLibreApp.prefs.flatAcceptPermissonLocation
     }
 
+    fun saveMapTypeCustom(mapType:String){
+        AireLibreApp.prefs.customMap = mapType
+    }
+
 
 }
