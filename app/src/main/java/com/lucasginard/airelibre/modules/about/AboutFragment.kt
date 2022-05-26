@@ -31,6 +31,8 @@ import com.lucasginard.airelibre.utils.*
 
 class AboutFragment: Fragment() {
 
+    private val linkDark = Color(140, 180, 255)
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -152,7 +154,7 @@ class AboutFragment: Fragment() {
             text = stringResource(id = R.string.seeMore),
             fontFamily = ComposablesUtils.fontFamily,
             fontWeight = FontWeight.Bold,
-            color = Color.Blue,
+            color = if (ThemeState.isDark)linkDark else Color.Blue,
             style = TextStyle(textDecoration = TextDecoration.Underline),
             fontSize = 18.sp,
             modifier = Modifier
@@ -181,7 +183,7 @@ class AboutFragment: Fragment() {
             textAlign = TextAlign.Center,
             fontFamily = ComposablesUtils.fontFamily,
             fontWeight = FontWeight.Bold,
-            color = Color.Blue,
+            color = if (ThemeState.isDark)linkDark else Color.Blue,
             fontSize = 14.sp,
             style = TextStyle(textDecoration = TextDecoration.Underline),
             modifier = Modifier.clickable(
@@ -207,7 +209,7 @@ class AboutFragment: Fragment() {
             textAlign = TextAlign.Center,
             fontFamily = ComposablesUtils.fontFamily,
             fontWeight = FontWeight.Bold,
-            color = Color.Blue,
+            color = if (ThemeState.isDark)linkDark else Color.Blue,
             fontSize = 14.sp,
             modifier = Modifier.clickable(
                 onClick = {
@@ -232,7 +234,7 @@ class AboutFragment: Fragment() {
             textAlign = TextAlign.Center,
             fontFamily = ComposablesUtils.fontFamily,
             fontWeight = FontWeight.Bold,
-            color = Color.Blue,
+            color = if (ThemeState.isDark)linkDark else Color.Blue,
             fontSize = 14.sp,
             style = TextStyle(textDecoration = TextDecoration.Underline),
             modifier = Modifier.clickable(
