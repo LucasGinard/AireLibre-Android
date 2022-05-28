@@ -90,16 +90,12 @@
     <string name="btnCancel">Cancelar</string>
     <string name="btnTwitter">twitterBot</string>
     <string name="btnWebsite">webSite</string>
-    list.add(MapData(R.drawable.map_blue,"Azul"))
-    list.add(MapData(R.drawable.map_cyber,"Cyber"))
-    list.add(MapData(R.drawable.map_fallout,"Fallout"))
-    list.add(MapData(R.drawable.map_gta,"GTA"))
-    return list
+
     <!---Emojis-->
     <string name="emojiWorld">🌎</string>
 
     <!---MapsNames-->
-    <string name="mapDefault">Prefijado</string>
+    <string name="mapDefault">Pred</string>
     <string name="mapUber">Uber</string>
     <string name="mapRetro">Retro</string>
     <string name="mapLightBlue">Celeste</string>
