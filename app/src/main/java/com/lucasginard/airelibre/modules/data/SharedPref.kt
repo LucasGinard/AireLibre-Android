@@ -29,7 +29,7 @@ class SharedPref(context: Context) {
         set(value) = prefs.edit().putBoolean(SHARED_LOCATION_ACCEPT, value).apply()
 
     var customMap: String
-        get() = prefs.getString(SHARED_MAP_CUSTOM, "Prefijado")!!
+        get() = prefs.getString(SHARED_MAP_CUSTOM, "Pred")!!
         set(value) = prefs.edit().putString(SHARED_MAP_CUSTOM, value).apply()
 
 }
