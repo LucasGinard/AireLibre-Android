@@ -44,6 +44,10 @@ class ConfigViewModel constructor(private val repository: ConfigRepository) : Vi
         repository.saveMapTypeCustom(mapType)
     }
 
+    fun getCustomMap():String{
+        return repository.getMapTypeCustom()
+    }
+
     fun getListMaps(context: Context):ArrayList<MapData>{
         val list = ArrayList<MapData>()
         list.add(MapData(R.drawable.map_default,context.getString(R.string.mapDefault)))

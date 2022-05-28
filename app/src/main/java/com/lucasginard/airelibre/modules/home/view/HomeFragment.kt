@@ -342,36 +342,38 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                 )?.let { markerList.add(it) }
             }
         }
-        GoogleMap.setInfoWindowAdapter(object : InfoWindowAdapter {
-            override fun getInfoWindow(arg0: Marker): View? {
-                return null
-            }
-
-            override fun getInfoContents(marker: Marker): View {
-                val sensor = listCitys.find { it.description == marker.title }
-                val info = LinearLayout(context)
-                info.orientation = LinearLayout.VERTICAL
-                val title = TextView(context)
-                val descriptionAQI = TextView(context)
-                if (sensor != null) {
-                    descriptionAQI.text = descriptionAQI.descriptionAQI(sensor.quality.index)
-                    descriptionAQI.setTextColor(descriptionAQI.colorBackground(sensor.quality.index,requireContext()))
+        if (::GoogleMap.isInitialized){
+            GoogleMap.setInfoWindowAdapter(object : InfoWindowAdapter {
+                override fun getInfoWindow(arg0: Marker): View? {
+                    return null
                 }
-                descriptionAQI.textSize = 15f
-                descriptionAQI.setTypeface(null, Typeface.BOLD)
-                title.setTextColor(ContextCompat.getColor(requireContext(),R.color.black))
-                title.gravity = Gravity.CENTER
-                title.setTypeface(null, Typeface.BOLD)
-                title.text = marker.title
-                info.addView(title)
-                info.addView(descriptionAQI)
-                return info
+
+                override fun getInfoContents(marker: Marker): View {
+                    val sensor = listCitys.find { it.description == marker.title }
+                    val info = LinearLayout(context)
+                    info.orientation = LinearLayout.VERTICAL
+                    val title = TextView(context)
+                    val descriptionAQI = TextView(context)
+                    if (sensor != null) {
+                        descriptionAQI.text = descriptionAQI.descriptionAQI(sensor.quality.index)
+                        descriptionAQI.setTextColor(descriptionAQI.colorBackground(sensor.quality.index,requireContext()))
+                    }
+                    descriptionAQI.textSize = 15f
+                    descriptionAQI.setTypeface(null, Typeface.BOLD)
+                    title.setTextColor(ContextCompat.getColor(requireContext(),R.color.black))
+                    title.gravity = Gravity.CENTER
+                    title.setTypeface(null, Typeface.BOLD)
+                    title.text = marker.title
+                    info.addView(title)
+                    info.addView(descriptionAQI)
+                    return info
+                }
+            })
+            GoogleMap.setOnMarkerClickListener { marker ->
+                markerLamda(marker.title!!)
+                marker.showInfoWindow()
+                true
             }
-        })
-        GoogleMap.setOnMarkerClickListener { marker ->
-            markerLamda(marker.title!!)
-            marker.showInfoWindow()
-            true
         }
     }
 

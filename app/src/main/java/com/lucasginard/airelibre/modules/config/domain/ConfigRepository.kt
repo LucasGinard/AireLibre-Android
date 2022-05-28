@@ -40,5 +40,9 @@ class ConfigRepository {
         AireLibreApp.prefs.customMap = mapType
     }
 
+    fun getMapTypeCustom():String{
+        return AireLibreApp.prefs.customMap
+    }
+
 
 }
