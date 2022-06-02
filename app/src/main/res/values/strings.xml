@@ -35,7 +35,7 @@
     <string name="questionInteresant">¿Querés saber más sobre el proyecto?</string>
     <string name="descriptionInteresant">Si querés colaborar,aprender a construir tu propio sensor, o saber en que se diferencia con otros proyectos similares Entrá:</string>
     <string name="seeMore">Ver proyecto</string>
-    <string name="licenseAireLibre">AireLibre es un proyecto libre y de código abierto bajo 📜licencia:</string>
+    <string name="licenseAireLibre">AireLibre es un proyecto libre y de código abierto bajo licencia:</string>
     <string name="licenseAireLibreLink">AGPLv3</string>
     <string name="TitlelicenseLogo">Imagen Ilustrativa original de:</string>
     <string name="desciptionlicenseLogo">pch.vector - www.freepik.es</string>
@@ -93,6 +93,7 @@
 
     <!---Emojis-->
     <string name="emojiWorld">🌎</string>
+    <string name="emojiLicense">📜</string>
 
     <!---MapsNames-->
     <string name="mapDefault">Pred</string>

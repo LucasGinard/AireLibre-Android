@@ -33,19 +33,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.lucasginard.airelibre.BuildConfig
 import com.lucasginard.airelibre.R
-import com.lucasginard.airelibre.modules.config.domain.ConfigRepository
 import com.lucasginard.airelibre.modules.config.listMaps.SelectMapCards
 import com.lucasginard.airelibre.modules.config.ui.theme.AireLibreTheme
 import com.lucasginard.airelibre.modules.config.viewModel.ConfigViewModel
-import com.lucasginard.airelibre.modules.config.viewModel.ConfigViewModelFactory
 import com.lucasginard.airelibre.utils.*
 
 class ConfigFragment: Fragment() {
 
-    private lateinit var viewModel: ConfigViewModel
+    private val viewModel: ConfigViewModel by viewModels()
     private lateinit var locationPermissionRequest:
             ActivityResultLauncher<Array<String>>
 
@@ -91,9 +90,6 @@ class ConfigFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     )= requireContentView(ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)) {
-        viewModel = ViewModelProvider(this, ConfigViewModelFactory(ConfigRepository())).get(
-            ConfigViewModel::class.java
-        )
         AireLibreTheme(darkTheme = ThemeState.isDark) {
             Surface(color = MaterialTheme.colors.background) {
                 baseConfig()
@@ -129,7 +125,7 @@ class ConfigFragment: Fragment() {
 
     override fun onResume() {
         super.onResume()
-        if (::viewModel.isInitialized && !viewModel.isNotDefaultTheme()) {
+        if ( !viewModel.isNotDefaultTheme()) {
             ThemeState.isDark = this.getModeTheme(requireContext())
         }
         if (::checkedStateLocation.isInitialized) checkedStateLocation.value = checkPermissionLocation()

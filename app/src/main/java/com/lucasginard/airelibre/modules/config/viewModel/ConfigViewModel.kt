@@ -6,7 +6,9 @@ import com.lucasginard.airelibre.R
 import com.lucasginard.airelibre.modules.config.domain.ConfigRepository
 import com.lucasginard.airelibre.modules.config.model.MapData
 
-class ConfigViewModel constructor(private val repository: ConfigRepository) : ViewModel() {
+class ConfigViewModel: ViewModel() {
+
+    val repository = ConfigRepository()
 
     fun setNotIsDefaultTheme(flat:Boolean){
         repository.saveIsThemeFlat(flat)

@@ -25,13 +25,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.remoteconfig.ktx.remoteConfig
+import com.google.gson.Gson
 import com.lucasginard.airelibre.R
+import com.lucasginard.airelibre.modules.about.model.LinksDynamic
 import com.lucasginard.airelibre.modules.about.ui.theme.AireLibreTheme
 import com.lucasginard.airelibre.utils.*
 
 class AboutFragment: Fragment() {
 
     private val linkDark = Color(140, 180, 255)
+    private lateinit var linksDynamic:LinksDynamic
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,11 +45,20 @@ class AboutFragment: Fragment() {
     ) = contentView(ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)) {
         AireLibreTheme(ThemeState.isDark) {
             Surface(color = MaterialTheme.colors.background) {
+                getLinksDynamic()
                 baseAbout()
             }
         }
     }
 
+    private fun getLinksDynamic() {
+        Firebase.remoteConfig.fetchAndActivate().addOnCompleteListener {
+            if (it.isSuccessful){
+                val links = Firebase.remoteConfig.getString("links_about")
+                linksDynamic = Gson().fromJson(links,LinksDynamic::class.java)
+            }
+        }
+    }
 
     @Composable
     fun baseAbout() {
@@ -105,7 +119,8 @@ class AboutFragment: Fragment() {
                         onClick = {
                             val intent = Intent()
                             intent.goToURL(
-                                url = requireContext().getString(R.string.linkTwitter),
+                                url = linksDynamic.linkTwitter
+                                    ?: requireContext().getString(R.string.linkTwitter),
                                 context = requireContext()
                             )
                         }
@@ -121,7 +136,8 @@ class AboutFragment: Fragment() {
                         onClick = {
                             val intent = Intent()
                             intent.goToURL(
-                                url = requireContext().getString(R.string.linkWebsite),
+                                url = linksDynamic.linkWeb
+                                    ?: requireContext().getString(R.string.linkWebsite),
                                 context = requireContext()
                             )
                         }
@@ -162,7 +178,8 @@ class AboutFragment: Fragment() {
                     onClick = {
                         val intent = Intent()
                         intent.goToURL(
-                            url = requireContext().getString(R.string.linkGitHub),
+                            url = linksDynamic.linkGitHub
+                                ?: requireContext().getString(R.string.linkGitHub),
                             context = requireContext()
                         )
                     }
@@ -178,24 +195,32 @@ class AboutFragment: Fragment() {
             text = stringResource(id = R.string.licenseAireLibre),
             textAlign = TextAlign.Center
         )
-        Text(
-            text = stringResource(id = R.string.licenseAireLibreLink),
-            textAlign = TextAlign.Center,
-            fontFamily = ComposablesUtils.fontFamily,
-            fontWeight = FontWeight.Bold,
-            color = if (ThemeState.isDark)linkDark else Color.Blue,
-            fontSize = 14.sp,
-            style = TextStyle(textDecoration = TextDecoration.Underline),
-            modifier = Modifier.clickable(
-                onClick = {
-                    val intent = Intent()
-                    intent.goToURL(
-                        url = requireContext().getString(R.string.linkLicense),
-                        context = requireContext()
-                    )
-                }
+        Row() {
+            Text(
+                text = stringResource(id = R.string.emojiLicense),
+                textAlign = TextAlign.Center ,
+                fontSize = 14.sp,
             )
-        )
+            Text(
+                text = stringResource(id = R.string.licenseAireLibreLink),
+                textAlign = TextAlign.Center,
+                fontFamily = ComposablesUtils.fontFamily,
+                fontWeight = FontWeight.Bold,
+                color = if (ThemeState.isDark)linkDark else Color.Blue,
+                fontSize = 14.sp,
+                style = TextStyle(textDecoration = TextDecoration.Underline),
+                modifier = Modifier.clickable(
+                    onClick = {
+                        val intent = Intent()
+                        intent.goToURL(
+                            url = linksDynamic.linkLicense ?: requireContext().getString(R.string.linkLicense),
+                            context = requireContext()
+                        )
+                    }
+                )
+            )
+        }
+
         Text(
             text = stringResource(id = R.string.titleDeveloper),
             textAlign = TextAlign.Center ,
@@ -215,7 +240,7 @@ class AboutFragment: Fragment() {
                 onClick = {
                     val intent = Intent()
                     intent.goToURL(
-                        url = requireContext().getString(R.string.linkLucas),
+                        url = linksDynamic.linkAppAndroid ?: requireContext().getString(R.string.linkLucas),
                         context = requireContext()
                     )
                 }
@@ -241,7 +266,7 @@ class AboutFragment: Fragment() {
                 onClick = {
                     val intent = Intent()
                     intent.goToURL(
-                        url = requireContext().getString(R.string.linkIcon),
+                        url = linksDynamic.linkIcon ?:  requireContext().getString(R.string.linkIcon),
                         context = requireContext()
                     )
                 }
