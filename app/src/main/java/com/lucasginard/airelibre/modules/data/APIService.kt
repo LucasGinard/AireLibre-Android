@@ -1,5 +1,6 @@
 package com.lucasginard.airelibre.modules.data
 
+import com.lucasginard.airelibre.BuildConfig
 import com.lucasginard.airelibre.modules.home.model.CityResponse
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -18,7 +19,7 @@ interface APIService {
         fun getInstance() : APIService {
             if (retrofitService == null) {
                 val retrofit = Retrofit.Builder()
-                    .baseUrl("https://rald-dev.greenbeep.com/")
+                    .baseUrl(BuildConfig.BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build()
                 retrofitService = retrofit.create(APIService::class.java)

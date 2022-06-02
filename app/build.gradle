@@ -19,6 +19,7 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
+        buildConfigField "String", "BASE_URL",'\"https://rald-dev.greenbeep.com/\"'
     }
 
     buildTypes {
