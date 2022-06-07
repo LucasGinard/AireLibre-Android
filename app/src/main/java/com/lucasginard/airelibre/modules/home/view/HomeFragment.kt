@@ -77,6 +77,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     private var flatPermisson = false
     private var isDown = true
     private val REQUEST_UPDATE = 100
+    private var zoomMap:Float ?=null
     val infoAQI = fun(){
         listCards.clear()
         listCards = viewModel.getCards(requireActivity())
@@ -105,7 +106,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                     LatLng(
                         cityObject.latitude,
                         cityObject.longitude
-                    ), 13f
+                    ), zoomMap ?: 13f
                 )
             )
         }
@@ -396,8 +397,12 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             GoogleMap = it
         }
         val py = LatLng(-25.250, -57.536)
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(py, 10f))
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(py, zoomMap ?:10f))
         googleMap.uiSettings.isMapToolbarEnabled = true
+        //get Zoom Map
+        googleMap.setOnCameraIdleListener {
+            zoomMap = googleMap.cameraPosition.zoom
+        }
         mapTheme()
         updateLocation()
     }
