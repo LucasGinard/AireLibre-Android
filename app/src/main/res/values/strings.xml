@@ -47,7 +47,8 @@
     <string name="title_activity_config">ConfigActivity</string>
     <string name="titleConfig">Ajustes</string>
     <string name="titleSwitchLocation">Acceso a su ubicación:</string>
-    <string name="titleCheckTheme">Cambia el color:</string>
+    <string name="titleDialogSelectedColor">🖌Cambia el color:</string>
+    <string name="titleDialogResultColor">🎨 Color seleccionado:</string>
     <string name="titleSwitchTheme">Modo Oscuro:</string>
     <string name="descriptionWarningTheme">Actualmente la App toma la configuración del dispositivo\nsi lo modifica ya no tendrá en cuenta la configuración del dispositivo.</string>
     <string name="descriptionDenyLocation">Al rechazar las dos solicitudes de permiso.\ntendrá que permitir el acceso a su ubicación en \nAjustes -> Aplicaciones -> AireLibre -> Permisos/Accesos\n\nAceptar para ir a ajustes.</string>

@@ -92,6 +92,9 @@ dependencies {
     implementation 'androidx.core:core-splashscreen:1.0.0-rc01'
     //update
     implementation 'com.google.android.play:core-ktx:1.8.1'
+    //Color Picker
+    implementation "com.github.skydoves:colorpicker-compose:1.0.0"
+
 
 
 }

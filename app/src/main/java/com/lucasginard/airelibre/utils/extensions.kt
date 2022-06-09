@@ -12,7 +12,9 @@ import android.view.animation.AnimationUtils
 import android.widget.TextView
 import android.widget.Toast
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.content.ContextCompat
@@ -232,4 +234,14 @@ fun Fragment.getBitmapMarker(context: Context, resourceId: Int, mText: String): 
     val y = cHeight / 2.5f + r.height() / 2f - r.bottom
     canvas.drawText(mText, x, y, paint)
     return bitmap
+}
+
+fun Modifier.vertical() = layout { measurable, constraints ->
+    val placeable = measurable.measure(constraints)
+    layout(placeable.height, placeable.width) {
+        placeable.place(
+            x = -(placeable.width / 2 - placeable.height / 2),
+            y = -(placeable.height / 2 - placeable.width / 2)
+        )
+    }
 }

@@ -35,8 +35,12 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import com.github.skydoves.colorpicker.compose.ColorEnvelope
+import com.github.skydoves.colorpicker.compose.HsvColorPicker
+import com.github.skydoves.colorpicker.compose.rememberColorPickerController
 import com.lucasginard.airelibre.BuildConfig
 import com.lucasginard.airelibre.R
+import com.lucasginard.airelibre.modules.config.dialogColorPicker.DialogColorPicker
 import com.lucasginard.airelibre.modules.config.listMaps.SelectMapCards
 import com.lucasginard.airelibre.modules.config.ui.theme.AireLibreTheme
 import com.lucasginard.airelibre.modules.config.viewModel.ConfigViewModel
@@ -144,9 +148,9 @@ class ConfigFragment: Fragment() {
         ) {
 
             sectionTitle()
-            //sectionThemeCheck()
             sectionSwitchLocation()
             sectionSwitchTheme()
+            sectionColorPicker()
             SelectMapCards(viewModel,requireContext())
             sectionTextVersion()
             dialogDenyComposable()
@@ -173,16 +177,10 @@ class ConfigFragment: Fragment() {
     }
 
     @Composable
-    fun sectionThemeCheck(){
-        Column(
-            Modifier.padding(top = 20.dp, bottom = 10.dp)
-        ){
-            Text(
-                text = stringResource(id = R.string.titleCheckTheme),
-                fontFamily = ComposablesUtils.fonts,
-                fontWeight = FontWeight.Normal,
-                modifier = Modifier
-            )
+    fun sectionColorPicker(){
+        var openDialogColor = remember { mutableStateOf(true) }
+        if (openDialogColor.value) {
+            DialogColorPicker(openDialog = openDialogColor)
         }
     }
 
