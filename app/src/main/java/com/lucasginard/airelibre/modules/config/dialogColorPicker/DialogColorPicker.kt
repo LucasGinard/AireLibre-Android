@@ -5,6 +5,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -17,11 +19,13 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.github.skydoves.colorpicker.compose.*
 import com.lucasginard.airelibre.R
+import com.lucasginard.airelibre.modules.home.view.MainActivity
 import com.lucasginard.airelibre.utils.ComposablesUtils
 import com.lucasginard.airelibre.utils.ThemeState
 
 @Composable
-fun DialogColorPicker(openDialog: MutableState<Boolean>){
+fun DialogColorPicker(openDialog: MutableState<Boolean>,colorCustom:MutableState<Color>,activity:MainActivity){
+    var colorHex = remember { mutableStateOf("") }
     Dialog(onDismissRequest = { openDialog.value = false }) {
         Card(
             shape = RoundedCornerShape(8.dp),
@@ -61,7 +65,8 @@ fun DialogColorPicker(openDialog: MutableState<Boolean>){
                         .padding(10.dp),
                     controller = controller,
                     onColorChanged = { colorEnvelope: ColorEnvelope ->
-                        // do something
+                        colorCustom.value = colorEnvelope.color
+                        colorHex.value = colorEnvelope.hexCode
                     }
                 )
                 BrightnessSlider(

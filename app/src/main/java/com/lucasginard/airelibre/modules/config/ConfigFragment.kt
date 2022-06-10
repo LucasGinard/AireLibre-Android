@@ -12,22 +12,22 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -44,6 +44,7 @@ import com.lucasginard.airelibre.modules.config.dialogColorPicker.DialogColorPic
 import com.lucasginard.airelibre.modules.config.listMaps.SelectMapCards
 import com.lucasginard.airelibre.modules.config.ui.theme.AireLibreTheme
 import com.lucasginard.airelibre.modules.config.viewModel.ConfigViewModel
+import com.lucasginard.airelibre.modules.home.view.MainActivity
 import com.lucasginard.airelibre.utils.*
 
 class ConfigFragment: Fragment() {
@@ -146,8 +147,6 @@ class ConfigFragment: Fragment() {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
-            sectionTitle()
             sectionSwitchLocation()
             sectionSwitchTheme()
             sectionColorPicker()
@@ -155,32 +154,6 @@ class ConfigFragment: Fragment() {
             sectionTextVersion()
             dialogDenyComposable()
 
-        }
-    }
-
-    @Composable
-    fun sectionTitle() {
-        Icon(
-            modifier = Modifier
-                .width(80.dp)
-                .height(80.dp),
-            painter = painterResource(id = R.drawable.icon_config),
-            contentDescription = stringResource(id = R.string.contentLogo),
-            tint = MaterialTheme.colors.primary
-        )
-        Text(
-            text = stringResource(id = R.string.titleConfig),
-            fontFamily = ComposablesUtils.fonts,
-            fontWeight = FontWeight.Bold,
-            fontSize = 22.sp,
-        )
-    }
-
-    @Composable
-    fun sectionColorPicker(){
-        var openDialogColor = remember { mutableStateOf(true) }
-        if (openDialogColor.value) {
-            DialogColorPicker(openDialog = openDialogColor)
         }
     }
 
@@ -306,6 +279,101 @@ class ConfigFragment: Fragment() {
 
         }
     }
+
+    @Composable
+    fun sectionColorPicker(){
+        var openDialogColor = remember { mutableStateOf(false) }
+        var colorCustom = remember { mutableStateOf(Color(0xFFFFFFFF)) }
+
+        if (openDialogColor.value) {
+            DialogColorPicker(openDialog = openDialogColor,colorCustom,
+                requireActivity() as MainActivity
+            )
+        }
+        Column(
+            modifier = Modifier
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                fontFamily = ComposablesUtils.fonts,
+                fontWeight = FontWeight.Bold,
+                text = "Personaliza el color"
+            )
+            var selectedOption by remember {
+                mutableStateOf("Pred")
+            }
+            val onSelectionChange = { text: String ->
+                selectedOption = text
+            }
+            Row(modifier = Modifier
+                .padding(top = 10.dp)
+                .horizontalScroll(rememberScrollState())
+                .fillMaxWidth()) {
+                Column(
+                    modifier= Modifier.padding(start = 10.dp, end = 10.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Image(
+                        painter = painterResource(R.drawable.map_default),
+                        contentDescription = "selectedColor",
+                        contentScale = ContentScale.Crop,
+                        colorFilter = ColorFilter.tint(Color(0xFF047745)),
+                        modifier = Modifier
+                            .size(80.dp)
+                            .clip(CircleShape)
+                            .border(1.dp, if (selectedOption == "Pred") Color.Green else Color.Gray, CircleShape)
+                            .clickable(
+                                onClick = {
+                                    onSelectionChange("Pred")
+                                }
+                            ),
+                    )
+                    Text(
+                        modifier = Modifier.paddingFromBaseline(top = 20.dp),
+                        text = "Pred",
+                        fontFamily = ComposablesUtils.fonts,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center,
+                        fontSize = 15.sp
+                    )
+                }
+                Column(
+                    modifier= Modifier.padding(start = 10.dp, end = 10.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Image(
+                        painter = painterResource(R.drawable.map_default),
+                        contentDescription = "selectedColor",
+                        contentScale = ContentScale.Crop,
+                        colorFilter = ColorFilter.tint(colorCustom.value),
+                        modifier = Modifier
+                            .size(80.dp)
+                            .clip(CircleShape)
+                            .border(1.dp, if (selectedOption == "Personalizado") Color.Green else Color.Gray, CircleShape)
+                            .clickable(
+                                onClick = {
+                                    openDialogColor.value = true
+                                    onSelectionChange("Personalizado")
+                                }
+                            ),
+                    )
+                    Text(
+                        modifier = Modifier.paddingFromBaseline(top = 20.dp),
+                        text = "Personalizado",
+                        fontFamily = ComposablesUtils.fonts,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center,
+                        fontSize = 15.sp
+                    )
+                }
+            }
+        }
+    }
+
 
     @Composable
     private fun sectionTextVersion(){
