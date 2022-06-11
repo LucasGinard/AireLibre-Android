@@ -87,14 +87,11 @@ dependencies {
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
     //Location
-    implementation 'com.google.android.gms:play-services-location:19.0.1'
+    implementation 'com.google.android.gms:play-services-location:20.0.0'
     //newSplash
     implementation 'androidx.core:core-splashscreen:1.0.0-rc01'
     //update
     implementation 'com.google.android.play:core-ktx:1.8.1'
-    //Color Picker
-    implementation "com.github.skydoves:colorpicker-compose:1.0.0"
-
 
 
 }
