@@ -36,7 +36,7 @@ import com.lucasginard.airelibre.utils.*
 class AboutFragment: Fragment() {
 
     private val linkDark = Color(140, 180, 255)
-    private lateinit var linksDynamic:LinksDynamic
+    private var linksDynamic:LinksDynamic ?= null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -119,7 +119,7 @@ class AboutFragment: Fragment() {
                         onClick = {
                             val intent = Intent()
                             intent.goToURL(
-                                url = linksDynamic.linkTwitter
+                                url = linksDynamic?.linkTwitter
                                     ?: requireContext().getString(R.string.linkTwitter),
                                 context = requireContext()
                             )
@@ -136,7 +136,7 @@ class AboutFragment: Fragment() {
                         onClick = {
                             val intent = Intent()
                             intent.goToURL(
-                                url = linksDynamic.linkWeb
+                                url = linksDynamic?.linkWeb
                                     ?: requireContext().getString(R.string.linkWebsite),
                                 context = requireContext()
                             )
@@ -178,7 +178,7 @@ class AboutFragment: Fragment() {
                     onClick = {
                         val intent = Intent()
                         intent.goToURL(
-                            url = linksDynamic.linkGitHub
+                            url = linksDynamic?.linkGitHub
                                 ?: requireContext().getString(R.string.linkGitHub),
                             context = requireContext()
                         )
@@ -213,7 +213,7 @@ class AboutFragment: Fragment() {
                     onClick = {
                         val intent = Intent()
                         intent.goToURL(
-                            url = linksDynamic.linkLicense ?: requireContext().getString(R.string.linkLicense),
+                            url = linksDynamic?.linkLicense ?: requireContext().getString(R.string.linkLicense),
                             context = requireContext()
                         )
                     }
@@ -240,7 +240,7 @@ class AboutFragment: Fragment() {
                 onClick = {
                     val intent = Intent()
                     intent.goToURL(
-                        url = linksDynamic.linkAppAndroid ?: requireContext().getString(R.string.linkLucas),
+                        url = linksDynamic?.linkAppAndroid ?: requireContext().getString(R.string.linkLucas),
                         context = requireContext()
                     )
                 }
@@ -266,7 +266,7 @@ class AboutFragment: Fragment() {
                 onClick = {
                     val intent = Intent()
                     intent.goToURL(
-                        url = linksDynamic.linkIcon ?:  requireContext().getString(R.string.linkIcon),
+                        url = linksDynamic?.linkIcon ?:  requireContext().getString(R.string.linkIcon),
                         context = requireContext()
                     )
                 }

@@ -312,24 +312,27 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun configureMaps(saved: Bundle?) {
-        mapView = _binding.mapViewFragment
-        mapView?.onCreate(saved)
-        mapView?.onResume()
         try {
+            mapView = _binding.mapViewFragment
+            mapView?.onCreate(saved)
+            mapView?.onResume()
+
             MapsInitializer.initialize(requireActivity().applicationContext)
+
+            mapView?.getMapAsync(this)
+            //Button Center Location:
+            val locationButton =
+                (_binding.mapViewFragment.findViewById<View>(Integer.parseInt("1"))?.parent as View).findViewById<View>(
+                    Integer.parseInt("2")
+                )
+            val rlp = locationButton.layoutParams as RelativeLayout.LayoutParams
+            rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE)
+            rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 0)
+            rlp.setMargins(0, 160, 30, 0)
         } catch (e: Exception) {
             e.printStackTrace()
+            errorConnectService()
         }
-        mapView?.getMapAsync(this)
-        //Button Center Location:
-        val locationButton =
-            (_binding.mapViewFragment.findViewById<View>(Integer.parseInt("1"))?.parent as View).findViewById<View>(
-                Integer.parseInt("2")
-            )
-        val rlp = locationButton.layoutParams as RelativeLayout.LayoutParams
-        rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE)
-        rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 0)
-        rlp.setMargins(0, 160, 30, 0)
     }
 
     private fun configureMarkers(arrayList: ArrayList<CityResponse>) {
