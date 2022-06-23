@@ -20,7 +20,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -36,19 +36,17 @@ import com.google.android.play.core.install.model.UpdateAvailability
 import com.lucasginard.airelibre.R
 import com.lucasginard.airelibre.databinding.FragmentHomeBinding
 import com.lucasginard.airelibre.modules.config.ui.theme.AireLibreTheme
-import com.lucasginard.airelibre.modules.data.APIService
-import com.lucasginard.airelibre.modules.home.domain.HomeRepository
 import com.lucasginard.airelibre.modules.home.model.CardsAQI
 import com.lucasginard.airelibre.modules.home.model.CityResponse
 import com.lucasginard.airelibre.modules.home.view.dialog.DialogCardsAQICompose
 import com.lucasginard.airelibre.modules.home.viewModel.HomeViewModel
-import com.lucasginard.airelibre.modules.home.viewModel.HomeViewModelFactory
 import com.lucasginard.airelibre.utils.*
 import com.lucasginard.airelibre.utils.adapter.AdapterCityList
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class HomeFragment : Fragment(), OnMapReadyCallback {
 
-    private lateinit var viewModel: HomeViewModel
     private lateinit var _binding: FragmentHomeBinding
     private lateinit var adapter: AdapterCityList
     private lateinit var cityCloser: CityResponse
@@ -70,9 +68,9 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     private lateinit var booleanDialog:MutableState<Boolean>
     private var listCards = ArrayList<CardsAQI>()
     private var markerList = ArrayList<Marker>()
+    private val viewModel: HomeViewModel by viewModels()
 
     private var mapView: MapView? = null
-    private val retrofit = APIService.getInstance()
     private var listCitys = ArrayList<CityResponse>()
     private var flatPermisson = false
     private var isDown = true
@@ -273,9 +271,6 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun configureService() {
-        viewModel = ViewModelProvider(this, HomeViewModelFactory(HomeRepository(retrofit))).get(
-            HomeViewModel::class.java
-        )
         viewModel.getListCitys.observe(requireActivity()) {
             if (it != null){
                 markerList.clear()

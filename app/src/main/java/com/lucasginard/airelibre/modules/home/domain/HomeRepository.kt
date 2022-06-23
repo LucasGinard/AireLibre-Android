@@ -1,11 +1,12 @@
 package com.lucasginard.airelibre.modules.home.domain
 
 import com.lucasginard.airelibre.AireLibreApp
-import com.lucasginard.airelibre.modules.data.APIService
+import com.lucasginard.airelibre.modules.data.APIHome
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
-class HomeRepository constructor(private val retrofitService: APIService) {
+class HomeRepository @Inject constructor(private val retrofitService: APIHome) {
 
     fun getAllCitys() = retrofitService.getList(getISODate())
 
