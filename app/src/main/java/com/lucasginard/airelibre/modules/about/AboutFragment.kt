@@ -2,6 +2,7 @@ package com.lucasginard.airelibre.modules.about
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.compose.foundation.Image
@@ -25,18 +26,27 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.gson.Gson
 import com.lucasginard.airelibre.R
 import com.lucasginard.airelibre.modules.about.model.LinksDynamic
 import com.lucasginard.airelibre.modules.about.ui.theme.AireLibreTheme
+import com.lucasginard.airelibre.modules.about.viewModel.AboutViewModel
 import com.lucasginard.airelibre.utils.*
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class AboutFragment: Fragment() {
 
     private val linkDark = Color(140, 180, 255)
     private var linksDynamic:LinksDynamic ?= null
+    private val viewModel: AboutViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,7 +57,18 @@ class AboutFragment: Fragment() {
             Surface(color = MaterialTheme.colors.background) {
                 getLinksDynamic()
                 baseAbout()
+
             }
+        }
+        try {
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewModel.getAllContributors()
+            }
+            viewModel.listContributors.observe(requireActivity()){
+                Log.d("testReturnList","list into Fragment -> ${it.size}")
+            }
+        } catch (e: Exception) {
+            Log.d("testReturnList","error")
         }
     }
 
