@@ -5,16 +5,16 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -28,17 +28,17 @@ import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import coil.compose.AsyncImage
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.gson.Gson
 import com.lucasginard.airelibre.R
+import com.lucasginard.airelibre.modules.about.model.Contributor
 import com.lucasginard.airelibre.modules.about.model.LinksDynamic
 import com.lucasginard.airelibre.modules.about.ui.theme.AireLibreTheme
 import com.lucasginard.airelibre.modules.about.viewModel.AboutViewModel
 import com.lucasginard.airelibre.utils.*
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -47,6 +47,7 @@ class AboutFragment: Fragment() {
     private val linkDark = Color(140, 180, 255)
     private var linksDynamic:LinksDynamic ?= null
     private val viewModel: AboutViewModel by viewModels()
+    private var listContributor by mutableStateOf(ArrayList<Contributor>())
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -55,17 +56,20 @@ class AboutFragment: Fragment() {
     ) = contentView(ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)) {
         AireLibreTheme(ThemeState.isDark) {
             Surface(color = MaterialTheme.colors.background) {
+                getServiceContributors()
                 getLinksDynamic()
                 baseAbout()
-
             }
         }
+
+    }
+
+    private fun getServiceContributors(){
         try {
-            viewLifecycleOwner.lifecycleScope.launch {
-                viewModel.getAllContributors()
-            }
-            viewModel.listContributors.observe(requireActivity()){
-                Log.d("testReturnList","list into Fragment -> ${it.size}")
+            if (SessionCache.listContributorsCache.isNullOrEmpty()){
+                viewLifecycleOwner.lifecycleScope.launch {
+                    viewModel.getAllContributors()
+                }
             }
         } catch (e: Exception) {
             Log.d("testReturnList","error")
@@ -97,6 +101,7 @@ class AboutFragment: Fragment() {
             sectionWhatisAire()
             sectionSocialMedia()
             descriptionContributeProject()
+            sectionContributors()
             sectionLicenseLogo()
         }
     }
@@ -207,6 +212,70 @@ class AboutFragment: Fragment() {
                 )
                 .paddingFromBaseline(top = 30.dp)
         )
+    }
+
+    @Composable
+    private fun sectionContributors(){
+        viewModel.listContributors.observe(requireActivity()){ list ->
+            listContributor.clear()
+            listContributor.addAll(list)
+            listContributor.sortWith(
+                compareBy(String.CASE_INSENSITIVE_ORDER) { it.nameContributor }
+            )
+            SessionCache.listContributorsCache.clear()
+            SessionCache.listContributorsCache.addAll(listContributor)
+            onResume()
+        }
+        if (!SessionCache.listContributorsCache.isNullOrEmpty()) listContributor = SessionCache.listContributorsCache!!
+        Column(
+            modifier = Modifier
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            if(listContributor.isNotEmpty()) {
+                Text(
+                    fontFamily = ComposablesUtils.fontFamily,
+                    fontWeight = FontWeight.Bold,
+                    text = stringResource(id = R.string.titleContributors),
+                    fontSize = 15.sp,
+                )
+                Row(modifier = Modifier
+                    .padding(top = 10.dp)
+                    .horizontalScroll(rememberScrollState())
+                    .fillMaxWidth()) {
+                    listContributor.forEach {
+                        Column(
+                            modifier= Modifier.padding(start = 10.dp, end = 10.dp),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            AsyncImage(
+                                model = it.profileImage,
+                                contentDescription = stringResource(id = R.string.titleContributors),
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier
+                                    .size(80.dp)
+                                    .clip(CircleShape)
+                                    .clickable(
+                                        onClick = {
+                                            Intent().goToURL(it.githubContributor, requireContext())
+                                        }
+                                    ),
+                            )
+                            Text(
+                                modifier = Modifier.paddingFromBaseline(top = 20.dp),
+                                text = it.nameContributor,
+                                fontFamily = ComposablesUtils.fonts,
+                                fontWeight = FontWeight.Bold,
+                                textAlign = TextAlign.Center,
+                                fontSize = 15.sp
+                            )
+                        }
+                    }
+                }
+            }
+        }
     }
 
     @Composable

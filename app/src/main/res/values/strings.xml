@@ -42,6 +42,7 @@
     <string name="titleSocialMedia">Mantente al tanto de la contaminación del Aire en:</string>
     <string name="titleDeveloper">App android desarrollada por:</string>
     <string name="textNameDeveloper">Lucas Ginard</string>
+    <string name="titleContributors">Contribuidores del proyecto</string>
 
     <!---ConfigActivity-->
     <string name="title_activity_config">ConfigActivity</string>
