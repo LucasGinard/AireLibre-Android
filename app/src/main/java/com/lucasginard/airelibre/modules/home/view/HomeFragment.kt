@@ -576,8 +576,10 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
     override fun onResume() {
         super.onResume()
-        mapView?.onResume()
-        mapTheme()
+        try{
+            mapView?.onResume()
+            mapTheme()
+        }catch (e:Exception){}
     }
 
     override fun onPause() {

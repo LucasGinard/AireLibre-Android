@@ -1,6 +1,5 @@
 package com.lucasginard.airelibre.modules.about.viewModel
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.lucasginard.airelibre.modules.about.domain.AboutRepository
@@ -18,7 +17,6 @@ class AboutViewModel @Inject constructor(private val repositoryGitHub: AboutRepo
     val listContributors = MutableLiveData<ArrayList<Contributor>>()
 
     fun getAllContributors(): MutableLiveData<ArrayList<Contributor>> {
-
         CoroutineScope(Dispatchers.Main).launch {
             try {
                 val repoAire = async {repositoryGitHub.getContributors("melizeche","AireLibre")}.await()
@@ -43,21 +41,15 @@ class AboutViewModel @Inject constructor(private val repositoryGitHub: AboutRepo
                                             listAux.addAll(repo5)
                                             listAux.addAll(repo6)
                                             listContributors.value = listAux.distinctBy { it.nameContributor } as ArrayList<Contributor>
-                                            Log.d("testReturnList","funciona")
                                         }
                                     }
                                 }
                             }
                         }
                     }
-                } else{
-                    Log.d("testReturnList","emprtyu ;ost -> ")
                 }
-            } catch (exception: Exception) {
-                Log.d("testReturnList","error")
-            }
+            } catch (exception: Exception) { }
         }
-        Log.d("testReturnList","list -> ${listContributors.value?.size ?: "vacio"}")
         return listContributors
     }
 

@@ -47,7 +47,7 @@ class AboutFragment: Fragment() {
     private val linkDark = Color(140, 180, 255)
     private var linksDynamic:LinksDynamic ?= null
     private val viewModel: AboutViewModel by viewModels()
-    private var listContributor by mutableStateOf(ArrayList<Contributor>())
+    lateinit var flagListContributor: MutableState<Boolean>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -67,13 +67,9 @@ class AboutFragment: Fragment() {
     private fun getServiceContributors(){
         try {
             if (SessionCache.listContributorsCache.isNullOrEmpty()){
-                viewLifecycleOwner.lifecycleScope.launch {
-                    viewModel.getAllContributors()
-                }
+                viewModel.getAllContributors()
             }
-        } catch (e: Exception) {
-            Log.d("testReturnList","error")
-        }
+        } catch (e: Exception) { }
     }
 
     private fun getLinksDynamic() {
@@ -86,7 +82,7 @@ class AboutFragment: Fragment() {
     }
 
     @Composable
-    fun baseAbout() {
+    private fun baseAbout() {
         if (ThemeState.isDefault && context != null) {
             ThemeState.isDark = this.getModeTheme(requireContext())
         }
@@ -107,7 +103,7 @@ class AboutFragment: Fragment() {
     }
 
     @Composable
-    fun sectionWhatisAire() {
+    private fun sectionWhatisAire() {
         Text(
             text = stringResource(id = R.string.whatsIsAireLibre),
             fontFamily = ComposablesUtils.fontFamily,
@@ -125,7 +121,7 @@ class AboutFragment: Fragment() {
     }
 
     @Composable
-    fun sectionSocialMedia(){
+    private fun sectionSocialMedia(){
         Text(
             modifier = Modifier.paddingFromBaseline(top = 30.dp),
             text = stringResource(id = R.string.titleSocialMedia),
@@ -175,7 +171,7 @@ class AboutFragment: Fragment() {
     }
 
     @Composable
-    fun descriptionContributeProject() {
+    private fun descriptionContributeProject() {
         Text(
             modifier = Modifier.paddingFromBaseline(top = 30.dp),
             text = stringResource(id = R.string.questionInteresant),
@@ -216,24 +212,22 @@ class AboutFragment: Fragment() {
 
     @Composable
     private fun sectionContributors(){
+        flagListContributor = remember { mutableStateOf(false) }
         viewModel.listContributors.observe(requireActivity()){ list ->
-            listContributor.clear()
-            listContributor.addAll(list)
-            listContributor.sortWith(
+            SessionCache.listContributorsCache.clear()
+            SessionCache.listContributorsCache.addAll(list)
+            SessionCache.listContributorsCache.sortWith(
                 compareBy(String.CASE_INSENSITIVE_ORDER) { it.nameContributor }
             )
-            SessionCache.listContributorsCache.clear()
-            SessionCache.listContributorsCache.addAll(listContributor)
-            onResume()
+            flagListContributor.value = true
         }
-        if (!SessionCache.listContributorsCache.isNullOrEmpty()) listContributor = SessionCache.listContributorsCache!!
         Column(
             modifier = Modifier
                 .padding(16.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            if(listContributor.isNotEmpty()) {
+            if(flagListContributor.value) {
                 Text(
                     fontFamily = ComposablesUtils.fontFamily,
                     fontWeight = FontWeight.Bold,
@@ -244,7 +238,7 @@ class AboutFragment: Fragment() {
                     .padding(top = 10.dp)
                     .horizontalScroll(rememberScrollState())
                     .fillMaxWidth()) {
-                    listContributor.forEach {
+                    SessionCache.listContributorsCache.forEach {
                         Column(
                             modifier= Modifier.padding(start = 10.dp, end = 10.dp),
                             verticalArrangement = Arrangement.Center,
@@ -255,7 +249,7 @@ class AboutFragment: Fragment() {
                                 contentDescription = stringResource(id = R.string.titleContributors),
                                 contentScale = ContentScale.Crop,
                                 modifier = Modifier
-                                    .size(80.dp)
+                                    .size(60.dp)
                                     .clip(CircleShape)
                                     .clickable(
                                         onClick = {
@@ -279,7 +273,7 @@ class AboutFragment: Fragment() {
     }
 
     @Composable
-    fun sectionLicenseLogo(){
+    private fun sectionLicenseLogo(){
         Text(
             modifier = Modifier.paddingFromBaseline(top = 30.dp,bottom = 10.dp),
             text = stringResource(id = R.string.licenseAireLibre),
