@@ -2,7 +2,6 @@ package com.lucasginard.airelibre.modules.about
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.compose.foundation.*
@@ -27,19 +26,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import coil.compose.AsyncImage
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.gson.Gson
 import com.lucasginard.airelibre.R
-import com.lucasginard.airelibre.modules.about.model.Contributor
 import com.lucasginard.airelibre.modules.about.model.LinksDynamic
 import com.lucasginard.airelibre.modules.about.ui.theme.AireLibreTheme
 import com.lucasginard.airelibre.modules.about.viewModel.AboutViewModel
 import com.lucasginard.airelibre.utils.*
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class AboutFragment: Fragment() {
@@ -263,7 +259,7 @@ class AboutFragment: Fragment() {
                                 fontFamily = ComposablesUtils.fonts,
                                 fontWeight = FontWeight.Bold,
                                 textAlign = TextAlign.Center,
-                                fontSize = 15.sp
+                                fontSize = 10.sp
                             )
                         }
                     }
