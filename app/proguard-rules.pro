@@ -20,3 +20,4 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 -keep class com.lucasginard.airelibre.modules.home.model.* { *; }
+-keep class com.lucasginard.airelibre.modules.about.model.** { *; }

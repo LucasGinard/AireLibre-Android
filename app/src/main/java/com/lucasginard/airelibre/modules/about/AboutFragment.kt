@@ -210,12 +210,14 @@ class AboutFragment: Fragment() {
     private fun sectionContributors(){
         flagListContributor = remember { mutableStateOf(false) }
         viewModel.listContributors.observe(requireActivity()){ list ->
-            SessionCache.listContributorsCache.clear()
-            SessionCache.listContributorsCache.addAll(list)
-            SessionCache.listContributorsCache.sortWith(
-                compareBy(String.CASE_INSENSITIVE_ORDER) { it.nameContributor }
-            )
-            flagListContributor.value = true
+            if (list.isNotEmpty()){
+                SessionCache.listContributorsCache.clear()
+                SessionCache.listContributorsCache.addAll(list)
+                SessionCache.listContributorsCache.sortWith(
+                    compareBy(String.CASE_INSENSITIVE_ORDER) { it.nameContributor }
+                )
+                flagListContributor.value = true
+            }
         }
         Column(
             modifier = Modifier
