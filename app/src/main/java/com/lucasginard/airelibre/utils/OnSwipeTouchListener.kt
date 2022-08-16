@@ -16,7 +16,7 @@ class OnSwipeTouchListener internal constructor(ctx: Context, val mainView: View
     var context: Context
 
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-        return gestureDetector.onTouchEvent(event)
+        return event?.let { gestureDetector.onTouchEvent(it) } ?:false
     }
 
     inner class GestureListener : SimpleOnGestureListener() {
