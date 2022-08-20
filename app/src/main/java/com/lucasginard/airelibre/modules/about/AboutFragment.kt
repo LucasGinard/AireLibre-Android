@@ -52,7 +52,7 @@ class AboutFragment: Fragment() {
     ) = contentView(ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)) {
         AireLibreTheme(ThemeState.isDark) {
             Surface(color = MaterialTheme.colors.background) {
-                getServiceContributors()
+                if(this.isInternetAvailable()) getServiceContributors()
                 getLinksDynamic()
                 baseAbout()
             }

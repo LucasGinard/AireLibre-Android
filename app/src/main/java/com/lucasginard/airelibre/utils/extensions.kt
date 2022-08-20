@@ -4,8 +4,12 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.Rect
 import android.net.Uri
+import android.os.NetworkOnMainThreadException
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
@@ -20,6 +24,7 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.lucasginard.airelibre.R
+import java.net.InetAddress
 
 
 fun View.setTint(color: Int = R.color.primaryColor) {
@@ -244,4 +249,14 @@ fun Modifier.vertical() = layout { measurable, constraints ->
             y = -(placeable.height / 2 - placeable.width / 2)
         )
     }
+}
+
+fun Fragment.isInternetAvailable(): Boolean {
+    try {
+        val address: InetAddress = InetAddress.getByName("www.google.com")
+        return !address.equals("")
+    } catch (e: NetworkOnMainThreadException) {
+        // Log error
+    }
+    return false
 }
