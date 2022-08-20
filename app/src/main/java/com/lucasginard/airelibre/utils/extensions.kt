@@ -24,7 +24,7 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.lucasginard.airelibre.R
-import java.net.InetAddress
+import java.io.IOException
 
 
 fun View.setTint(color: Int = R.color.primaryColor) {
@@ -253,10 +253,12 @@ fun Modifier.vertical() = layout { measurable, constraints ->
 
 fun Fragment.isInternetAvailable(): Boolean {
     try {
-        val address: InetAddress = InetAddress.getByName("www.google.com")
-        return !address.equals("")
-    } catch (e: NetworkOnMainThreadException) {
-        // Log error
+        val ipProcess = Runtime.getRuntime().exec("/system/bin/ping -c 1 8.8.8.8")
+        return ipProcess.waitFor() == 0
+    } catch (e: IOException) {
+        e.printStackTrace()
+    } catch (e: InterruptedException) {
+        e.printStackTrace()
     }
     return false
 }

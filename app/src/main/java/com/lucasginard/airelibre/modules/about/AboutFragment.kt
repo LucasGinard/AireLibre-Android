@@ -102,14 +102,14 @@ class AboutFragment: Fragment() {
     private fun sectionWhatisAire() {
         Text(
             text = stringResource(id = R.string.whatsIsAireLibre),
-            fontFamily = ComposablesUtils.fontFamily,
+            fontFamily = ComposablesUtils.fonts,
             fontWeight = FontWeight.Bold,
             fontSize = 15.sp
         )
 
         Text(
             text = stringResource(id = R.string.descriptionWhatis),
-            fontFamily = ComposablesUtils.fontFamily,
+            fontFamily = ComposablesUtils.fonts,
             fontWeight = FontWeight.Normal,
             fontSize = 14.sp,
             textAlign = TextAlign.Center,
@@ -121,7 +121,7 @@ class AboutFragment: Fragment() {
         Text(
             modifier = Modifier.paddingFromBaseline(top = 30.dp),
             text = stringResource(id = R.string.titleSocialMedia),
-            fontFamily = ComposablesUtils.fontFamily,
+            fontFamily = ComposablesUtils.fonts,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
             fontSize = 15.sp
@@ -171,7 +171,7 @@ class AboutFragment: Fragment() {
         Text(
             modifier = Modifier.paddingFromBaseline(top = 30.dp),
             text = stringResource(id = R.string.questionInteresant),
-            fontFamily = ComposablesUtils.fontFamily,
+            fontFamily = ComposablesUtils.fonts,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
             fontSize = 15.sp
@@ -179,14 +179,14 @@ class AboutFragment: Fragment() {
 
         Text(
             text = stringResource(id = R.string.descriptionInteresant),
-            fontFamily = ComposablesUtils.fontFamily,
+            fontFamily = ComposablesUtils.fonts,
             fontWeight = FontWeight.Normal,
             fontSize = 14.sp,
             textAlign = TextAlign.Center,
         )
         Text(
             text = stringResource(id = R.string.seeMore),
-            fontFamily = ComposablesUtils.fontFamily,
+            fontFamily = ComposablesUtils.fonts,
             fontWeight = FontWeight.Bold,
             color = if (ThemeState.isDark)linkDark else Color.Blue,
             style = TextStyle(textDecoration = TextDecoration.Underline),
@@ -227,7 +227,7 @@ class AboutFragment: Fragment() {
         ) {
             if(flagListContributor.value) {
                 Text(
-                    fontFamily = ComposablesUtils.fontFamily,
+                    fontFamily = ComposablesUtils.fonts,
                     fontWeight = FontWeight.Bold,
                     text = stringResource(id = R.string.titleContributors),
                     fontSize = 15.sp,
@@ -286,7 +286,7 @@ class AboutFragment: Fragment() {
             Text(
                 text = stringResource(id = R.string.licenseAireLibreLink),
                 textAlign = TextAlign.Center,
-                fontFamily = ComposablesUtils.fontFamily,
+                fontFamily = ComposablesUtils.fonts,
                 fontWeight = FontWeight.Bold,
                 color = if (ThemeState.isDark)linkDark else Color.Blue,
                 fontSize = 14.sp,
@@ -306,7 +306,7 @@ class AboutFragment: Fragment() {
         Text(
             text = stringResource(id = R.string.titleDeveloper),
             textAlign = TextAlign.Center ,
-            fontFamily = ComposablesUtils.fontFamily,
+            fontFamily = ComposablesUtils.fonts,
             fontWeight = FontWeight.Bold,
             fontSize = 14.sp,
             modifier = Modifier.paddingFromBaseline(top = 30.dp)
@@ -314,7 +314,7 @@ class AboutFragment: Fragment() {
         Text(
             text = stringResource(id = R.string.textNameDeveloper),
             textAlign = TextAlign.Center,
-            fontFamily = ComposablesUtils.fontFamily,
+            fontFamily = ComposablesUtils.fonts,
             fontWeight = FontWeight.Bold,
             color = if (ThemeState.isDark)linkDark else Color.Blue,
             fontSize = 14.sp,
@@ -331,7 +331,7 @@ class AboutFragment: Fragment() {
         Text(
             text = stringResource(id = R.string.TitlelicenseLogo),
             textAlign = TextAlign.Center ,
-            fontFamily = ComposablesUtils.fontFamily,
+            fontFamily = ComposablesUtils.fonts,
             fontWeight = FontWeight.Bold,
             fontSize = 14.sp,
             modifier = Modifier.paddingFromBaseline(top = 30.dp)
@@ -339,7 +339,7 @@ class AboutFragment: Fragment() {
         Text(
             text = stringResource(id = R.string.desciptionlicenseLogo),
             textAlign = TextAlign.Center,
-            fontFamily = ComposablesUtils.fontFamily,
+            fontFamily = ComposablesUtils.fonts,
             fontWeight = FontWeight.Bold,
             color = if (ThemeState.isDark)linkDark else Color.Blue,
             fontSize = 14.sp,
