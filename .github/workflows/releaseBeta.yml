@@ -1,10 +1,7 @@
 name: Release (Beta)
 
 on:
-  push:
-    paths:
-      - 'app/**'
-    branches: [ master ]
+ workflow_dispatch:
 
 jobs:
   deploy:
