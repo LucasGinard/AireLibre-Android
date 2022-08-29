@@ -7,9 +7,21 @@ plugins {
     id 'dagger.hilt.android.plugin'
 }
 
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
 android {
     compileSdk 33
-
+    
+    signingConfigs {
+        config {
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+        }
+    }
     defaultConfig {
         applicationId "com.lucasginard.airelibre"
         minSdk 24
@@ -22,6 +34,7 @@ android {
             useSupportLibrary true
         }
         buildConfigField "String", "BASE_URL",'\"https://rald-dev.greenbeep.com/\"'
+        signingConfig signingConfigs.config
     }
 
     buildTypes {
