@@ -13,7 +13,7 @@ keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 android {
     compileSdk 33
-    
+
     signingConfigs {
         config {
             keyAlias keystoreProperties['keyAlias']
@@ -26,7 +26,7 @@ android {
         applicationId "com.lucasginard.airelibre"
         minSdk 24
         targetSdk 31
-        versionCode 15
+        versionCode 16
         versionName "1.1.4"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -35,6 +35,8 @@ android {
         }
         buildConfigField "String", "BASE_URL",'\"https://rald-dev.greenbeep.com/\"'
         signingConfig signingConfigs.config
+        manifestPlaceholders = [GOOGLE_MAP_API_KEY: "${keystoreProperties['apiMaps']}"]
+
     }
 
     buildTypes {

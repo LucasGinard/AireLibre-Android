@@ -48,12 +48,13 @@ jobs:
           echo "keyAlias=$KEYSTORE_KEY_ALIAS" >> keystore.properties
           echo "storePassword=$KEYSTORE_STORE_PASSWORD" >> keystore.properties
           echo "keyPassword=$KEYSTORE_KEY_PASSWORD" >> keystore.properties
+          echo "apiMaps=$KEY_GOOGLE_MAP" >> keystore.properties
         env:
           ANDROID_KEYSTORE_FILE: ${{ secrets.ANDROID_KEYSTORE_FILE }}
           KEYSTORE_KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
           KEYSTORE_KEY_PASSWORD: ${{ secrets.KEYSTORE_KEY_PASSWORD }}
           KEYSTORE_STORE_PASSWORD: ${{ secrets.KEYSTORE_STORE_PASSWORD }}
-
+          KEY_GOOGLE_MAP: ${{ secrets.KEY_GOOGLE_MAP }}
       - name: Create Google Play Config file
         run : |
           echo "$PLAY_CONFIG_JSON" > play_config.json.b64
