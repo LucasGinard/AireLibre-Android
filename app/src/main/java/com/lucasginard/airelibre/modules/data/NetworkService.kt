@@ -28,23 +28,3 @@ object NetworkService{
         return retrofit.create(APIHome::class.java)
     }
 }
-
-@Module
-@InstallIn(SingletonComponent::class)
-object NetworkServiceGitHub{
-    @Named("retrofit_gitHub")
-    @Singleton
-    @Provides
-    fun provideGitHub(): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl("https://api.github.com/repos/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
-
-    @Singleton
-    @Provides
-    fun provideReposContributors(@Named("retrofit_gitHub") retrofit: Retrofit): APIGitHub {
-        return retrofit.create(APIGitHub::class.java)
-    }
-}

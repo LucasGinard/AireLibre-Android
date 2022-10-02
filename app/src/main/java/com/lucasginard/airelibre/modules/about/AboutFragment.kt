@@ -7,8 +7,13 @@ import android.view.ViewGroup
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,9 +40,7 @@ import com.lucasginard.airelibre.modules.about.model.LinksDynamic
 import com.lucasginard.airelibre.modules.about.ui.theme.AireLibreTheme
 import com.lucasginard.airelibre.modules.about.viewModel.AboutViewModel
 import com.lucasginard.airelibre.utils.*
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
 class AboutFragment: Fragment() {
 
     private val linkDark = Color(140, 180, 255)
@@ -214,7 +217,7 @@ class AboutFragment: Fragment() {
                 SessionCache.listContributorsCache.clear()
                 SessionCache.listContributorsCache.addAll(list)
                 SessionCache.listContributorsCache.sortWith(
-                    compareBy(String.CASE_INSENSITIVE_ORDER) { it.nameContributor }
+                    compareBy(String.CASE_INSENSITIVE_ORDER) { it.nameContributor.toString() }
                 )
                 flagListContributor.value = true
             }
@@ -251,18 +254,20 @@ class AboutFragment: Fragment() {
                                     .clip(CircleShape)
                                     .clickable(
                                         onClick = {
-                                            Intent().goToURL(it.githubContributor, requireContext())
+                                            it.githubContributor?.let { it1 -> Intent().goToURL(it1, requireContext()) }
                                         }
                                     ),
                             )
-                            Text(
-                                modifier = Modifier.paddingFromBaseline(top = 20.dp),
-                                text = it.nameContributor,
-                                fontFamily = ComposablesUtils.fonts,
-                                fontWeight = FontWeight.Bold,
-                                textAlign = TextAlign.Center,
-                                fontSize = 10.sp
-                            )
+                            it.nameContributor?.let { it1 ->
+                                Text(
+                                    modifier = Modifier.paddingFromBaseline(top = 20.dp),
+                                    text = it1,
+                                    fontFamily = ComposablesUtils.fonts,
+                                    fontWeight = FontWeight.Bold,
+                                    textAlign = TextAlign.Center,
+                                    fontSize = 10.sp
+                                )
+                            }
                         }
                     }
                 }
