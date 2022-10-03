@@ -283,6 +283,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                     _binding.btnReconnect.visibility = View.GONE
                     _binding.coordinatorLayout.visibility = View.VISIBLE
                 }
+                lastUpdateText(true)
             }else {
                 errorConnectService()
             }
@@ -304,6 +305,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                 this.ToastCustom(context?.getString(R.string.toastErrorNet) ?: "Sin conexión compruebe su conexión")
             }
         }
+        lastUpdateText()
     }
 
     private fun configureMaps(saved: Bundle?) {
@@ -559,9 +561,13 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         if (isDark){
             btnArrow.setTint(R.color.black)
             _binding.tvTitle.setTextColor(ContextCompat.getColor(requireContext(),R.color.black))
+            _binding.tvGmt.setTextColor(ContextCompat.getColor(requireContext(),R.color.black))
+            _binding.iconUpdate.setTint(R.color.black)
         }else{
             btnArrow.setTint(R.color.white)
             _binding.tvTitle.setTextColor(ContextCompat.getColor(requireContext(),R.color.white))
+            _binding.tvGmt.setTextColor(ContextCompat.getColor(requireContext(),R.color.white))
+            _binding.iconUpdate.setTint(R.color.white)
         }
     }
 
@@ -571,6 +577,15 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             if (it.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE && it.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)){
                 appUpdate.startUpdateFlowForResult(it,AppUpdateType.IMMEDIATE,requireActivity(),REQUEST_UPDATE)
             }
+        }
+    }
+
+    private fun lastUpdateText(showGmt:Boolean = false){
+        if (showGmt){
+            _binding.linearGmt.visibility = View.VISIBLE
+            _binding.tvGmt.text = SessionCache.lastUpdate
+        }else{
+            _binding.linearGmt.visibility = View.GONE
         }
     }
 
