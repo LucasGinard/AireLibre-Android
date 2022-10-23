@@ -9,8 +9,12 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
 import android.net.Uri
-import android.os.NetworkOnMainThreadException
+import android.transition.Slide
+import android.transition.Transition
+import android.transition.TransitionManager
+import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.TextView
@@ -261,4 +265,12 @@ fun Fragment.isInternetAvailable(): Boolean {
         e.printStackTrace()
     }
     return false
+}
+
+fun View.setAnimationSlideLeftToRight(idAnimation:Int) {
+    var transition: Transition = Slide(Gravity.LEFT)
+    transition.duration = 600
+    transition.addTarget(idAnimation)
+    TransitionManager.beginDelayedTransition(parent as ViewGroup?, transition)
+    this.visibility = if (this.visibility == View.GONE) View.VISIBLE else View.GONE
 }

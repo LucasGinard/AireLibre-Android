@@ -245,6 +245,10 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             btnRefresh.animationRefresh()
             viewModel.getAllCity()
         }
+
+        _binding.iconUpdate.setOnClickListener {
+            _binding.tvGmt.setAnimationSlideLeftToRight(_binding.tvGmt.id)
+        }
     }
 
     private fun showItemsFilter(v: View, @MenuRes menuRes: Int) {
