@@ -6,11 +6,16 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.remoteconfig.ktx.remoteConfig
+import com.google.gson.Gson
 import com.lucasginard.airelibre.modules.about.model.Contributor
+import com.lucasginard.airelibre.modules.about.model.LinksDynamic
 
 class AboutViewModel() : ViewModel() {
 
     val listContributors = MutableLiveData<ArrayList<Contributor>>()
+    val linksDynamic = MutableLiveData<LinksDynamic>()
 
     fun getAllContributors(): MutableLiveData<ArrayList<Contributor>> {
         val rootRef = FirebaseDatabase.getInstance().reference
@@ -29,6 +34,16 @@ class AboutViewModel() : ViewModel() {
         })
 
         return listContributors
+    }
+
+    fun getDynamicLinks(): MutableLiveData<LinksDynamic> {
+        Firebase.remoteConfig.fetchAndActivate().addOnCompleteListener {
+            if (it.isSuccessful){
+                val links = Firebase.remoteConfig.getString("links_about")
+                linksDynamic.value = Gson().fromJson(links, LinksDynamic::class.java)
+            }
+        }
+        return linksDynamic
     }
 
 }

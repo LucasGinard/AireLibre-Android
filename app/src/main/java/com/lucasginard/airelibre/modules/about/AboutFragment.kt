@@ -72,10 +72,15 @@ class AboutFragment: Fragment() {
     }
 
     private fun getLinksDynamic() {
-        Firebase.remoteConfig.fetchAndActivate().addOnCompleteListener {
-            if (it.isSuccessful){
-                val links = Firebase.remoteConfig.getString("links_about")
-                linksDynamic = Gson().fromJson(links,LinksDynamic::class.java)
+        if (SessionCache.linksDynamicCache == null){
+            viewModel.getDynamicLinks()
+        }else{
+            linksDynamic = SessionCache.linksDynamicCache
+        }
+        viewModel.linksDynamic.observe(requireActivity()){ links ->
+            if (links != null){
+                SessionCache.linksDynamicCache = links
+                linksDynamic = links
             }
         }
     }
