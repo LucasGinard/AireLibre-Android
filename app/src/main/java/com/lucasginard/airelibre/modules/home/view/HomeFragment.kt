@@ -271,6 +271,8 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                 else -> false
             }
         }
+        if (tvFilter.text == getText(R.string.tvDistance)) popup.menu.findItem(R.id.option_1).isVisible =
+            false else popup.menu.findItem(R.id.option_2).isVisible = false
         popup.show()
     }
 

@@ -32,9 +32,6 @@ import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import coil.compose.AsyncImage
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.remoteconfig.ktx.remoteConfig
-import com.google.gson.Gson
 import com.lucasginard.airelibre.R
 import com.lucasginard.airelibre.modules.about.model.LinksDynamic
 import com.lucasginard.airelibre.modules.about.ui.theme.AireLibreTheme
