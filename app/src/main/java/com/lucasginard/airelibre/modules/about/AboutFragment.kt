@@ -136,7 +136,24 @@ class AboutFragment: Fragment() {
         ) {
             Image(
                 modifier = Modifier
-                    .padding(top = 15.dp, end = 20.dp)
+                    .padding(top = 15.dp)
+                    .height(45.dp)
+                    .clickable(
+                        onClick = {
+                            val intent = Intent()
+                            intent.goToURL(
+                                url = linksDynamic?.linkMastodon
+                                    ?: requireContext().getString(R.string.linkMastodon),
+                                context = requireContext()
+                            )
+                        }
+                    ),
+                painter = painterResource(id = R.drawable.icon_mastodon),
+                contentDescription = stringResource(id = R.string.linkMastodon),
+            )
+            Image(
+                modifier = Modifier
+                    .padding(top = 15.dp, end = 15.dp,start = 15.dp)
                     .height(45.dp)
                     .clickable(
                         onClick = {
