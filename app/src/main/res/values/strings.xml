@@ -79,6 +79,7 @@
     <string name="linkGitHub">https://github.com/melizeche/AireLibre/#faq</string>
     <string name="linkLicense">https://es.wikipedia.org/wiki/GNU_Affero_General_Public_License</string>
     <string name="linkLucas">https://www.linkedin.com/in/lucasginard/?originalSubdomain=py</string>
+    <string name="linkMastodon">https://terere.social/@AireLibre</string>
 
     <!---ContentDescriptions-->
     <string name="contentOnBack">OnBack</string>
