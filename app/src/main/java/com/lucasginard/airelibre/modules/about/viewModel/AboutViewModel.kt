@@ -20,7 +20,7 @@ class AboutViewModel() : ViewModel() {
     fun getAllContributors(): MutableLiveData<ArrayList<Contributor>> {
         val rootRef = FirebaseDatabase.getInstance().reference
         val listAux = ArrayList<Contributor>()
-        val orderDetailRef = rootRef.child("getContributors").addListenerForSingleValueEvent(object : ValueEventListener {
+        rootRef.child("getContributors").addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for (postSnapshot in dataSnapshot.children) {
                     postSnapshot.getValue(Contributor::class.java)?.let { listAux.add(it) }
