@@ -40,8 +40,6 @@
     <string name="TitlelicenseLogo">Imagen Ilustrativa original de:</string>
     <string name="desciptionlicenseLogo">pch.vector - www.freepik.es</string>
     <string name="titleSocialMedia">Mantente al tanto de la contaminación del Aire en:</string>
-    <string name="titleDeveloper">App android desarrollada por:</string>
-    <string name="textNameDeveloper">Lucas Ginard</string>
     <string name="titleContributors">Contribuidores del proyecto</string>
 
     <!---ConfigActivity-->
@@ -78,7 +76,6 @@
     <string name="linkWebsite">https://airelib.re</string>
     <string name="linkGitHub">https://github.com/melizeche/AireLibre/#faq</string>
     <string name="linkLicense">https://es.wikipedia.org/wiki/GNU_Affero_General_Public_License</string>
-    <string name="linkLucas">https://www.linkedin.com/in/lucasginard/?originalSubdomain=py</string>
     <string name="linkMastodon">https://terere.social/@AireLibre</string>
 
     <!---ContentDescriptions-->

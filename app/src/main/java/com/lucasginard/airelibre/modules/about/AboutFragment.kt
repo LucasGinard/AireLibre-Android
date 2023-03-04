@@ -328,31 +328,6 @@ class AboutFragment: Fragment() {
         }
 
         Text(
-            text = stringResource(id = R.string.titleDeveloper),
-            textAlign = TextAlign.Center ,
-            fontFamily = ComposablesUtils.fonts,
-            fontWeight = FontWeight.Bold,
-            fontSize = 14.sp,
-            modifier = Modifier.paddingFromBaseline(top = 30.dp)
-        )
-        Text(
-            text = stringResource(id = R.string.textNameDeveloper),
-            textAlign = TextAlign.Center,
-            fontFamily = ComposablesUtils.fonts,
-            fontWeight = FontWeight.Bold,
-            color = if (ThemeState.isDark)linkDark else Color.Blue,
-            fontSize = 14.sp,
-            modifier = Modifier.clickable(
-                onClick = {
-                    val intent = Intent()
-                    intent.goToURL(
-                        url = linksDynamic?.linkAppAndroid ?: requireContext().getString(R.string.linkLucas),
-                        context = requireContext()
-                    )
-                }
-            )
-        )
-        Text(
             text = stringResource(id = R.string.TitlelicenseLogo),
             textAlign = TextAlign.Center ,
             fontFamily = ComposablesUtils.fonts,
