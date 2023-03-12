@@ -1,12 +1,15 @@
 package com.lucasginard.airelibre.modules.home.viewModel
 
 import android.app.Activity
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.android.play.core.review.ReviewManagerFactory
 import com.lucasginard.airelibre.R
 import com.lucasginard.airelibre.modules.home.domain.HomeRepository
 import com.lucasginard.airelibre.modules.home.model.CardsAQI
 import com.lucasginard.airelibre.modules.home.model.CityResponse
+import com.lucasginard.airelibre.utils.ToastCustom
 import dagger.hilt.android.lifecycle.HiltViewModel
 import retrofit2.Call
 import retrofit2.Callback
@@ -53,8 +56,21 @@ class HomeViewModel @Inject constructor(private val repository: HomeRepository) 
         listCards.add(CardsAQI(activity.getString(R.string.textTitleDanger),activity.getString(R.string.tvDescriptionDanger),R.color.cardDanger))
         return listCards
     }
+
     fun getCustomMap():String{
         return repository.getStyleMap()
+    }
+
+    fun showReviewForPlayStore(fragment:Fragment){
+        val manager = ReviewManagerFactory.create(fragment.requireContext())
+        val request = manager.requestReviewFlow()
+        request.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                manager.launchReviewFlow(fragment.requireActivity(),task.result)
+            } else {
+                fragment.ToastCustom(fragment.requireContext().getString(R.string.toastErrorRetry) ?: "Hubo un problema intente de nuevo")
+            }
+        }
     }
 
 }

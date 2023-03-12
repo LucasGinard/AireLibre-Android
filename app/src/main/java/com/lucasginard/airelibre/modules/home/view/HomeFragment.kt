@@ -151,6 +151,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         configureOnClickListeners()
         configureMaps(savedInstanceState)
         checkUpdate()
+        configureReviewPlayStore()
     }
 
     private fun configureUI() {
@@ -584,6 +585,10 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                 appUpdate.startUpdateFlowForResult(it,AppUpdateType.IMMEDIATE,requireActivity(),REQUEST_UPDATE)
             }
         }
+    }
+
+    private fun configureReviewPlayStore(){
+        viewModel.showReviewForPlayStore(this)
     }
 
     private fun lastUpdateText(showGmt:Boolean = false){
