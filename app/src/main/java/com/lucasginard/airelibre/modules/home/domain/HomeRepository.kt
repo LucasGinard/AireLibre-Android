@@ -11,6 +11,8 @@ class HomeRepository @Inject constructor(private val retrofitService: APIHome) {
 
     fun getAllCitys() = retrofitService.getList(getISODate())
 
+    fun getStatus() = retrofitService.getStatus()
+
     fun getIsThemeSave():Boolean{
         return AireLibreApp.prefs.flatTheme
     }
