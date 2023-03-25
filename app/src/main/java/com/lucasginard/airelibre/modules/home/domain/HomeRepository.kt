@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 class HomeRepository @Inject constructor(private val retrofitService: APIHome) {
 
-    fun getAllCitys() = retrofitService.getList(getISODate())
+    fun getAllSensors() = retrofitService.getList(getISODate())
 
     fun getStatus() = retrofitService.getStatus()
 
@@ -25,7 +25,7 @@ class HomeRepository @Inject constructor(private val retrofitService: APIHome) {
         return AireLibreApp.prefs.customMap
     }
 
-    fun getISODate(): String {
+    private fun getISODate(): String {
         val calendar = Calendar.getInstance()
         var date = calendar.time
         date = Date(date.time - 60 * 60000)

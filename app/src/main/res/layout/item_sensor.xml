@@ -13,7 +13,7 @@
     android:paddingBottom="12dp">
 
     <TextView
-        android:id="@+id/tvTitleCity"
+        android:id="@+id/tv_title_sensor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="2dp"
@@ -86,7 +86,7 @@
         android:textColor="@color/black"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tvTitleCity" />
+        app:layout_constraintTop_toTopOf="@+id/tv_title_sensor" />
 
     <ImageView
         android:id="@+id/imShare"

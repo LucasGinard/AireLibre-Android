@@ -5,18 +5,18 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.maps.GoogleMap
 import com.lucasginard.airelibre.R
-import com.lucasginard.airelibre.modules.home.model.CityResponse
+import com.lucasginard.airelibre.modules.home.model.SensorResponse
 import com.lucasginard.airelibre.modules.home.view.HomeFragment
 
-class AdapterCityList(var cityList: ArrayList<CityResponse>,val fragment: HomeFragment,val maps: GoogleMap?=null) : RecyclerView.Adapter<CityViewHolder>(){
+class AdapterSensorList(var sensorList: ArrayList<SensorResponse>, val fragment: HomeFragment, val maps: GoogleMap?=null) : RecyclerView.Adapter<SensorViewHolder>(){
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CityViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SensorViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        return CityViewHolder(layoutInflater.inflate(R.layout.item_city, parent, false))
+        return SensorViewHolder(layoutInflater.inflate(R.layout.item_sensor, parent, false))
     }
 
-    override fun onBindViewHolder(holder: CityViewHolder, position: Int) {
-        val item = cityList[position]
+    override fun onBindViewHolder(holder: SensorViewHolder, position: Int) {
+        val item = sensorList[position]
         if (maps != null) {
             holder.bind(item,fragment,maps)
         }else{
@@ -24,35 +24,35 @@ class AdapterCityList(var cityList: ArrayList<CityResponse>,val fragment: HomeFr
         }
     }
 
-    override fun getItemCount(): Int = cityList.size
+    override fun getItemCount(): Int = sensorList.size
 
     private fun orderListDown(orderName:String){
         val aux = when(orderName){
             "Distance" ->{
-                cityList.sortedBy { it.distance }
+                sensorList.sortedBy { it.distance }
             }
             "AQI"->{
-                cityList.sortedBy { it.quality.index }
+                sensorList.sortedBy { it.quality.index }
             }
-            else -> cityList
+            else -> sensorList
         }
-        cityList.clear()
-        cityList.addAll(aux)
+        sensorList.clear()
+        sensorList.addAll(aux)
         notifyDataSetChanged()
     }
 
     private fun orderListUp(orderName: String){
         val aux = when(orderName){
             "Distance" ->{
-                cityList.sortedByDescending { it.distance }
+                sensorList.sortedByDescending { it.distance }
             }
             "AQI"->{
-                cityList.sortedByDescending { it.quality.index }
+                sensorList.sortedByDescending { it.quality.index }
             }
-            else -> cityList
+            else -> sensorList
         }
-        cityList.clear()
-        cityList.addAll(aux)
+        sensorList.clear()
+        sensorList.addAll(aux)
         notifyDataSetChanged()
     }
 

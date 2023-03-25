@@ -37,19 +37,19 @@ import com.lucasginard.airelibre.R
 import com.lucasginard.airelibre.databinding.FragmentHomeBinding
 import com.lucasginard.airelibre.modules.config.ui.theme.AireLibreTheme
 import com.lucasginard.airelibre.modules.home.model.CardsAQI
-import com.lucasginard.airelibre.modules.home.model.CityResponse
+import com.lucasginard.airelibre.modules.home.model.SensorResponse
 import com.lucasginard.airelibre.modules.home.view.dialog.DialogCardsAQICompose
 import com.lucasginard.airelibre.modules.home.viewModel.HomeViewModel
 import com.lucasginard.airelibre.utils.*
-import com.lucasginard.airelibre.utils.adapter.AdapterCityList
+import com.lucasginard.airelibre.utils.adapter.AdapterSensorList
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class HomeFragment : Fragment(), OnMapReadyCallback {
 
     private lateinit var _binding: FragmentHomeBinding
-    private lateinit var adapter: AdapterCityList
-    private lateinit var cityCloser: CityResponse
+    private lateinit var adapter: AdapterSensorList
+    private lateinit var sensorCloser: SensorResponse
     private lateinit var btnArrow:ImageView
     private lateinit var btnOrderList:ImageView
     private lateinit var recycler:RecyclerView
@@ -71,7 +71,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     private val viewModel: HomeViewModel by viewModels()
 
     private var mapView: MapView? = null
-    private var listCitys = ArrayList<CityResponse>()
+    private var listSensors = ArrayList<SensorResponse>()
     private var flatPermisson = false
     private var isDown = true
     private val REQUEST_UPDATE = 100
@@ -88,10 +88,10 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                 R.anim.slide_up
             )
         )
-        val cityObject = listCitys.find { it.description == marker }
-        if (cityObject != null){
-            _binding.tvCiudad.text = cityObject.description
-            cityObject.quality.index.let {
+        val sensorObject = listSensors.find { it.description == marker }
+        if (sensorObject != null){
+            _binding.tvCiudad.text = sensorObject.description
+            sensorObject.quality.index.let {
                 this.textsAQI(
                     _binding.tvDescripcion,
                     _binding.iconInfo,
@@ -102,8 +102,8 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             GoogleMap.animateCamera(
                 CameraUpdateFactory.newLatLngZoom(
                     LatLng(
-                        cityObject.latitude,
-                        cityObject.longitude
+                        sensorObject.latitude,
+                        sensorObject.longitude
                     ), zoomMap ?: 13f
                 )
             )
@@ -114,12 +114,12 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
             btnArrow.background = ContextCompat.getDrawable(requireContext(),R.drawable.ic_arrow_up)
         }
-        if (::cityCloser.isInitialized) {
-            if (cityCloser.description == marker) {
-                _binding.tvTitleCity.text = context?.getText(R.string.tvSensorCloser) ?: "Sensor más cercano:"
-            } else _binding.tvTitleCity.text = context?.getText(R.string.tvSensor) ?: "Sensor:"
+        if (::sensorCloser.isInitialized) {
+            if (sensorCloser.description == marker) {
+                _binding.tvTitleSensor.text = context?.getText(R.string.tvSensorCloser) ?: "Sensor más cercano:"
+            } else _binding.tvTitleSensor.text = context?.getText(R.string.tvSensor) ?: "Sensor:"
         } else {
-            _binding.tvTitleCity.text = context?.getText(R.string.tvSensor) ?: "Sensor:"
+            _binding.tvTitleSensor.text = context?.getText(R.string.tvSensor) ?: "Sensor:"
         }
     }
 
@@ -147,7 +147,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         super.onViewCreated(view, savedInstanceState)
         configureUI()
         configureAdapter()
-        configureService()
+        configureServiceListSensors()
         configureOnClickListeners()
         configureMaps(savedInstanceState)
         checkUpdate()
@@ -168,9 +168,9 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
     private fun configureAdapter() {
         adapter = if (::GoogleMap.isInitialized){
-            AdapterCityList(listCitys, this, GoogleMap)
+            AdapterSensorList(listSensors, this, GoogleMap)
         }else{
-            AdapterCityList(listCitys, this)
+            AdapterSensorList(listSensors, this)
         }
         if (context != null){
             recycler.layoutManager = LinearLayoutManager(context)
@@ -196,7 +196,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         }
 
         _binding.btnReconnect.setOnClickListener {
-            configureService()
+            configureServiceListSensors()
         }
 
         onSwipeTouchListener = OnSwipeTouchListener(requireContext(), _binding.linearInfoMarker)
@@ -244,7 +244,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
         btnRefresh.setOnClickListener {
             btnRefresh.animationRefresh()
-            viewModel.getAllCity()
+            viewModel.getAllSensors()
         }
 
         _binding.iconUpdate.setOnClickListener {
@@ -277,14 +277,14 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         popup.show()
     }
 
-    private fun configureService() {
-        viewModel.getListCitys.observe(requireActivity()) {
+    private fun configureServiceListSensors() {
+        viewModel.getListSensors.observe(requireActivity()) {
             if (it != null){
                 markerList.clear()
-                listCitys.clear()
-                listCitys.addAll(it)
+                listSensors.clear()
+                listSensors.addAll(it)
                 adapter.notifyDataSetChanged()
-                configureMarkers(listCitys)
+                configureMarkers(listSensors)
                 calculateMarkerLocation()
                 if (_binding.btnReconnect.visibility == View.VISIBLE) {
                     _binding.btnReconnect.visibility = View.GONE
@@ -299,11 +299,11 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         viewModel.errorMessage.observe(requireActivity()) {
             errorConnectService()
         }
-        viewModel.getAllCity()
+        viewModel.getAllSensors()
     }
 
     private fun errorConnectService(){
-        if (listCitys.isNotEmpty()){
+        if (listSensors.isNotEmpty()){
             this.ToastCustom(context?.getString(R.string.toastErrorRetry) ?: "Hubo un problema intente de nuevo")
         }else{
             _binding.btnReconnect.visibility = View.VISIBLE
@@ -339,7 +339,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    private fun configureMarkers(arrayList: ArrayList<CityResponse>) {
+    private fun configureMarkers(arrayList: ArrayList<SensorResponse>) {
         for (x in arrayList) {
             if (::GoogleMap.isInitialized && mapView != null) {
                 GoogleMap.addMarker(
@@ -357,7 +357,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                 }
 
                 override fun getInfoContents(marker: Marker): View {
-                    val sensor = listCitys.find { it.description == marker.title }
+                    val sensor = listSensors.find { it.description == marker.title }
                     val info = LinearLayout(context)
                     info.orientation = LinearLayout.VERTICAL
                     val title = TextView(context)
@@ -385,7 +385,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    private fun setMarkerIcon(sensor:CityResponse): BitmapDescriptor? {
+    private fun setMarkerIcon(sensor:SensorResponse): BitmapDescriptor? {
         val image = when (sensor.quality.index) {
             in 0..50 -> R.drawable.icon_maps_green
             in 51..100 -> R.drawable.icon_maps_yellow
@@ -474,7 +474,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             var posicionMasCercana = LatLng(0.0, 0.0)
             var distanciaActual = Double.MAX_VALUE;
 
-            for (x in listCitys) {
+            for (x in listSensors) {
                 distanceMarker.longitude = x.longitude
                 distanceMarker.latitude = x.latitude
                 val distancia = lastLocation.distanceTo(distanceMarker)
@@ -484,12 +484,12 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                     distanciaActual = distancia.toDouble();
                 }
             }
-            val cerca = listCitys.find { it.latitude == posicionMasCercana.latitude && it.longitude == posicionMasCercana.longitude }
+            val cerca = listSensors.find { it.latitude == posicionMasCercana.latitude && it.longitude == posicionMasCercana.longitude }
             if (cerca != null) {
-                cityCloser = cerca
+                sensorCloser = cerca
                 markerLamda(cerca.description)
                 markerList.find { it.title == cerca.description }?.showInfoWindow()
-                _binding.tvTitleCity.text = context?.getText(R.string.tvSensorCloser) ?: "Sensor más cercano:"
+                _binding.tvTitleSensor.text = context?.getText(R.string.tvSensorCloser) ?: "Sensor más cercano:"
                 if (::adapter.isInitialized){
                     filterAdapter = context?.getString(R.string.itemDistance) ?: "Distance"
                     tvFilter.text = context?.getText(R.string.tvDistance) ?: "Distancia"

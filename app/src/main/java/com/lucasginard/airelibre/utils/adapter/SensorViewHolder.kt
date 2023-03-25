@@ -6,18 +6,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
-import com.lucasginard.airelibre.databinding.ItemCityBinding
-import com.lucasginard.airelibre.modules.home.model.CityResponse
+import com.lucasginard.airelibre.databinding.ItemSensorBinding
+import com.lucasginard.airelibre.modules.home.model.SensorResponse
 import com.lucasginard.airelibre.modules.home.view.HomeFragment
 import com.lucasginard.airelibre.utils.textAQI
 import com.lucasginard.airelibre.utils.textsAQI
 
-class CityViewHolder (view: View): RecyclerView.ViewHolder(view) {
+class SensorViewHolder (view: View): RecyclerView.ViewHolder(view) {
 
-    private val binding = ItemCityBinding.bind(view)
+    private val binding = ItemSensorBinding.bind(view)
 
-    fun bind(local: CityResponse, fragment: HomeFragment, maps: GoogleMap?=null){
-        binding.tvTitleCity.text = local.description
+    fun bind(local: SensorResponse, fragment: HomeFragment, maps: GoogleMap?=null){
+        binding.tvTitleSensor.text = local.description
         fragment.textsAQI(null, binding.stateIcon,binding.tvAQI,local.quality.index)
         configureOnClickListener(maps,local,fragment)
 
@@ -40,7 +40,7 @@ class CityViewHolder (view: View): RecyclerView.ViewHolder(view) {
         }
     }
 
-    private fun configureOnClickListener(maps: GoogleMap?,local: CityResponse,fragment: HomeFragment) {
+    private fun configureOnClickListener(maps: GoogleMap?, local: SensorResponse, fragment: HomeFragment) {
         binding.btnInfoAQI.setOnClickListener {
             fragment.infoAQI()
         }
@@ -54,7 +54,7 @@ class CityViewHolder (view: View): RecyclerView.ViewHolder(view) {
             val shareText = Intent(Intent.ACTION_SEND)
             shareText.type = "text/plain"
             var description: String = "".textAQI(local.quality.index, fragment.requireContext())
-            val dataToShare = "Sensor: ${binding.tvTitleCity.text}.\nEstado del aire: ${binding.stateIcon.text} - AQI: ${binding.tvAQI.text}\nDescripción:\n$description\nDatos obtenidos en www.airelib.re"
+            val dataToShare = "Sensor: ${binding.tvTitleSensor.text}.\nEstado del aire: ${binding.stateIcon.text} - AQI: ${binding.tvAQI.text}\nDescripción:\n$description\nDatos obtenidos en www.airelib.re"
             shareText.putExtra(Intent.EXTRA_TEXT, dataToShare)
             fragment.activity?.startActivity(Intent.createChooser(shareText, null))
         }

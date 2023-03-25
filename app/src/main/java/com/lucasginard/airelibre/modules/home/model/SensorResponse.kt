@@ -2,7 +2,7 @@ package com.lucasginard.airelibre.modules.home.model
 
 import com.google.gson.annotations.SerializedName
 
-data class CityResponse(
+data class SensorResponse(
     @SerializedName("sensor") var sensor: String,
     @SerializedName("source") var source: String,
     @SerializedName("description") var description: String,

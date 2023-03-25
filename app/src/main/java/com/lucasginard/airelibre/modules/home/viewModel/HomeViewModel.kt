@@ -8,7 +8,8 @@ import com.google.android.play.core.review.ReviewManagerFactory
 import com.lucasginard.airelibre.R
 import com.lucasginard.airelibre.modules.home.domain.HomeRepository
 import com.lucasginard.airelibre.modules.home.model.CardsAQI
-import com.lucasginard.airelibre.modules.home.model.CityResponse
+import com.lucasginard.airelibre.modules.home.model.SensorResponse
+import com.lucasginard.airelibre.modules.home.model.StatusResponse
 import com.lucasginard.airelibre.utils.ToastCustom
 import dagger.hilt.android.lifecycle.HiltViewModel
 import retrofit2.Call
@@ -19,20 +20,37 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(private val repository: HomeRepository) : ViewModel() {
 
-    val getListCitys = MutableLiveData<ArrayList<CityResponse>>()
+    val getListSensors = MutableLiveData<ArrayList<SensorResponse>>()
     val errorMessage = MutableLiveData<String>()
+    val getStatus = MutableLiveData<StatusResponse>()
 
-    fun getAllCity() {
-        val response = repository.getAllCitys()
-        response.enqueue(object : Callback<ArrayList<CityResponse>> {
+    fun getAllSensors() {
+        val response = repository.getAllSensors()
+        response.enqueue(object : Callback<ArrayList<SensorResponse>> {
             override fun onResponse(
-                call: Call<ArrayList<CityResponse>>,
-                response: Response<ArrayList<CityResponse>>
+                call: Call<ArrayList<SensorResponse>>,
+                response: Response<ArrayList<SensorResponse>>
             ) {
-                getListCitys.postValue(response.body())
+                getListSensors.postValue(response.body())
             }
 
-            override fun onFailure(call: Call<ArrayList<CityResponse>>, t: Throwable) {
+            override fun onFailure(call: Call<ArrayList<SensorResponse>>, t: Throwable) {
+                errorMessage.postValue(t.message)
+            }
+        })
+    }
+
+    fun getStatusService(){
+        val response = repository.getStatus()
+        response.enqueue(object : Callback<StatusResponse> {
+            override fun onResponse(
+                call: Call<StatusResponse>,
+                response: Response<StatusResponse>
+            ) {
+                getStatus.postValue(response.body())
+            }
+
+            override fun onFailure(call: Call<StatusResponse>, t: Throwable) {
                 errorMessage.postValue(t.message)
             }
         })
