@@ -313,6 +313,16 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             }
         }
         lastUpdateText()
+        callStatusService()
+    }
+
+    private fun callStatusService(){
+        viewModel.getStatusService()
+        viewModel.getStatus.observe(requireActivity()) {
+            if (!it.getDataBaseIsUp() || !it.getServiceIsUp()){
+
+            }
+        }
     }
 
     private fun configureMaps(saved: Bundle?) {
