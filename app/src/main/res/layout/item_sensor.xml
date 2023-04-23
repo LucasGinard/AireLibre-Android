@@ -21,7 +21,7 @@
         android:gravity="center"
         android:text="Surubi-i, Mariano"
         android:textColor="@color/black"
-        android:textSize="12dp"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@+id/imageView3"
         app:layout_constraintStart_toEndOf="@+id/imageView3"
         app:layout_constraintTop_toTopOf="@+id/imageView3" />
@@ -92,20 +92,20 @@
         android:id="@+id/imShare"
         android:layout_width="20dp"
         android:layout_height="0dp"
-        android:src="@drawable/ic_share"
-        app:layout_constraintBottom_toBottomOf="@+id/tvShare"
-        app:layout_constraintEnd_toStartOf="@+id/tvShare"
-        app:layout_constraintTop_toTopOf="@+id/tvShare"
+        android:src="@drawable/ic_notify_add"
+        app:layout_constraintBottom_toBottomOf="@+id/tvNotify"
+        app:layout_constraintEnd_toStartOf="@+id/tvNotify"
+        app:layout_constraintTop_toTopOf="@+id/tvNotify"
         app:tint="@color/link" />
 
     <TextView
-        android:id="@+id/tvShare"
+        android:id="@+id/tvNotify"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:autoLink="phone"
         android:fontFamily="@font/rubik_bold"
-        android:text="@string/tvShareGo"
+        android:text="@string/tvNotify"
         android:textColor="@color/link"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -170,4 +170,27 @@
         app:srcCompat="@drawable/ic_info_aqi"
         app:tint="@color/black"
         tools:ignore="TouchTargetSizeCheck" />
+
+    <ImageView
+        android:id="@+id/imShare2"
+        android:layout_width="20dp"
+        android:layout_height="0dp"
+        android:src="@drawable/ic_share"
+        app:layout_constraintBottom_toBottomOf="@+id/tvShare"
+        app:layout_constraintStart_toStartOf="@+id/imShare"
+        app:layout_constraintTop_toTopOf="@+id/tvShare"
+        app:tint="@color/link" />
+
+    <TextView
+        android:id="@+id/tvShare"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:autoLink="phone"
+        android:fontFamily="@font/rubik_bold"
+        android:text="@string/tvShareGo"
+        android:textColor="@color/link"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@+id/imShare2"
+        app:layout_constraintTop_toBottomOf="@+id/tvNotify" />
 </androidx.constraintlayout.widget.ConstraintLayout>
