@@ -89,7 +89,7 @@
         app:layout_constraintTop_toTopOf="@+id/tv_title_sensor" />
 
     <ImageView
-        android:id="@+id/imShare"
+        android:id="@+id/imNotify"
         android:layout_width="20dp"
         android:layout_height="0dp"
         android:src="@drawable/ic_notify_add"
@@ -172,12 +172,12 @@
         tools:ignore="TouchTargetSizeCheck" />
 
     <ImageView
-        android:id="@+id/imShare2"
+        android:id="@+id/imShare"
         android:layout_width="20dp"
         android:layout_height="0dp"
         android:src="@drawable/ic_share"
         app:layout_constraintBottom_toBottomOf="@+id/tvShare"
-        app:layout_constraintStart_toStartOf="@+id/imShare"
+        app:layout_constraintStart_toStartOf="@+id/imNotify"
         app:layout_constraintTop_toTopOf="@+id/tvShare"
         app:tint="@color/link" />
 
@@ -191,6 +191,6 @@
         android:text="@string/tvShareGo"
         android:textColor="@color/link"
         android:textSize="12sp"
-        app:layout_constraintStart_toEndOf="@+id/imShare2"
+        app:layout_constraintStart_toEndOf="@+id/imShare"
         app:layout_constraintTop_toBottomOf="@+id/tvNotify" />
 </androidx.constraintlayout.widget.ConstraintLayout>
