@@ -45,7 +45,7 @@ import com.lucasginard.airelibre.utils.adapter.AdapterSensorList
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class HomeFragment : Fragment(), OnMapReadyCallback {
+class HomeFragment : Fragment(), OnMapReadyCallback,ContractHome {
 
     private lateinit var _binding: FragmentHomeBinding
     private lateinit var adapter: AdapterSensorList
@@ -76,12 +76,28 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     private var isDown = true
     private val REQUEST_UPDATE = 100
     private var zoomMap:Float ?=null
-    val infoAQI = fun(){
-        listCards.clear()
-        listCards = viewModel.getCards(requireActivity())
-        booleanDialog.value = true
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        _binding.layoutCompose.apply {
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+            setContent {
+                AireLibreTheme(darkTheme = ThemeState.isDark) {
+                    Surface(color = MaterialTheme.colors.background) {
+                        booleanDialog = remember { androidx.compose.runtime.mutableStateOf(false) }
+                        if (booleanDialog.value) DialogCardsAQICompose(booleanDialog,listCards)
+                    }
+                }
+            }
+        }
+        requestLocation()
+        return _binding.root
     }
-    val markerLamda = fun(marker: String) {
+
+    override fun showInfoMarker(marker: String) {
         _binding.linearInfoMarker.visibility = View.VISIBLE
         _binding.linearInfoMarker.startAnimation(
             _binding.linearInfoMarker.animationCreate(
@@ -123,24 +139,11 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        _binding.layoutCompose.apply {
-            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-            setContent {
-                AireLibreTheme(darkTheme = ThemeState.isDark) {
-                    Surface(color = MaterialTheme.colors.background) {
-                        booleanDialog = remember { androidx.compose.runtime.mutableStateOf(false) }
-                        if (booleanDialog.value) DialogCardsAQICompose(booleanDialog,listCards)
-                    }
-                }
-            }
-        }
-        requestLocation()
-        return _binding.root
+
+    override fun infoAQI() {
+        listCards.clear()
+        listCards = viewModel.getCards(requireActivity())
+        booleanDialog.value = true
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -388,7 +391,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                 }
             })
             GoogleMap.setOnMarkerClickListener { marker ->
-                markerLamda(marker.title!!)
+                showInfoMarker(marker.title!!)
                 marker.showInfoWindow()
                 true
             }
@@ -497,7 +500,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             val cerca = listSensors.find { it.latitude == posicionMasCercana.latitude && it.longitude == posicionMasCercana.longitude }
             if (cerca != null) {
                 sensorCloser = cerca
-                markerLamda(cerca.description)
+                showInfoMarker(cerca.description)
                 markerList.find { it.title == cerca.description }?.showInfoWindow()
                 _binding.tvTitleSensor.text = context?.getText(R.string.tvSensorCloser) ?: "Sensor más cercano:"
                 if (::adapter.isInitialized){
@@ -631,4 +634,9 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     companion object {
         fun newInstance() = HomeFragment()
     }
+}
+
+interface ContractHome{
+    fun infoAQI()
+    fun showInfoMarker(marker: String)
 }

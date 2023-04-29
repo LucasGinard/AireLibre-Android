@@ -47,16 +47,20 @@ class SensorViewHolder (view: View): RecyclerView.ViewHolder(view) {
 
         binding.tvLink.setOnClickListener {
             maps?.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(local.latitude,local.longitude), 13f))
-            fragment.markerLamda(local.description)
+            fragment.showInfoMarker(local.description)
         }
 
         binding.tvShare.setOnClickListener {
             val shareText = Intent(Intent.ACTION_SEND)
             shareText.type = "text/plain"
-            var description: String = "".textAQI(local.quality.index, fragment.requireContext())
+            val description: String = "".textAQI(local.quality.index, fragment.requireContext())
             val dataToShare = "Sensor: ${binding.tvTitleSensor.text}.\nEstado del aire: ${binding.stateIcon.text} - AQI: ${binding.tvAQI.text}\nDescripción:\n$description\nDatos obtenidos en www.airelib.re"
             shareText.putExtra(Intent.EXTRA_TEXT, dataToShare)
             fragment.activity?.startActivity(Intent.createChooser(shareText, null))
+        }
+
+        binding.tvNotify.setOnClickListener {
+
         }
     }
 }
