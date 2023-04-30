@@ -1,14 +1,24 @@
 package com.lucasginard.airelibre.utils.adapter
 
+import android.app.AlarmManager
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.view.View
+import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
+import com.lucasginard.airelibre.R
 import com.lucasginard.airelibre.databinding.ItemSensorBinding
 import com.lucasginard.airelibre.modules.home.model.SensorResponse
 import com.lucasginard.airelibre.modules.home.view.HomeFragment
+import com.lucasginard.airelibre.modules.notifications.NotificationReceiver
 import com.lucasginard.airelibre.utils.textAQI
 import com.lucasginard.airelibre.utils.textsAQI
 
@@ -60,7 +70,23 @@ class SensorViewHolder (view: View): RecyclerView.ViewHolder(view) {
         }
 
         binding.tvNotify.setOnClickListener {
-
+            programarNotificacion(fragment)
         }
+    }
+
+    private fun programarNotificacion(fragment: HomeFragment) {
+        // Calcula la hora de entrega de la notificación (por ejemplo, dentro de 5 segundos)
+        val tiempoNotificacion = System.currentTimeMillis() + 2000
+
+        // Programa la entrega de la notificación
+        val intent = Intent(fragment.requireContext(), NotificationReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(
+            fragment.requireContext(),
+            0,
+            intent,
+            PendingIntent.FLAG_MUTABLE
+        )
+        val alarmManager = fragment.activity?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        alarmManager.set(AlarmManager.RTC_WAKEUP, tiempoNotificacion, pendingIntent)
     }
 }
