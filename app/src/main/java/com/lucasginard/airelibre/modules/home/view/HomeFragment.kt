@@ -68,7 +68,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback,ContractHome {
     private lateinit var booleanDialog:MutableState<Boolean>
     private var listCards = ArrayList<CardsAQI>()
     private var markerList = ArrayList<Marker>()
-    private val viewModel: HomeViewModel by viewModels()
+    val viewModel: HomeViewModel by viewModels()
 
     private var mapView: MapView? = null
     private var listSensors = ArrayList<SensorResponse>()

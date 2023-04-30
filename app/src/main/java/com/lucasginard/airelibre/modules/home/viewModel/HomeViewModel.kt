@@ -31,13 +31,25 @@ class HomeViewModel @Inject constructor(private val repository: HomeRepository) 
                 call: Call<ArrayList<SensorResponse>>,
                 response: Response<ArrayList<SensorResponse>>
             ) {
-                getListSensors.postValue(response.body())
+                val listSensors = response.body()
+                listSensors?.let {list ->
+                    getListSensors.postValue(addIdsToSensorResponses(list))
+                }
             }
 
             override fun onFailure(call: Call<ArrayList<SensorResponse>>, t: Throwable) {
                 errorMessage.postValue(t.message)
             }
         })
+    }
+
+    fun addIdsToSensorResponses(sensorList: ArrayList<SensorResponse>): ArrayList<SensorResponse> {
+        var currentId = 1
+        val listWithId = sensorList
+        for (sensorResponse in listWithId) {
+            sensorResponse.id = currentId++
+        }
+        return listWithId
     }
 
     fun getStatusService(){

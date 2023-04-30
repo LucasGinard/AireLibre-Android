@@ -14,11 +14,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
+import com.google.gson.Gson
 import com.lucasginard.airelibre.R
 import com.lucasginard.airelibre.databinding.ItemSensorBinding
 import com.lucasginard.airelibre.modules.home.model.SensorResponse
 import com.lucasginard.airelibre.modules.home.view.HomeFragment
 import com.lucasginard.airelibre.modules.notifications.NotificationReceiver
+import com.lucasginard.airelibre.utils.Constants
 import com.lucasginard.airelibre.utils.textAQI
 import com.lucasginard.airelibre.utils.textsAQI
 
@@ -70,16 +72,17 @@ class SensorViewHolder (view: View): RecyclerView.ViewHolder(view) {
         }
 
         binding.tvNotify.setOnClickListener {
-            programarNotificacion(fragment)
+            programarNotificacion(fragment,local)
         }
     }
 
-    private fun programarNotificacion(fragment: HomeFragment) {
-        // Calcula la hora de entrega de la notificación (por ejemplo, dentro de 5 segundos)
+    private fun programarNotificacion(fragment: HomeFragment,sensor:SensorResponse) {
         val tiempoNotificacion = System.currentTimeMillis() + 2000
 
-        // Programa la entrega de la notificación
         val intent = Intent(fragment.requireContext(), NotificationReceiver::class.java)
+        val sensorObject = Gson().toJson(sensor)
+        intent.putExtra(Constants.OBJECT_SENSOR,sensorObject)
+
         val pendingIntent = PendingIntent.getBroadcast(
             fragment.requireContext(),
             0,

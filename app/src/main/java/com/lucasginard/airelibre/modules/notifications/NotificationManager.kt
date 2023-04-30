@@ -28,7 +28,7 @@ class NotificationManager(private val context: Context) {
         mainIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         val pendingIntent = PendingIntent.getActivity(context, 0, mainIntent, PendingIntent.FLAG_MUTABLE)
 
-        // Crear la notificación
+        // Crea la notificación
         val builder = NotificationCompat.Builder(context, idSensorNotifiy)
             .setSmallIcon(R.mipmap.ic_launcher_round)
             .setContentTitle(title)
