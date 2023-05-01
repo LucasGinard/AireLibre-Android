@@ -41,7 +41,7 @@ import com.lucasginard.airelibre.modules.home.model.SensorResponse
 import com.lucasginard.airelibre.modules.home.view.dialog.DialogCardsAQICompose
 import com.lucasginard.airelibre.modules.home.viewModel.HomeViewModel
 import com.lucasginard.airelibre.utils.*
-import com.lucasginard.airelibre.utils.adapter.AdapterSensorList
+import com.lucasginard.airelibre.modules.home.view.adapter.AdapterSensorList
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

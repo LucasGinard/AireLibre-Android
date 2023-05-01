@@ -3,13 +3,14 @@ package com.lucasginard.airelibre.modules.home.domain
 import com.lucasginard.airelibre.AireLibreApp
 import com.lucasginard.airelibre.modules.data.APIHome
 import com.lucasginard.airelibre.utils.SessionCache
+import com.lucasginard.airelibre.utils.Utils
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
 class HomeRepository @Inject constructor(private val retrofitService: APIHome) {
 
-    fun getAllSensors() = retrofitService.getList(getISODate())
+    fun getAllSensors() = retrofitService.getList(Utils.getISODate())
 
     fun getStatus() = retrofitService.getStatus()
 
@@ -23,17 +24,5 @@ class HomeRepository @Inject constructor(private val retrofitService: APIHome) {
 
     fun getStyleMap():String{
         return AireLibreApp.prefs.customMap
-    }
-
-    private fun getISODate(): String {
-        val calendar = Calendar.getInstance()
-        var date = calendar.time
-        date = Date(date.time - 60 * 60000)
-        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-        val sdf2 = SimpleDateFormat("HH:mm dd-MM")
-        sdf.timeZone = TimeZone.getTimeZone("GMT")
-        sdf2.timeZone = TimeZone.getTimeZone("GMT")
-        SessionCache.lastUpdate = "GMT ${sdf2.format(date)}"
-        return sdf.format(date)
     }
 }

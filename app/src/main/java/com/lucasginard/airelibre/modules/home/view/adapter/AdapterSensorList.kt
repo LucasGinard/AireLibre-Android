@@ -1,4 +1,4 @@
-package com.lucasginard.airelibre.utils.adapter
+package com.lucasginard.airelibre.modules.home.view.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

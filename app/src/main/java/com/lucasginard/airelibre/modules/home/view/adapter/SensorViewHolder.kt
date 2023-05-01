@@ -1,4 +1,4 @@
-package com.lucasginard.airelibre.utils.adapter
+package com.lucasginard.airelibre.modules.home.view.adapter
 
 import android.app.AlarmManager
 import android.app.NotificationChannel
