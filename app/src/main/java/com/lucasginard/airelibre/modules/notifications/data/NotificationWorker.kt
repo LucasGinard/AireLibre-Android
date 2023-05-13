@@ -22,6 +22,8 @@ class NotificationWorker(context: Context, params: WorkerParameters) : Coroutine
         return suspendCoroutine { continuation ->
             GlobalScope.launch {
                 val response = apiService.getSensor(Utils.getISODate(),sourceSensor)
+                val notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as android.app.NotificationManager
+
                 if (response.isSuccessful){
                     val sensor = response.body()?.first()
                     val notification = sensor?.let {
@@ -32,13 +34,12 @@ class NotificationWorker(context: Context, params: WorkerParameters) : Coroutine
                         )
                     }
 
-                    val notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as android.app.NotificationManager
                     sensor?.source?.let {
                         notificationManager.notify(it.hexToInt(), notification)
                     }
-
                     continuation.resume(Result.success())
                 }else{
+                    notificationManager.cancel(sourceSensor.hexToInt())
                     continuation.resume(Result.failure())
                 }
             }
