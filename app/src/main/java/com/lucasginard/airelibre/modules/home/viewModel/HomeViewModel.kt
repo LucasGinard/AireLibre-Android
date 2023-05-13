@@ -24,6 +24,7 @@ class HomeViewModel @Inject constructor(private val repository: HomeRepository) 
     val errorMessage = MutableLiveData<String>()
     val getStatus = MutableLiveData<StatusResponse>()
 
+    lateinit var sensorNotify:SensorResponse
     fun getAllSensors() {
         val response = repository.getAllSensors()
         response.enqueue(object : Callback<ArrayList<SensorResponse>> {

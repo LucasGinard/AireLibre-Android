@@ -42,6 +42,7 @@ import com.lucasginard.airelibre.modules.home.view.dialog.DialogCardsAQICompose
 import com.lucasginard.airelibre.modules.home.viewModel.HomeViewModel
 import com.lucasginard.airelibre.utils.*
 import com.lucasginard.airelibre.modules.home.view.adapter.AdapterSensorList
+import com.lucasginard.airelibre.modules.home.view.dialog.DialogConfigureNotification
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -65,7 +66,8 @@ class HomeFragment : Fragment(), OnMapReadyCallback,ContractHome {
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
     private lateinit var appUpdate:AppUpdateManager
 
-    private lateinit var booleanDialog:MutableState<Boolean>
+    private lateinit var showAQIDialog:MutableState<Boolean>
+    private lateinit var showNotificationDialog:MutableState<Boolean>
     private var listCards = ArrayList<CardsAQI>()
     private var markerList = ArrayList<Marker>()
     val viewModel: HomeViewModel by viewModels()
@@ -87,8 +89,10 @@ class HomeFragment : Fragment(), OnMapReadyCallback,ContractHome {
             setContent {
                 AireLibreTheme(darkTheme = ThemeState.isDark) {
                     Surface(color = MaterialTheme.colors.background) {
-                        booleanDialog = remember { androidx.compose.runtime.mutableStateOf(false) }
-                        if (booleanDialog.value) DialogCardsAQICompose(booleanDialog,listCards)
+                        showAQIDialog = remember { androidx.compose.runtime.mutableStateOf(false) }
+                        showNotificationDialog = remember { androidx.compose.runtime.mutableStateOf(false) }
+                        if (showAQIDialog.value) DialogCardsAQICompose(showAQIDialog,listCards)
+                        if (showNotificationDialog.value) DialogConfigureNotification(showNotificationDialog,requireContext(),viewModel.sensorNotify)
                     }
                 }
             }
@@ -143,7 +147,12 @@ class HomeFragment : Fragment(), OnMapReadyCallback,ContractHome {
     override fun infoAQI() {
         listCards.clear()
         listCards = viewModel.getCards(requireActivity())
-        booleanDialog.value = true
+        showAQIDialog.value = true
+    }
+
+    override fun showDialogConfigure(sensor: SensorResponse) {
+        viewModel.sensorNotify = sensor
+        showNotificationDialog.value = true
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -639,4 +648,5 @@ class HomeFragment : Fragment(), OnMapReadyCallback,ContractHome {
 interface ContractHome{
     fun infoAQI()
     fun showInfoMarker(marker: String)
+    fun showDialogConfigure(sensor: SensorResponse)
 }
