@@ -10,7 +10,6 @@ data class SensorResponse(
     @SerializedName("latitude") var latitude: Double,
     @SerializedName("quality") var quality: Quality,
     var distance: Float?=null,
-    var id:Int?=null
 )
 
 data class Quality (

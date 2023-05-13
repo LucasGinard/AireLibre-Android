@@ -21,6 +21,7 @@ import com.lucasginard.airelibre.modules.home.model.SensorResponse
 import com.lucasginard.airelibre.modules.home.view.HomeFragment
 import com.lucasginard.airelibre.modules.notifications.NotificationReceiver
 import com.lucasginard.airelibre.utils.Constants
+import com.lucasginard.airelibre.utils.hexToInt
 import com.lucasginard.airelibre.utils.textAQI
 import com.lucasginard.airelibre.utils.textsAQI
 
@@ -72,11 +73,11 @@ class SensorViewHolder (view: View): RecyclerView.ViewHolder(view) {
         }
 
         binding.tvNotify.setOnClickListener {
-            programarNotificacion(fragment,local)
+            createNotification(fragment,local)
         }
     }
 
-    private fun programarNotificacion(fragment: HomeFragment,sensor:SensorResponse) {
+    private fun createNotification(fragment: HomeFragment,sensor:SensorResponse) {
         val tiempoNotificacion = System.currentTimeMillis() + 2000
 
         val intent = Intent(fragment.requireContext(), NotificationReceiver::class.java)
@@ -85,7 +86,7 @@ class SensorViewHolder (view: View): RecyclerView.ViewHolder(view) {
 
         val pendingIntent = PendingIntent.getBroadcast(
             fragment.requireContext(),
-            0,
+            sensor.source.hexToInt(),
             intent,
             PendingIntent.FLAG_MUTABLE
         )

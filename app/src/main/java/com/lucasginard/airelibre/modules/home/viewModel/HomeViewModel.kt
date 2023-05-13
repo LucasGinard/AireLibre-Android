@@ -33,7 +33,7 @@ class HomeViewModel @Inject constructor(private val repository: HomeRepository) 
             ) {
                 val listSensors = response.body()
                 listSensors?.let {list ->
-                    getListSensors.postValue(addIdsToSensorResponses(list))
+                    getListSensors.postValue(list)
                 }
             }
 
@@ -41,15 +41,6 @@ class HomeViewModel @Inject constructor(private val repository: HomeRepository) 
                 errorMessage.postValue(t.message)
             }
         })
-    }
-
-    fun addIdsToSensorResponses(sensorList: ArrayList<SensorResponse>): ArrayList<SensorResponse> {
-        var currentId = 1
-        val listWithId = sensorList
-        for (sensorResponse in listWithId) {
-            sensorResponse.id = currentId++
-        }
-        return listWithId
     }
 
     fun getStatusService(){

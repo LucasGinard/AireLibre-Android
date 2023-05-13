@@ -8,6 +8,8 @@ import com.lucasginard.airelibre.modules.home.model.SensorResponse
 import com.lucasginard.airelibre.modules.notifications.NotificationManager
 import com.lucasginard.airelibre.utils.Constants
 import com.lucasginard.airelibre.utils.Utils
+import com.lucasginard.airelibre.utils.getQualityAQI
+import com.lucasginard.airelibre.utils.hexToInt
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -17,6 +19,10 @@ class ServiceSensor : Service() {
         return null
     }
 
+    override fun onCreate() {
+        super.onCreate()
+
+    }
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val apiService = BaseCallService.serviceSensor().create(APINotification::class.java)
         val sourceSensor = intent?.getStringExtra(Constants.SOURCE_SENSOR) ?: ""
@@ -25,6 +31,8 @@ class ServiceSensor : Service() {
             val response = apiService.getSensor(Utils.getISODate(),sourceSensor)
             if (response.isSuccessful){
                 onResult(response.body()?.first(),applicationContext)
+            }else{
+                deSuscribeNotification(sourceSensor,applicationContext)
             }
         }
         stopSelf()
@@ -34,17 +42,20 @@ class ServiceSensor : Service() {
     private fun onResult(sensor: SensorResponse?, context: Context){
         val notification = sensor?.let {
             NotificationManager(context).showNotification(
-                "Sensor: ${sensor.description}",
-                "Contenido de la notificación",
+                "${getQualityAQI(sensor.quality.index,context)}",
+                "Sensor: ${sensor.description} - AQI: ${sensor.quality.index}",
                 it.source
             )
         }
 
-        sensor?.id = 1
-        sensor?.id?.let { id ->
-            val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as android.app.NotificationManager
-            notificationManager.notify(id, notification)
-            return
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as android.app.NotificationManager
+        sensor?.source?.let {
+            notificationManager.notify(it.hexToInt(), notification)
         }
+    }
+
+    private fun deSuscribeNotification(id: String?,context: Context){
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as android.app.NotificationManager
+        id?.let { notificationManager.cancel(it.hexToInt()) }
     }
 }

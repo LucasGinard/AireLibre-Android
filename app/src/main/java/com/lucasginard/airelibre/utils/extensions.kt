@@ -274,3 +274,33 @@ fun View.setAnimationSlideLeftToRight(idAnimation:Int) {
     TransitionManager.beginDelayedTransition(parent as ViewGroup?, transition)
     this.visibility = if (this.visibility == View.GONE) View.VISIBLE else View.GONE
 }
+
+fun String.hexToInt(): Int {
+    return this.toInt(16)
+}
+
+fun getQualityAQI(
+    index: Int,
+    context:Context
+):String {
+    when (index) {
+        in 0..50 -> {
+            return "${context.getString(R.string.emojiGreen)} ${context.getString(R.string.tvDescriptionGreen)}"
+        }
+        in 51..100 -> {
+            return "${context.getString(R.string.emojiYellow)} ${context.getString(R.string.tvDescriptionYellow)}"
+        }
+        in 101..150 -> {
+            return "${context.getString(R.string.emojiOrange)} ${context.getString(R.string.tvDescriptionOrange)}"
+        }
+        in 151..200 -> {
+            return "${context.getString(R.string.emojiRed)} ${context.getString(R.string.tvDescriptionRed)}"
+        }
+        in 201..300 -> {
+            return "${context.getString(R.string.emojiPurple)} ${context.getString(R.string.tvDescriptionPurple)}"
+        }
+        else -> {
+            return "${context.getString(R.string.emojiDanger)} ${context.getString(R.string.tvDescriptionDanger)}"
+        }
+    }
+}
