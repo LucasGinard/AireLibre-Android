@@ -124,5 +124,7 @@ dependencies {
     // PlayStore Review In-App
     implementation 'com.google.android.play:review:2.0.1'
     implementation 'com.google.android.play:review-ktx:2.0.1'
+    //For Notificaction Push in background and foreground
+    implementation 'androidx.work:work-runtime-ktx:2.7.1'
 
 }

@@ -21,7 +21,6 @@
             android:name=".modules.notifications.NotificationReceiver"
             android:enabled="true"
             android:exported="false" />
-        <service android:name=".modules.notifications.data.ServiceSensor"/>
         <activity
             android:name=".modules.home.view.MainActivity"
             android:exported="true"

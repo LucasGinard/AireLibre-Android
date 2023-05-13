@@ -78,7 +78,7 @@ class SensorViewHolder (view: View): RecyclerView.ViewHolder(view) {
     }
 
     private fun createNotification(fragment: HomeFragment,sensor:SensorResponse) {
-        val tiempoNotificacion = System.currentTimeMillis() + 2000
+        val tiempoNotificacion = System.currentTimeMillis() + 5000
 
         val intent = Intent(fragment.requireContext(), NotificationReceiver::class.java)
         val sensorObject = Gson().toJson(sensor)
