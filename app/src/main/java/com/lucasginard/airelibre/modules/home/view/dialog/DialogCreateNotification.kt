@@ -9,13 +9,19 @@ import android.content.Intent
 import android.widget.DatePicker
 import android.widget.TimePicker
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Card
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -24,15 +30,20 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.google.gson.Gson
+import com.lucasginard.airelibre.R
 import com.lucasginard.airelibre.modules.home.model.SensorResponse
 import com.lucasginard.airelibre.modules.home.view.HomeFragment
 import com.lucasginard.airelibre.modules.notifications.NotificationReceiver
 import com.lucasginard.airelibre.utils.Constants
+import com.lucasginard.airelibre.utils.ThemeState
 import com.lucasginard.airelibre.utils.hexToInt
 import java.time.LocalDate
 import java.time.LocalTime
@@ -66,21 +77,46 @@ fun DialogConfigureNotification(openDialog: MutableState<Boolean>, context: Cont
     )
 
     Dialog(onDismissRequest = { openDialog.value = false }) {
-        Column {
-            Button(onClick = { mTimePickerDialog.show() }, colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF34BE82))) {
-                Text(text = "Open Time Picker", color = Color.White)
-            }
-
-            Button(onClick = { datePicker.show() }, colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF34BE82))) {
-                Text(text = "Open date Picker", color = Color.White)
-            }
-
-            Button(
-                onClick = {
-                    openDialog.value = false
+        Card(
+            shape = RoundedCornerShape(8.dp),
+            backgroundColor = MaterialTheme.colors.surface,
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ){
+                IconButton(
+                    modifier = Modifier
+                        .then(Modifier.size(30.dp))
+                        .padding(bottom = 5.dp, top = 5.dp, end = 5.dp)
+                        .align(Alignment.End),
+                    onClick = {
+                        openDialog.value = false
+                    },
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_close),
+                        contentDescription = stringResource(id = R.string.contentOnBack),
+                        tint = if (!ThemeState.isDark) Color.Black else Color.White
+                    )
                 }
-            ) {
-                Text("Select")
+                Button(onClick = { mTimePickerDialog.show() }, colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF34BE82))) {
+                    Text(text = "Open Time Picker", color = Color.White)
+                }
+
+                Button(onClick = { datePicker.show() }, colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF34BE82))) {
+                    Text(text = "Open date Picker", color = Color.White)
+                }
+
+                Button(
+                    onClick = {
+                        openDialog.value = false
+                    }
+                ) {
+                    Text("Select")
+                }
             }
         }
     }

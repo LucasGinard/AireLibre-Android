@@ -21,6 +21,7 @@ import com.lucasginard.airelibre.modules.home.model.SensorResponse
 import com.lucasginard.airelibre.modules.home.view.HomeFragment
 import com.lucasginard.airelibre.modules.notifications.NotificationReceiver
 import com.lucasginard.airelibre.utils.Constants
+import com.lucasginard.airelibre.utils.SessionCache
 import com.lucasginard.airelibre.utils.hexToInt
 import com.lucasginard.airelibre.utils.textAQI
 import com.lucasginard.airelibre.utils.textsAQI
@@ -33,6 +34,7 @@ class SensorViewHolder (view: View): RecyclerView.ViewHolder(view) {
         binding.tvTitleSensor.text = local.description
         fragment.textsAQI(null, binding.stateIcon,binding.tvAQI,local.quality.index)
         configureOnClickListener(maps,local,fragment)
+        validateNotificationSensor(fragment,local)
 
         if (local.distance == 0.0F || local.distance == null){
             binding.tvDistance.visibility = View.INVISIBLE
@@ -73,24 +75,14 @@ class SensorViewHolder (view: View): RecyclerView.ViewHolder(view) {
         }
 
         binding.tvNotify.setOnClickListener {
-            createNotification(fragment,local)
+            fragment.showDialogConfigure(local)
         }
     }
 
-    private fun createNotification(fragment: HomeFragment,sensor:SensorResponse) {
-        val tiempoNotificacion = System.currentTimeMillis() + 5000
-
-        val intent = Intent(fragment.requireContext(), NotificationReceiver::class.java)
-        val sensorObject = Gson().toJson(sensor)
-        intent.putExtra(Constants.OBJECT_SENSOR,sensorObject)
-
-        val pendingIntent = PendingIntent.getBroadcast(
-            fragment.requireContext(),
-            sensor.source.hexToInt(),
-            intent,
-            PendingIntent.FLAG_MUTABLE
-        )
-        val alarmManager = fragment.activity?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        alarmManager.set(AlarmManager.RTC_WAKEUP, tiempoNotificacion, pendingIntent)
+    private fun validateNotificationSensor(fragment: HomeFragment,sensorResponse: SensorResponse){
+        val listIds = SessionCache.getAllNotificationEnable(fragment.requireContext())
+        if (sensorResponse.source.hexToInt().equals(listIds)){
+            binding.tvNotify.text = "Activo"
+        }
     }
 }
