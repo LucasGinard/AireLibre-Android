@@ -92,7 +92,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback,ContractHome {
                         showAQIDialog = remember { androidx.compose.runtime.mutableStateOf(false) }
                         showNotificationDialog = remember { androidx.compose.runtime.mutableStateOf(false) }
                         if (showAQIDialog.value) DialogCardsAQICompose(showAQIDialog,listCards)
-                        if (showNotificationDialog.value) DialogConfigureNotification(showNotificationDialog,requireContext(),viewModel.sensorNotify)
+                        if (showNotificationDialog.value) DialogConfigureNotification(showNotificationDialog,viewModel.sensorNotify)
                     }
                 }
             }
