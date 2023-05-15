@@ -29,6 +29,9 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.lucasginard.airelibre.R
 import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 
 fun View.setTint(color: Int = R.color.primaryColor) {
@@ -303,4 +306,8 @@ fun getQualityAQI(
             return "${context.getString(R.string.emojiDanger)} ${context.getString(R.string.tvDescriptionDanger)}"
         }
     }
+}
+
+fun nowDate(): String {
+    return SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
 }

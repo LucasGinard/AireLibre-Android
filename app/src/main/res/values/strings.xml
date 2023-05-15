@@ -86,6 +86,7 @@
     <string name="contentLocation">iconLocation</string>
     <string name="contentOnB">logoTheme</string>
     <string name="btnAccept">Aceptar</string>
+    <string name="btnConfirm">Confirmar</string>
     <string name="btnCancel">Cancelar</string>
     <string name="btnTwitter">twitterBot</string>
     <string name="btnWebsite">webSite</string>

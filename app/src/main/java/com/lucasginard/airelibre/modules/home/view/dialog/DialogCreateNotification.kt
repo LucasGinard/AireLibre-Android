@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -25,7 +26,9 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
+import androidx.compose.material.Switch
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -41,6 +44,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.google.gson.Gson
 import com.lucasginard.airelibre.R
@@ -53,6 +57,7 @@ import com.lucasginard.airelibre.utils.ComposablesUtils
 import com.lucasginard.airelibre.utils.Constants
 import com.lucasginard.airelibre.utils.ThemeState
 import com.lucasginard.airelibre.utils.hexToInt
+import com.lucasginard.airelibre.utils.nowDate
 import java.time.LocalDate
 import java.time.LocalTime
 import java.util.Calendar
@@ -64,18 +69,20 @@ fun DialogConfigureNotification(openDialog: MutableState<Boolean>,sensor: Sensor
     val mCalendar = Calendar.getInstance()
     val mHour = mCalendar[Calendar.HOUR_OF_DAY]
     val mMinute = mCalendar[Calendar.MINUTE]
-    val mTime = remember { mutableStateOf("") }
+    var mTime by remember { mutableStateOf("$mHour:$mMinute") }
 
     //calendar
     val year = mCalendar[Calendar.YEAR]
     val month = mCalendar[Calendar.MONTH]
     val dayOfMonth = mCalendar[Calendar.DAY_OF_MONTH]
-    var selectedDateText by remember { mutableStateOf("") }
+    var selectedDateText by remember { mutableStateOf(nowDate()) }
+
+    var switchCheck by remember { mutableStateOf(false) }
 
     val mTimePickerDialog = TimePickerDialog(
         LocalContext.current,
         {_, mHour : Int, mMinute: Int ->
-            mTime.value = "$mHour:$mMinute"
+            mTime = "$mHour:$mMinute"
         }, mHour, mMinute, false
     )
 
@@ -90,6 +97,7 @@ fun DialogConfigureNotification(openDialog: MutableState<Boolean>,sensor: Sensor
         Card(
             shape = RoundedCornerShape(8.dp),
             backgroundColor = MaterialTheme.colors.surface,
+            modifier = Modifier.padding(12.dp)
         ) {
             Column(
                 modifier = Modifier
@@ -121,20 +129,73 @@ fun DialogConfigureNotification(openDialog: MutableState<Boolean>,sensor: Sensor
                     text = "Configure su notificación"
                 )
 
-                Row {
+                Row(
+                    modifier = Modifier.padding(top= 8.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
                     Icon(painter =painterResource(id = R.drawable.ic_sensors) , contentDescription = "iconSensor")
                     Text(
                         fontFamily = font,
-                        fontWeight = FontWeight.Normal,
-                        text = "Sensor: ${sensor.description}"
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 12.sp,
+                        text = sensor.description
                     )
                 }
-                Button(onClick = { mTimePickerDialog.show() }, colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF34BE82))) {
-                    Text(text = "Open Time Picker", color = Color.White)
-                }
 
-                Button(onClick = { datePicker.show() }, colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF34BE82))) {
-                    Text(text = "Open date Picker", color = Color.White)
+                Column(
+                    horizontalAlignment = Alignment.Start
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .padding(top = 15.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            modifier = Modifier.width(80.dp),
+                            fontFamily = font,
+                            fontWeight = FontWeight.Normal,
+                            text = "Fecha:"
+                        )
+                        TextButton(onClick = { datePicker.show() }) {
+                            Text(text = selectedDateText)
+                        }
+                    }
+
+                    Row(
+                        modifier = Modifier
+                            .padding(top = 15.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            modifier = Modifier.width(80.dp),
+                            fontFamily = font,
+                            fontWeight = FontWeight.Normal,
+                            text = "Hora:"
+                        )
+                        TextButton(onClick = { mTimePickerDialog.show() }) {
+                            Text(
+                                text = mTime
+                            )
+                        }
+                    }
+
+
+                    Row(
+                        modifier = Modifier
+                            .padding(top = 15.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            modifier = Modifier.width(80.dp),
+                            fontFamily = font,
+                            fontWeight = FontWeight.Normal,
+                            text = "Repetir"
+                        )
+                        Switch(checked = switchCheck, onCheckedChange = {
+                            switchCheck = !switchCheck
+                        } )
+                    }
                 }
 
                 Row(
@@ -143,6 +204,7 @@ fun DialogConfigureNotification(openDialog: MutableState<Boolean>,sensor: Sensor
                 ){
                     OutlinedButton(
                         shape = RoundedCornerShape(8.dp),
+                        modifier = Modifier.padding(end = 4.dp),
                         onClick = {
                             openDialog.value = false
                         }) {
@@ -154,7 +216,7 @@ fun DialogConfigureNotification(openDialog: MutableState<Boolean>,sensor: Sensor
                         onClick = {
                             openDialog.value = false
                         }) {
-                        Text(text = stringResource(id = R.string.btnAccept))
+                        Text(text = stringResource(id = R.string.btnConfirm))
                     }
                 }
             }
