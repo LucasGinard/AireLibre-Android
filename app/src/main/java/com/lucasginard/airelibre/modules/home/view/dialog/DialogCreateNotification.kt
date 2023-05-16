@@ -7,20 +7,16 @@ import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.widget.DatePicker
-import android.widget.TimePicker
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -66,32 +62,82 @@ import java.util.Calendar
 fun DialogConfigureNotification(openDialog: MutableState<Boolean>,sensor: SensorResponse) {
     val font = ComposablesUtils.fonts
 
+    val context = LocalContext.current
     val mCalendar = Calendar.getInstance()
-    val mHour = mCalendar[Calendar.HOUR_OF_DAY]
-    val mMinute = mCalendar[Calendar.MINUTE]
-    var mTime by remember { mutableStateOf("$mHour:$mMinute") }
+    var selectedHour by remember { mutableStateOf(mCalendar[Calendar.HOUR_OF_DAY]) }
+    var selectedMinute by remember { mutableStateOf(mCalendar[Calendar.MINUTE]) }
+    var mTime by remember { mutableStateOf("$selectedHour:$selectedMinute") }
 
     //calendar
-    val year = mCalendar[Calendar.YEAR]
-    val month = mCalendar[Calendar.MONTH]
-    val dayOfMonth = mCalendar[Calendar.DAY_OF_MONTH]
     var selectedDateText by remember { mutableStateOf(nowDate()) }
+    var selectedDay by remember { mutableStateOf(mCalendar[Calendar.DAY_OF_MONTH]) }
+    var selectedMoth by remember { mutableStateOf(0) }
 
     var switchCheck by remember { mutableStateOf(false) }
 
     val mTimePickerDialog = TimePickerDialog(
         LocalContext.current,
         {_, mHour : Int, mMinute: Int ->
-            mTime = "$mHour:$mMinute"
-        }, mHour, mMinute, false
+            selectedHour = mHour
+            selectedMinute = mMinute
+            mTime = "$selectedHour:$selectedMinute"
+        }, mCalendar[Calendar.HOUR_OF_DAY], mCalendar[Calendar.MINUTE], false
     )
 
     val datePicker = DatePickerDialog(
         LocalContext.current,
         { _: DatePicker, selectedYear: Int, selectedMonth: Int, selectedDayOfMonth: Int ->
             selectedDateText = "$selectedDayOfMonth/${selectedMonth + 1}/$selectedYear"
-        }, year, month, dayOfMonth
+            selectedDay = selectedDayOfMonth
+            selectedMoth = selectedMonth
+        }, mCalendar[Calendar.YEAR], mCalendar[Calendar.MONTH], mCalendar[Calendar.DAY_OF_MONTH]
     )
+    datePicker.datePicker.minDate = System.currentTimeMillis()
+
+    val createNotificationDateAndTime = {
+        val intent = Intent(context, NotificationReceiver::class.java)
+        val sensorObject = Gson().toJson(sensor)
+        intent.putExtra(Constants.OBJECT_SENSOR,sensorObject)
+
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            sensor.source.hexToInt(),
+            intent,
+            PendingIntent.FLAG_MUTABLE
+        )
+
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis = System.currentTimeMillis()
+        calendar.set(Calendar.HOUR_OF_DAY, selectedHour)
+        calendar.set(Calendar.MINUTE, selectedMinute)
+        calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
+        calendar.set(Calendar.DAY_OF_MONTH, selectedDay)
+
+        val interval: Long = when (calendar.getActualMaximum(Calendar.DAY_OF_MONTH)) {
+            28 -> 1000L * 60L * 60L * 24L * 28L
+            29 -> 1000L * 60L * 60L * 24L * 29L
+            30 -> 1000L * 60L * 60L * 24L * 30L
+            31 -> 1000L * 60L * 60L * 24L * 31L
+            else -> throw IllegalArgumentException("Invalid number of days in month")
+        }
+
+        if (switchCheck){
+            alarmManager.setRepeating(
+                AlarmManager.RTC_WAKEUP,
+                calendar.timeInMillis,
+                interval,
+                pendingIntent
+            )
+        }else{
+            alarmManager.set(
+                AlarmManager.RTC_WAKEUP,
+                calendar.timeInMillis,
+                pendingIntent
+            )
+        }
+    }
 
     Dialog(onDismissRequest = { openDialog.value = false }) {
         Card(
@@ -190,7 +236,7 @@ fun DialogConfigureNotification(openDialog: MutableState<Boolean>,sensor: Sensor
                             modifier = Modifier.width(80.dp),
                             fontFamily = font,
                             fontWeight = FontWeight.Normal,
-                            text = "Repetir"
+                            text = "Repetir todos los meses"
                         )
                         Switch(checked = switchCheck, onCheckedChange = {
                             switchCheck = !switchCheck
@@ -214,6 +260,7 @@ fun DialogConfigureNotification(openDialog: MutableState<Boolean>,sensor: Sensor
                     Button(
                         shape = RoundedCornerShape(8.dp),
                         onClick = {
+                            createNotificationDateAndTime()
                             openDialog.value = false
                         }) {
                         Text(text = stringResource(id = R.string.btnConfirm))
@@ -238,21 +285,4 @@ fun previewDialogNotification(){
             sensor = ""
         ))
     }
-}
-
-private fun createNotification(fragment: HomeFragment, sensor: SensorResponse) {
-    val tiempoNotificacion = System.currentTimeMillis() + 5000
-
-    val intent = Intent(fragment.requireContext(), NotificationReceiver::class.java)
-    val sensorObject = Gson().toJson(sensor)
-    intent.putExtra(Constants.OBJECT_SENSOR,sensorObject)
-
-    val pendingIntent = PendingIntent.getBroadcast(
-        fragment.requireContext(),
-        sensor.source.hexToInt(),
-        intent,
-        PendingIntent.FLAG_MUTABLE
-    )
-    val alarmManager = fragment.activity?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-    alarmManager.set(AlarmManager.RTC_WAKEUP, tiempoNotificacion, pendingIntent)
 }
