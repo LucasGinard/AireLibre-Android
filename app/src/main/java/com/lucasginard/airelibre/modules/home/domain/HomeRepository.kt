@@ -2,10 +2,7 @@ package com.lucasginard.airelibre.modules.home.domain
 
 import com.lucasginard.airelibre.AireLibreApp
 import com.lucasginard.airelibre.modules.data.APIHome
-import com.lucasginard.airelibre.utils.SessionCache
 import com.lucasginard.airelibre.utils.Utils
-import java.text.SimpleDateFormat
-import java.util.*
 import javax.inject.Inject
 
 class HomeRepository @Inject constructor(private val retrofitService: APIHome) {

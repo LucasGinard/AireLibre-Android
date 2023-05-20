@@ -18,7 +18,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.lucasginard.airelibre.R
 import com.lucasginard.airelibre.modules.about.ui.theme.AireLibreTheme
-import com.lucasginard.airelibre.utils.ComposablesUtils.Companion.dialogCustom
 
 class ComposablesUtils {
 

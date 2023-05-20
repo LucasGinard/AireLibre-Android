@@ -1,26 +1,15 @@
 package com.lucasginard.airelibre.modules.home.view.adapter
 
-import android.app.AlarmManager
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
-import android.content.Context
+
 import android.content.Intent
-import android.os.Build
 import android.view.View
-import androidx.core.app.NotificationCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
-import com.google.gson.Gson
-import com.lucasginard.airelibre.R
 import com.lucasginard.airelibre.databinding.ItemSensorBinding
 import com.lucasginard.airelibre.modules.home.model.SensorResponse
 import com.lucasginard.airelibre.modules.home.view.HomeFragment
-import com.lucasginard.airelibre.modules.notifications.NotificationReceiver
-import com.lucasginard.airelibre.utils.Constants
 import com.lucasginard.airelibre.utils.SessionCache
 import com.lucasginard.airelibre.utils.hexToInt
 import com.lucasginard.airelibre.utils.textAQI
