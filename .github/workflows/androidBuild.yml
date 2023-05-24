@@ -42,6 +42,3 @@ jobs:
         run: chmod +x ./gradlew
       - name: Build app
         run: ./gradlew assemble
-
-      - name: Distribute app to Beta track 🚀
-        uses: ./.github/workflows/releaseBeta.yml
