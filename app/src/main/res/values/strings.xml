@@ -56,6 +56,7 @@
     <string name="tvLinkGo"><u>Ver mas</u></string>
     <string name="tvShareGo"><u>Compartir</u></string>
     <string name="tvNotify"><u>Notificarme</u></string>
+    <string name="tvNotifyEnable"><u>Activo</u></string>
     <!---LazyColumn-->
     <string name="textTitleGreen">0-50 | Libre</string>
     <string name="textTitleYellow">51-100 | Maso</string>

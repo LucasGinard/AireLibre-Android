@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.google.gson.Gson
+import com.lucasginard.airelibre.AireLibreApp
 import com.lucasginard.airelibre.R
 import com.lucasginard.airelibre.modules.about.ui.theme.AireLibreTheme
 import com.lucasginard.airelibre.modules.home.model.Quality
@@ -98,6 +99,7 @@ fun DialogConfigureNotification(openDialog: MutableState<Boolean>,sensor: Sensor
         val intent = Intent(context, NotificationReceiver::class.java)
         val sensorObject = Gson().toJson(sensor)
         intent.putExtra(Constants.OBJECT_SENSOR,sensorObject)
+        intent.putExtra(Constants.NOTIFICATION_SENSOR_IS_PERIODIC,switchCheck)
 
         val pendingIntent = PendingIntent.getBroadcast(
             context,
@@ -137,6 +139,8 @@ fun DialogConfigureNotification(openDialog: MutableState<Boolean>,sensor: Sensor
                 pendingIntent
             )
         }
+
+        AireLibreApp.prefs.scheduleNotification("${sensor.source.hexToInt()}")
     }
 
     Dialog(onDismissRequest = { openDialog.value = false }) {

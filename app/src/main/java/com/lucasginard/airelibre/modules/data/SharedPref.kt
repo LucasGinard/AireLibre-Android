@@ -4,13 +4,15 @@ import android.content.Context
 import android.content.SharedPreferences
 
 class SharedPref(context: Context) {
-    val PREFS_NAME = "airelibre.sharedpreferences"
-    val SHARED_FLAT = "theme_flat"
-    val SHARED_THEME = "custom_theme"
-    val SHARED_LOCATION_DENY = "location_deny"
-    val SHARED_LOCATION_ACCEPT = "location_accept"
-    val SHARED_MAP_CUSTOM = "map_custom"
-    val prefs: SharedPreferences = context.getSharedPreferences(PREFS_NAME, 0)
+    private val PREFS_NAME = "airelibre.sharedpreferences"
+    private val SHARED_FLAT = "theme_flat"
+    private val SHARED_THEME = "custom_theme"
+    private val SHARED_LOCATION_DENY = "location_deny"
+    private val SHARED_LOCATION_ACCEPT = "location_accept"
+    private val SHARED_MAP_CUSTOM = "map_custom"
+    private val SHARED_NOTIFICATION_IDS = "notification_ids"
+
+    private val prefs: SharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
     var flatTheme: Boolean
         get() = prefs.getBoolean(SHARED_FLAT, false)
@@ -29,7 +31,22 @@ class SharedPref(context: Context) {
         set(value) = prefs.edit().putBoolean(SHARED_LOCATION_ACCEPT, value).apply()
 
     var customMap: String
-        get() = prefs.getString(SHARED_MAP_CUSTOM, "Pred")!!
+        get() = prefs.getString(SHARED_MAP_CUSTOM, "Pred") ?: "Pred"
         set(value) = prefs.edit().putString(SHARED_MAP_CUSTOM, value).apply()
 
+    fun scheduleNotification(notificationId: String) {
+        val notificationIds = prefs.getStringSet(SHARED_NOTIFICATION_IDS, setOf())?.toMutableSet() ?: mutableSetOf()
+        notificationIds.add(notificationId)
+        prefs.edit().putStringSet(SHARED_NOTIFICATION_IDS, notificationIds).apply()
+    }
+
+    fun cancelScheduledNotification(notificationId: String) {
+        val notificationIds = prefs.getStringSet(SHARED_NOTIFICATION_IDS, setOf())?.toMutableSet() ?: mutableSetOf()
+        notificationIds.remove(notificationId)
+        prefs.edit().putStringSet(SHARED_NOTIFICATION_IDS, notificationIds).apply()
+    }
+
+    fun getAllScheduledNotifications(): Set<String> {
+        return prefs.getStringSet(SHARED_NOTIFICATION_IDS, setOf()) ?: setOf()
+    }
 }

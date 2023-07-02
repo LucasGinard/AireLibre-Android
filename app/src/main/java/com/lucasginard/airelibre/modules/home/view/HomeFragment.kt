@@ -43,6 +43,7 @@ import com.lucasginard.airelibre.modules.home.viewModel.HomeViewModel
 import com.lucasginard.airelibre.utils.*
 import com.lucasginard.airelibre.modules.home.view.adapter.AdapterSensorList
 import com.lucasginard.airelibre.modules.home.view.dialog.DialogConfigureNotification
+import com.lucasginard.airelibre.modules.notifications.NotificationReceiver
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

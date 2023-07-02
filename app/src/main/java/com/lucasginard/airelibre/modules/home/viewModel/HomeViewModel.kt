@@ -95,4 +95,9 @@ class HomeViewModel @Inject constructor(private val repository: HomeRepository) 
         }
     }
 
+    fun isActiveScheduleAlarmSensor(source:String):Boolean{
+        val listSchedule = repository.getListScheduledNotifications()
+        return listSchedule.contains(source)
+    }
+
 }

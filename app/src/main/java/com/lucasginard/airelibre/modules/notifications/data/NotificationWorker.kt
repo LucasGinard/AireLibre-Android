@@ -3,6 +3,7 @@ package com.lucasginard.airelibre.modules.notifications.data
 import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import com.lucasginard.airelibre.AireLibreApp
 import com.lucasginard.airelibre.modules.notifications.NotificationManager
 import com.lucasginard.airelibre.utils.Constants
 import com.lucasginard.airelibre.utils.Utils
@@ -40,6 +41,7 @@ class NotificationWorker(context: Context, params: WorkerParameters) : Coroutine
                     continuation.resume(Result.success())
                 }else{
                     notificationManager.cancel(sourceSensor.hexToInt())
+                    AireLibreApp.prefs.cancelScheduledNotification("${sourceSensor.hexToInt()}")
                     continuation.resume(Result.failure())
                 }
             }

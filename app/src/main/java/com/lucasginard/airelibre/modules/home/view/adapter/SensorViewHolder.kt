@@ -3,10 +3,12 @@ package com.lucasginard.airelibre.modules.home.view.adapter
 
 import android.content.Intent
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
+import com.lucasginard.airelibre.R
 import com.lucasginard.airelibre.databinding.ItemSensorBinding
 import com.lucasginard.airelibre.modules.home.model.SensorResponse
 import com.lucasginard.airelibre.modules.home.view.HomeFragment
@@ -69,9 +71,11 @@ class SensorViewHolder (view: View): RecyclerView.ViewHolder(view) {
     }
 
     private fun validateNotificationSensor(fragment: HomeFragment,sensorResponse: SensorResponse){
-        val listIds = SessionCache.getAllNotificationEnable(fragment.requireContext())
-        if (sensorResponse.source.hexToInt().equals(listIds)){
-            binding.tvNotify.text = "Activo"
+        if (fragment.viewModel.isActiveScheduleAlarmSensor(sensorResponse.source.hexToInt().toString())){
+            binding.tvNotify.text = fragment.getString(R.string.tvNotifyEnable)
+            fragment.context?.let {
+            binding.imNotify.setImageDrawable(ContextCompat.getDrawable(it,R.drawable.ic_notify_active))
+            }
         }
     }
 }

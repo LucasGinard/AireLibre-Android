@@ -22,4 +22,8 @@ class HomeRepository @Inject constructor(private val retrofitService: APIHome) {
     fun getStyleMap():String{
         return AireLibreApp.prefs.customMap
     }
+
+    fun getListScheduledNotifications():Set<String>{
+        return AireLibreApp.prefs.getAllScheduledNotifications()
+    }
 }
