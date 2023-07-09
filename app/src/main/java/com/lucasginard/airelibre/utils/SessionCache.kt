@@ -10,9 +10,5 @@ open class SessionCache {
         var listContributorsCache = ArrayList<Contributor>()
         var linksDynamicCache:LinksDynamic ?= null
         var lastUpdate:String = ""
-
-        fun getAllNotificationEnable(context: Context):ArrayList<Int>{
-            return NotificationManager(context).getAllNotificationsEnables()
-        }
     }
 }

@@ -38,13 +38,4 @@ class NotificationManager(private val context: Context) {
 
         return  builder.build()
     }
-
-    fun getAllNotificationsEnables():ArrayList<Int>{
-        val activeNotifications = notificationManager.activeNotifications
-        val idList = ArrayList<Int>()
-        activeNotifications.forEach{notification ->
-            idList.add(notification.id)
-        }
-        return idList
-    }
 }

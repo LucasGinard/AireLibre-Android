@@ -43,7 +43,6 @@ import com.lucasginard.airelibre.modules.home.viewModel.HomeViewModel
 import com.lucasginard.airelibre.utils.*
 import com.lucasginard.airelibre.modules.home.view.adapter.AdapterSensorList
 import com.lucasginard.airelibre.modules.home.view.dialog.DialogConfigureNotification
-import com.lucasginard.airelibre.modules.notifications.NotificationReceiver
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -93,7 +92,9 @@ class HomeFragment : Fragment(), OnMapReadyCallback,ContractHome {
                         showAQIDialog = remember { androidx.compose.runtime.mutableStateOf(false) }
                         showNotificationDialog = remember { androidx.compose.runtime.mutableStateOf(false) }
                         if (showAQIDialog.value) DialogCardsAQICompose(showAQIDialog,listCards)
-                        if (showNotificationDialog.value) DialogConfigureNotification(showNotificationDialog,viewModel.sensorNotify)
+                        if (showNotificationDialog.value) DialogConfigureNotification(showNotificationDialog,viewModel.sensorNotify) {
+                            updateAdapterItem()
+                        }
                     }
                 }
             }
@@ -621,6 +622,11 @@ class HomeFragment : Fragment(), OnMapReadyCallback,ContractHome {
         }else{
             _binding.linearGmt.visibility = View.GONE
         }
+    }
+
+    fun updateAdapterItem(){
+        val positionForUpdate = listSensors.indexOf(viewModel.sensorNotify)
+        adapter.notifyItemChanged(positionForUpdate)
     }
 
     override fun onResume() {

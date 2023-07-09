@@ -9,6 +9,8 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
 import android.net.Uri
+import android.text.SpannableString
+import android.text.style.UnderlineSpan
 import android.transition.Slide
 import android.transition.Transition
 import android.transition.TransitionManager
@@ -310,4 +312,11 @@ fun getQualityAQI(
 
 fun nowDate(): String {
     return SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
+}
+
+fun TextView.setUnderlineText(text:String){
+    val spannableString = SpannableString(text)
+    spannableString.setSpan(UnderlineSpan(), 0, text.length, 0)
+    this.text = text
+    this.paintFlags =this.paintFlags or Paint.UNDERLINE_TEXT_FLAG
 }

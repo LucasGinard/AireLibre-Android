@@ -48,19 +48,16 @@ import com.lucasginard.airelibre.R
 import com.lucasginard.airelibre.modules.about.ui.theme.AireLibreTheme
 import com.lucasginard.airelibre.modules.home.model.Quality
 import com.lucasginard.airelibre.modules.home.model.SensorResponse
-import com.lucasginard.airelibre.modules.home.view.HomeFragment
 import com.lucasginard.airelibre.modules.notifications.NotificationReceiver
 import com.lucasginard.airelibre.utils.ComposablesUtils
 import com.lucasginard.airelibre.utils.Constants
 import com.lucasginard.airelibre.utils.ThemeState
 import com.lucasginard.airelibre.utils.hexToInt
 import com.lucasginard.airelibre.utils.nowDate
-import java.time.LocalDate
-import java.time.LocalTime
 import java.util.Calendar
 
 @Composable
-fun DialogConfigureNotification(openDialog: MutableState<Boolean>,sensor: SensorResponse) {
+fun DialogConfigureNotification(openDialog: MutableState<Boolean>,sensor: SensorResponse,callBackUpdate:() -> Unit) {
     val font = ComposablesUtils.fonts
 
     val context = LocalContext.current
@@ -141,6 +138,7 @@ fun DialogConfigureNotification(openDialog: MutableState<Boolean>,sensor: Sensor
         }
 
         AireLibreApp.prefs.scheduleNotification("${sensor.source.hexToInt()}")
+        callBackUpdate()
     }
 
     Dialog(onDismissRequest = { openDialog.value = false }) {
@@ -287,6 +285,6 @@ fun previewDialogNotification(){
             latitude = 0.0,
             quality = Quality("",0),
             sensor = ""
-        ))
+        ),{})
     }
 }
