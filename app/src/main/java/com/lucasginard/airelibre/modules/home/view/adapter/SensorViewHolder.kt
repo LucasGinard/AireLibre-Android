@@ -18,6 +18,7 @@ import com.lucasginard.airelibre.databinding.ItemSensorBinding
 import com.lucasginard.airelibre.modules.home.model.SensorResponse
 import com.lucasginard.airelibre.modules.home.view.HomeFragment
 import com.lucasginard.airelibre.utils.SessionCache
+import com.lucasginard.airelibre.utils.Utils
 import com.lucasginard.airelibre.utils.hexToInt
 import com.lucasginard.airelibre.utils.setUnderlineText
 import com.lucasginard.airelibre.utils.textAQI
@@ -75,10 +76,14 @@ class SensorViewHolder (view: View): RecyclerView.ViewHolder(view) {
 
         binding.tvNotify.setOnClickListener {
             if (local.isEnableNotification){
-                AireLibreApp.prefs.cancelScheduledNotification(local.source.hexToInt().toString())
-                val notificationManager = fragment.requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as android.app.NotificationManager
-                notificationManager.cancel(local.source.hexToInt())
-                fragment.updateAdapterItem()
+                fragment.context?.let { context ->
+                    Utils.showDialog(context,"Quieres cancelar la notificación ?"){
+                        AireLibreApp.prefs.cancelScheduledNotification(local.source.hexToInt().toString())
+                        val notificationManager = fragment.requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as android.app.NotificationManager
+                        notificationManager.cancel(local.source.hexToInt())
+                        fragment.updateAdapterItem()
+                    }
+                }
             }else{
                 fragment.showDialogConfigure(local)
             }
