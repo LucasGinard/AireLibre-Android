@@ -82,7 +82,6 @@ fun DialogConfigureNotification(
 
     // Weekly repeat, monthly repeat, and single notification options
     var repeatWeekly by remember { mutableStateOf(false) }
-    var repeatMonthly by remember { mutableStateOf(false) }
 
     // List of switches for each day of the week
     val selectedDays =
@@ -111,7 +110,7 @@ fun DialogConfigureNotification(
         val intent = Intent(context, NotificationReceiver::class.java)
         val sensorObject = Gson().toJson(sensor)
         intent.putExtra(Constants.OBJECT_SENSOR, sensorObject)
-        intent.putExtra(Constants.NOTIFICATION_SENSOR_IS_PERIODIC, repeatWeekly || repeatMonthly)
+        intent.putExtra(Constants.NOTIFICATION_SENSOR_IS_PERIODIC, repeatWeekly)
 
         val pendingIntent = PendingIntent.getBroadcast(
             context,
@@ -154,19 +153,6 @@ fun DialogConfigureNotification(
                     )
                 }
             }
-        } else if (repeatMonthly) {
-            val nextMonthCalendar = Calendar.getInstance()
-            nextMonthCalendar.timeInMillis = calendar.timeInMillis
-            nextMonthCalendar.add(Calendar.MONTH, 1)
-            nextMonthCalendar.set(Calendar.DAY_OF_MONTH, 1)
-
-            val interval = nextMonthCalendar.timeInMillis - calendar.timeInMillis
-            alarmManager.setRepeating(
-                AlarmManager.RTC_WAKEUP,
-                calendar.timeInMillis,
-                interval,
-                pendingIntent
-            )
         } else {
             alarmManager.set(
                 AlarmManager.RTC_WAKEUP,
@@ -180,7 +166,7 @@ fun DialogConfigureNotification(
     }
 
 
-    if (repeatWeekly || repeatMonthly) {
+    if (repeatWeekly) {
         Dialog(onDismissRequest = { openDialog.value = false }) {
             Card(
                 shape = RoundedCornerShape(8.dp),
@@ -249,9 +235,9 @@ fun DialogConfigureNotification(
                         ) {
 
                             TextButton(
-                                onClick = { repeatWeekly = false; repeatMonthly = false },
+                                onClick = { repeatWeekly = false},
                                 colors = ButtonDefaults.textButtonColors(
-                                    backgroundColor = if (!repeatWeekly && !repeatMonthly) MaterialTheme.colors.primary else Color.Gray
+                                    backgroundColor = if (!repeatWeekly) MaterialTheme.colors.primary else Color.Gray
                                 ),
                                 modifier = Modifier.weight(1f)
                             ) {
@@ -265,7 +251,7 @@ fun DialogConfigureNotification(
                             Spacer(modifier = Modifier.width(3.dp))
 
                             TextButton(
-                                onClick = { repeatWeekly = true; repeatMonthly = false },
+                                onClick = { repeatWeekly = true },
                                 colors = ButtonDefaults.textButtonColors(
                                     backgroundColor = if (repeatWeekly) MaterialTheme.colors.primary else Color.Gray
                                 ),
@@ -273,22 +259,6 @@ fun DialogConfigureNotification(
                             ) {
                                 Text(
                                     text = "Cada\nSemana",
-                                    color = Color.White,
-                                    textAlign = TextAlign.Center
-                                )
-                            }
-
-                            Spacer(modifier = Modifier.width(3.dp))
-
-                            TextButton(
-                                onClick = { repeatWeekly = false; repeatMonthly = true },
-                                colors = ButtonDefaults.textButtonColors(
-                                    backgroundColor = if (repeatMonthly) MaterialTheme.colors.primary else Color.Gray
-                                ),
-                                modifier = Modifier.weight(1f)
-                            ) {
-                                Text(
-                                    text = "Cada\nMes",
                                     color = Color.White,
                                     textAlign = TextAlign.Center
                                 )
@@ -361,7 +331,9 @@ fun DialogConfigureNotification(
                         }
 
                         Row(
-                            modifier = Modifier.padding(top = 15.dp).fillMaxWidth(),
+                            modifier = Modifier
+                                .padding(top = 15.dp)
+                                .fillMaxWidth(),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.Center
                         ) {
@@ -459,9 +431,9 @@ fun DialogConfigureNotification(
                         ) {
 
                             TextButton(
-                                onClick = { repeatWeekly = false; repeatMonthly = false },
+                                onClick = { repeatWeekly = false},
                                 colors = ButtonDefaults.textButtonColors(
-                                    backgroundColor = if (!repeatWeekly && !repeatMonthly) MaterialTheme.colors.primary else Color.Gray
+                                    backgroundColor = if (!repeatWeekly) MaterialTheme.colors.primary else Color.Gray
                                 ),
                                 modifier = Modifier.weight(1f)
                             ) {
@@ -475,7 +447,7 @@ fun DialogConfigureNotification(
                             Spacer(modifier = Modifier.width(3.dp))
 
                             TextButton(
-                                onClick = { repeatWeekly = true; repeatMonthly = false },
+                                onClick = { repeatWeekly = true },
                                 colors = ButtonDefaults.textButtonColors(
                                     backgroundColor = if (repeatWeekly) MaterialTheme.colors.primary else Color.Gray
                                 ),
@@ -483,22 +455,6 @@ fun DialogConfigureNotification(
                             ) {
                                 Text(
                                     text = "Cada\nSemana",
-                                    color = Color.White,
-                                    textAlign = TextAlign.Center
-                                )
-                            }
-
-                            Spacer(modifier = Modifier.width(3.dp))
-
-                            TextButton(
-                                onClick = { repeatWeekly = false; repeatMonthly = true },
-                                colors = ButtonDefaults.textButtonColors(
-                                    backgroundColor = if (repeatMonthly) MaterialTheme.colors.primary else Color.Gray
-                                ),
-                                modifier = Modifier.weight(1f)
-                            ) {
-                                Text(
-                                    text = "Cada\nMes",
                                     color = Color.White,
                                     textAlign = TextAlign.Center
                                 )
@@ -537,7 +493,9 @@ fun DialogConfigureNotification(
                         }
 
                         Row(
-                            modifier = Modifier.padding(top = 15.dp).fillMaxWidth(),
+                            modifier = Modifier
+                                .padding(top = 15.dp)
+                                .fillMaxWidth(),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.Center
                         ) {
