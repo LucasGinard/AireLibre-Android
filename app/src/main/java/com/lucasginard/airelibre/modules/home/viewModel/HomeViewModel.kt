@@ -11,6 +11,7 @@ import com.lucasginard.airelibre.modules.home.model.CardsAQI
 import com.lucasginard.airelibre.modules.home.model.SensorResponse
 import com.lucasginard.airelibre.modules.home.model.StatusResponse
 import com.lucasginard.airelibre.utils.ToastCustom
+import com.lucasginard.airelibre.utils.hexToInt
 import dagger.hilt.android.lifecycle.HiltViewModel
 import retrofit2.Call
 import retrofit2.Callback
@@ -34,6 +35,7 @@ class HomeViewModel @Inject constructor(private val repository: HomeRepository) 
             ) {
                 val listSensors = response.body()
                 listSensors?.let {list ->
+                    val listValidateSensorNotifyList = isActiveScheduleAlarmSensor(list)
                     getListSensors.postValue(list)
                 }
             }
@@ -95,9 +97,11 @@ class HomeViewModel @Inject constructor(private val repository: HomeRepository) 
         }
     }
 
-    fun isActiveScheduleAlarmSensor(source:String):Boolean{
+    fun isActiveScheduleAlarmSensor(list:ArrayList<SensorResponse>):ArrayList<SensorResponse> {
         val listSchedule = repository.getListScheduledNotifications()
-        return listSchedule.contains(source)
+        list.forEach { filterSensor ->
+            filterSensor.isEnableNotification = listSchedule.any { it.startsWith(filterSensor.source.hexToInt().toString()) }
+        }
+        return list
     }
-
 }

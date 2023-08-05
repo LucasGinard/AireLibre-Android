@@ -34,6 +34,9 @@ class AdapterSensorList(var sensorList: ArrayList<SensorResponse>, val fragment:
             "AQI"->{
                 sensorList.sortedBy { it.quality.index }
             }
+            "NotifyFilter"->{
+                sensorList.sortedWith(compareByDescending { it.isEnableNotification })
+            }
             else -> sensorList
         }
         sensorList.clear()
@@ -48,6 +51,9 @@ class AdapterSensorList(var sensorList: ArrayList<SensorResponse>, val fragment:
             }
             "AQI"->{
                 sensorList.sortedByDescending { it.quality.index }
+            }
+            "NotifyFilter"->{
+                sensorList.sortedWith(compareBy { it.isEnableNotification })
             }
             else -> sensorList
         }

@@ -23,14 +23,13 @@ import com.lucasginard.airelibre.utils.hexToInt
 import com.lucasginard.airelibre.utils.setUnderlineText
 import com.lucasginard.airelibre.utils.textAQI
 import com.lucasginard.airelibre.utils.textsAQI
+import java.util.Calendar
 
 class SensorViewHolder (view: View): RecyclerView.ViewHolder(view) {
 
     private val binding = ItemSensorBinding.bind(view)
 
     fun bind(local: SensorResponse, fragment: HomeFragment, maps: GoogleMap?=null){
-        local.isEnableNotification = fragment.viewModel.isActiveScheduleAlarmSensor(local.source.hexToInt().toString())
-
         binding.tvTitleSensor.text = local.description
         fragment.textsAQI(null, binding.stateIcon,binding.tvAQI,local.quality.index)
         configureOnClickListener(maps,local,fragment)
@@ -80,7 +79,13 @@ class SensorViewHolder (view: View): RecyclerView.ViewHolder(view) {
                     Utils.showDialog(context,"Quieres cancelar la notificación ?"){
                         AireLibreApp.prefs.cancelScheduledNotification(local.source.hexToInt().toString())
                         val notificationManager = fragment.requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as android.app.NotificationManager
-                        notificationManager.cancel(local.source.hexToInt())
+                        listOf(
+                            Calendar.MONDAY, Calendar.TUESDAY, Calendar.WEDNESDAY,
+                            Calendar.THURSDAY, Calendar.FRIDAY, Calendar.SATURDAY, Calendar.SUNDAY
+                        ).forEachIndexed { _, dayOfWeek ->
+                            val notificationId = "${local.source.hexToInt()}_$dayOfWeek"
+                            notificationManager.cancel(notificationId.hashCode())
+                        }
                         fragment.updateAdapterItem()
                     }
                 }

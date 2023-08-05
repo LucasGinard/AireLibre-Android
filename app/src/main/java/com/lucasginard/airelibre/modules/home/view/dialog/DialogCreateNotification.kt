@@ -112,13 +112,6 @@ fun DialogConfigureNotification(
         intent.putExtra(Constants.OBJECT_SENSOR, sensorObject)
         intent.putExtra(Constants.NOTIFICATION_SENSOR_IS_PERIODIC, repeatWeekly)
 
-        val pendingIntent = PendingIntent.getBroadcast(
-            context,
-            sensor.source.hexToInt(),
-            intent,
-            PendingIntent.FLAG_MUTABLE
-        )
-
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = System.currentTimeMillis()
@@ -142,6 +135,13 @@ fun DialogConfigureNotification(
             if (daysOfWeek.isNotEmpty()) {
                 val interval = 1000L * 60L * 60L * 24L * 7L // One week interval
                 for (day in daysOfWeek) {
+                    val pendingIntent = PendingIntent.getBroadcast(
+                        context,
+                        "${sensor.source.hexToInt()}_${day}".hashCode(),
+                        intent,
+                        PendingIntent.FLAG_MUTABLE
+                    )
+
                     val dayCalendar = Calendar.getInstance()
                     dayCalendar.timeInMillis = calendar.timeInMillis
                     dayCalendar.set(Calendar.DAY_OF_WEEK, day)
@@ -154,6 +154,13 @@ fun DialogConfigureNotification(
                 }
             }
         } else {
+            val pendingIntent = PendingIntent.getBroadcast(
+                context,
+                sensor.source.hexToInt(),
+                intent,
+                PendingIntent.FLAG_MUTABLE
+            )
+
             alarmManager.set(
                 AlarmManager.RTC_WAKEUP,
                 calendar.timeInMillis,

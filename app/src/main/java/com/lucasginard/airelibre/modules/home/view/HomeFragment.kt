@@ -283,11 +283,26 @@ class HomeFragment : Fragment(), OnMapReadyCallback,ContractHome {
                     orderList()
                     true
                 }
+                getText(R.string.tvNotifyTitle) -> {
+                    filterAdapter = context?.getString(R.string.tvNotifyFilter) ?: "NotifyFilter"
+                    tvFilter.text = getText(R.string.tvNotifyTitle)
+                    orderList()
+                    true
+                }
                 else -> false
             }
         }
-        if (tvFilter.text == getText(R.string.tvDistance)) popup.menu.findItem(R.id.option_1).isVisible =
-            false else popup.menu.findItem(R.id.option_2).isVisible = false
+        when (tvFilter.text) {
+            getText(R.string.tvDistance) ->{
+                popup.menu.findItem(R.id.option_1).isVisible = false
+            }
+            getText(R.string.itemAQI) -> {
+                popup.menu.findItem(R.id.option_2).isVisible = false
+            }
+            getText(R.string.tvNotifyTitle) -> {
+                popup.menu.findItem(R.id.option_3).isVisible = false
+            }
+        }
         popup.show()
     }
 

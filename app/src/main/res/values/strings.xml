@@ -9,6 +9,8 @@
     <string name="tvEscale">Escala AQI</string>
     <string name="tvStatus">Estado</string>
     <string name="tvDistance">Distancia</string>
+    <string name="tvNotifyTitle">Notificaciones</string>
+    <string name="tvNotifyFilter">NotifyFilter</string>
     <string name="tvHelp">Es un índice utilizado por agencias ambientales para medir la calidad del aire, cuanto más alto su valor, el nivel de contaminación es mayor.</string>
     <string name="emojiGreen">🟢👍</string>
     <string name="emojiYellow">🟡😐</string>

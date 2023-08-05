@@ -4,4 +4,6 @@
         android:title="@string/tvDistance" />
     <item android:id="@+id/option_2"
         android:title="@string/itemAQI" />
+    <item android:id="@+id/option_3"
+        android:title="@string/tvNotifyTitle" />
 </menu>
