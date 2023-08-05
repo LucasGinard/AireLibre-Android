@@ -641,6 +641,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback,ContractHome {
 
     fun updateAdapterItem(){
         val positionForUpdate = listSensors.indexOf(viewModel.sensorNotify)
+        listSensors[positionForUpdate].isEnableNotification = true
         adapter.notifyItemChanged(positionForUpdate)
     }
 

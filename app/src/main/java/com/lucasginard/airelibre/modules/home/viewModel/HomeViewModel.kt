@@ -36,7 +36,7 @@ class HomeViewModel @Inject constructor(private val repository: HomeRepository) 
                 val listSensors = response.body()
                 listSensors?.let {list ->
                     val listValidateSensorNotifyList = isActiveScheduleAlarmSensor(list)
-                    getListSensors.postValue(list)
+                    getListSensors.postValue(listValidateSensorNotifyList)
                 }
             }
 
