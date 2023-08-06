@@ -159,6 +159,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback,ContractHome {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        configureAuth()
         configureUI()
         configureAdapter()
         configureServiceListSensors()
@@ -166,6 +167,10 @@ class HomeFragment : Fragment(), OnMapReadyCallback,ContractHome {
         configureMaps(savedInstanceState)
         checkUpdate()
         configureReviewPlayStore()
+    }
+
+    private fun configureAuth() {
+        viewModel.authForRealtime()
     }
 
     private fun configureUI() {

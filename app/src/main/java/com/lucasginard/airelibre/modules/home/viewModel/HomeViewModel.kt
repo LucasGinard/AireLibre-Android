@@ -5,6 +5,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.play.core.review.ReviewManagerFactory
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.lucasginard.airelibre.R
 import com.lucasginard.airelibre.modules.home.domain.HomeRepository
 import com.lucasginard.airelibre.modules.home.model.CardsAQI
@@ -103,5 +106,10 @@ class HomeViewModel @Inject constructor(private val repository: HomeRepository) 
             filterSensor.isEnableNotification = listSchedule.any { it.startsWith(filterSensor.source.hexToInt().toString()) }
         }
         return list
+    }
+
+    fun authForRealtime(){
+        val auth: FirebaseAuth = Firebase.auth
+        auth.signInAnonymously()
     }
 }
