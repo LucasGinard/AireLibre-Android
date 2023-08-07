@@ -86,6 +86,7 @@ class SensorViewHolder (view: View): RecyclerView.ViewHolder(view) {
                             val notificationId = "${local.source.hexToInt()}_$dayOfWeek"
                             notificationManager.cancel(notificationId.hashCode())
                         }
+                        fragment.viewModel.sensorNotify = local
                         fragment.updateAdapterItem()
                     }
                 }
