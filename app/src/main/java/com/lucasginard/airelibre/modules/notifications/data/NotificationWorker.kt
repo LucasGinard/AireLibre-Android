@@ -17,11 +17,11 @@ class NotificationWorker(context: Context, params: WorkerParameters) : Coroutine
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
         val apiService = BaseCallService.serviceSensor().create(APINotification::class.java)
         val sourceSensor = inputData.getString(Constants.SOURCE_SENSOR) ?: ""
+        val notificationManager =
+            applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as android.app.NotificationManager
 
         try {
             val response = apiService.getSensor(Utils.getISODate(), sourceSensor)
-            val notificationManager =
-                applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as android.app.NotificationManager
 
             if (response.isSuccessful) {
                 val sensor = response.body()?.first()
@@ -43,6 +43,8 @@ class NotificationWorker(context: Context, params: WorkerParameters) : Coroutine
                 Result.failure()
             }
         } catch (e: Exception) {
+            notificationManager.cancel(sourceSensor.hexToInt())
+            AireLibreApp.prefs.cancelScheduledNotification("${sourceSensor.hexToInt()}")
             Result.failure()
         }
     }
