@@ -72,7 +72,11 @@ fun DialogConfigureNotification(
     val context = LocalContext.current
     val mCalendar = Calendar.getInstance()
     var selectedHour by remember { mutableStateOf(mCalendar[Calendar.HOUR_OF_DAY]) }
-    var selectedMinute by remember { mutableStateOf(mCalendar[Calendar.MINUTE] + 3) }
+    var selectedMinute by remember {
+        var minutes = mCalendar[Calendar.MINUTE]
+        if (minutes >= 56) minutes += 3
+        mutableStateOf(minutes)
+    }
     var mTime by remember { mutableStateOf("$selectedHour:$selectedMinute") }
 
     // Calendar
@@ -93,7 +97,7 @@ fun DialogConfigureNotification(
             selectedHour = mHour
             selectedMinute = mMinute
             mTime = "$selectedHour:$selectedMinute"
-        }, mCalendar[Calendar.HOUR_OF_DAY], mCalendar[Calendar.MINUTE], false
+        }, mCalendar[Calendar.HOUR_OF_DAY], mCalendar[Calendar.MINUTE], true
     )
 
     val datePicker = DatePickerDialog(
@@ -133,7 +137,6 @@ fun DialogConfigureNotification(
                 }
             }
             if (daysOfWeek.isNotEmpty()) {
-                val interval = 1000L * 60L * 60L * 24L * 7L // One week interval
                 for (day in daysOfWeek) {
                     val pendingIntent = PendingIntent.getBroadcast(
                         context,
@@ -145,10 +148,14 @@ fun DialogConfigureNotification(
                     val dayCalendar = Calendar.getInstance()
                     dayCalendar.timeInMillis = calendar.timeInMillis
                     dayCalendar.set(Calendar.DAY_OF_WEEK, day)
-                    alarmManager.setRepeating(
+                    dayCalendar.set(Calendar.HOUR_OF_DAY, selectedHour)
+                    dayCalendar.set(Calendar.MINUTE, selectedMinute)
+                    dayCalendar.set(Calendar.SECOND, 0)
+                    dayCalendar.set(Calendar.MILLISECOND, 0)
+                    alarmManager.setInexactRepeating(
                         AlarmManager.RTC_WAKEUP,
                         dayCalendar.timeInMillis,
-                        interval,
+                        AlarmManager.INTERVAL_DAY * 7,
                         pendingIntent
                     )
                 }
