@@ -29,6 +29,7 @@ class HomeViewModel @Inject constructor(private val repository: HomeRepository) 
     val getStatus = MutableLiveData<StatusResponse>()
 
     lateinit var sensorNotify:SensorResponse
+
     fun getAllSensors() {
         val response = repository.getAllSensors()
         response.enqueue(object : Callback<ArrayList<SensorResponse>> {
@@ -38,7 +39,7 @@ class HomeViewModel @Inject constructor(private val repository: HomeRepository) 
             ) {
                 val listSensors = response.body()
                 listSensors?.let {list ->
-                    val listValidateSensorNotifyList = isActiveScheduleAlarmSensor(list)
+                    val listValidateSensorNotifyList = getActiveScheduleAlarmSensor(list)
                     getListSensors.postValue(listValidateSensorNotifyList)
                 }
             }
@@ -100,7 +101,7 @@ class HomeViewModel @Inject constructor(private val repository: HomeRepository) 
         }
     }
 
-    fun isActiveScheduleAlarmSensor(list:ArrayList<SensorResponse>):ArrayList<SensorResponse> {
+    private fun getActiveScheduleAlarmSensor(list:ArrayList<SensorResponse>):ArrayList<SensorResponse> {
         val listSchedule = repository.getListScheduledNotifications()
         list.forEach { filterSensor ->
             filterSensor.isEnableNotification = listSchedule.any { it.startsWith(filterSensor.source.hexToInt().toString()) }
@@ -111,5 +112,9 @@ class HomeViewModel @Inject constructor(private val repository: HomeRepository) 
     fun authForRealtime(){
         val auth: FirebaseAuth = Firebase.auth
         auth.signInAnonymously()
+    }
+
+    fun isActiveScheduleAlarmSensor():Boolean{
+        return repository.getListScheduledNotifications().isNotEmpty()
     }
 }

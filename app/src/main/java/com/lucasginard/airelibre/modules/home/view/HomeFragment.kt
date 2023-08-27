@@ -298,16 +298,17 @@ class HomeFragment : Fragment(), OnMapReadyCallback,ContractHome {
         }
         when (tvFilter.text) {
             getText(R.string.tvDistance) ->{
-                popup.menu.findItem(R.id.option_1).isVisible = false
+                popup.menu.findItem(R.id.distanceID).isVisible = false
             }
             getText(R.string.itemAQI) -> {
-                popup.menu.findItem(R.id.option_2).isVisible = false
+                popup.menu.findItem(R.id.aqiID).isVisible = false
             }
             getText(R.string.tvNotifyTitle) -> {
-                popup.menu.findItem(R.id.option_3).isVisible = false
+                popup.menu.findItem(R.id.NotiID).isVisible = false
             }
         }
-        if (!flatPermisson) popup.menu.removeItem(R.id.option_1)
+        if (!flatPermisson) popup.menu.removeItem(R.id.distanceID)
+        if (!viewModel.isActiveScheduleAlarmSensor()) popup.menu.removeItem(R.id.NotiID)
         popup.show()
     }
 
