@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/option_1"
+    <item android:id="@+id/distanceID"
         android:title="@string/tvDistance" />
-    <item android:id="@+id/option_2"
+    <item android:id="@+id/aqiID"
         android:title="@string/itemAQI" />
-    <item android:id="@+id/option_3"
+    <item android:id="@+id/NotiID"
         android:title="@string/tvNotifyTitle" />
 </menu>
