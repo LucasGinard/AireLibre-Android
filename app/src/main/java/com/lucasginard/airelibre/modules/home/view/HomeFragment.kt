@@ -200,7 +200,6 @@ class HomeFragment : Fragment(), OnMapReadyCallback,ContractHome {
             isDown = true
             orderList()
             tvFilter.text = filterAdapter
-            btnFilter.visibility = View.GONE
         }
     }
 
@@ -308,6 +307,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback,ContractHome {
                 popup.menu.findItem(R.id.option_3).isVisible = false
             }
         }
+        if (!flatPermisson) popup.menu.removeItem(R.id.option_1)
         popup.show()
     }
 
@@ -503,6 +503,8 @@ class HomeFragment : Fragment(), OnMapReadyCallback,ContractHome {
                         if (position != null) {
                             lastLocation = position
                             calculateMarkerLocation()
+                        }else{
+                            flatPermisson = false
                         }
                     }
                     GoogleMap.isMyLocationEnabled = true
