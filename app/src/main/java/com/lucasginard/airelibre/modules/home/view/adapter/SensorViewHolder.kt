@@ -76,9 +76,10 @@ class SensorViewHolder (view: View): RecyclerView.ViewHolder(view) {
         binding.tvNotify.setOnClickListener {
             if (local.isEnableNotification){
                 fragment.context?.let { context ->
-                    Utils.showDialog(context,"Quieres cancelar la notificación ?"){
+                    Utils.showDialog(context,fragment.getString(R.string.titleDisableNotification)){
                         AireLibreApp.prefs.cancelScheduledNotification(local.source.hexToInt().toString())
                         val notificationManager = fragment.requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as android.app.NotificationManager
+                        notificationManager.cancel(local.source.hexToInt())
                         listOf(
                             Calendar.MONDAY, Calendar.TUESDAY, Calendar.WEDNESDAY,
                             Calendar.THURSDAY, Calendar.FRIDAY, Calendar.SATURDAY, Calendar.SUNDAY

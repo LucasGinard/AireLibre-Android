@@ -92,7 +92,7 @@ fun DialogConfigureNotification(
         remember { mutableStateListOf(false, false, false, false, false, false, false) }
 
     val mTimePickerDialog = TimePickerDialog(
-        LocalContext.current,
+        context,
         { _, mHour: Int, mMinute: Int ->
             selectedHour = mHour
             selectedMinute = mMinute
@@ -101,7 +101,7 @@ fun DialogConfigureNotification(
     )
 
     val datePicker = DatePickerDialog(
-        LocalContext.current,
+        context,
         { _: DatePicker, selectedYear: Int, selectedMonths: Int, selectedDayOfMonth: Int ->
             selectedDateText = "$selectedDayOfMonth/${selectedMonth + 1}/$selectedYear"
             selectedDay = selectedDayOfMonth
@@ -142,7 +142,7 @@ fun DialogConfigureNotification(
                         context,
                         "${sensor.source.hexToInt()}_${day}".hashCode(),
                         intent,
-                        PendingIntent.FLAG_MUTABLE
+                        PendingIntent.FLAG_UPDATE_CURRENT
                     )
 
                     val dayCalendar = Calendar.getInstance()
@@ -152,7 +152,7 @@ fun DialogConfigureNotification(
                     dayCalendar.set(Calendar.MINUTE, selectedMinute)
                     dayCalendar.set(Calendar.SECOND, 0)
                     dayCalendar.set(Calendar.MILLISECOND, 0)
-                    alarmManager.setInexactRepeating(
+                    alarmManager.setRepeating (
                         AlarmManager.RTC_WAKEUP,
                         dayCalendar.timeInMillis,
                         AlarmManager.INTERVAL_DAY * 7,
@@ -213,7 +213,7 @@ fun DialogConfigureNotification(
                     Text(
                         fontFamily = font,
                         fontWeight = FontWeight.Bold,
-                        text = "Configure su notificación"
+                        text = context.getString(R.string.tvTitleConfigure)
                     )
 
                     Row(
@@ -284,7 +284,7 @@ fun DialogConfigureNotification(
                             modifier = Modifier.padding(top = 15.dp),
                             fontFamily = font,
                             fontWeight = FontWeight.Normal,
-                            text = "Seleccioné los días de la semana:"
+                            text = context.getString(R.string.tvSelectDays)
                         )
 
                         Column(
@@ -409,7 +409,7 @@ fun DialogConfigureNotification(
                     Text(
                         fontFamily = font,
                         fontWeight = FontWeight.Bold,
-                        text = "Configure su notificación"
+                        text = context.getString(R.string.tvTitleConfigure)
                     )
 
                     Row(

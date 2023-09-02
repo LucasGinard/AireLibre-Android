@@ -107,4 +107,12 @@
     <string name="mapCyber">Futurista</string>
     <string name="mapFallout">Fallout</string>
     <string name="mapGTA">GTA</string>
+
+    <!---Dialog Cancel Notification-->
+    <string name="titleDisableNotification">Quieres cancelar la notificación ?</string>
+
+    <!---Dialog Configure Notification-->
+    <string name="tvTitleConfigure">Configure su notificación</string>
+    <string name="tvSelectDays">Seleccioné los días de la semana:</string>
+
 </resources>
