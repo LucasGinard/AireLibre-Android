@@ -1,11 +1,7 @@
 package com.lucasginard.airelibre.modules.home.view.adapter
 
 
-import android.content.Context
 import android.content.Intent
-import android.graphics.Paint
-import android.text.SpannableString
-import android.text.style.UnderlineSpan
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -17,13 +13,11 @@ import com.lucasginard.airelibre.R
 import com.lucasginard.airelibre.databinding.ItemSensorBinding
 import com.lucasginard.airelibre.modules.home.model.SensorResponse
 import com.lucasginard.airelibre.modules.home.view.HomeFragment
-import com.lucasginard.airelibre.utils.SessionCache
+import com.lucasginard.airelibre.modules.notifications.NotificationWorkManager
 import com.lucasginard.airelibre.utils.Utils
-import com.lucasginard.airelibre.utils.hexToInt
 import com.lucasginard.airelibre.utils.setUnderlineText
 import com.lucasginard.airelibre.utils.textAQI
 import com.lucasginard.airelibre.utils.textsAQI
-import java.util.Calendar
 
 class SensorViewHolder (view: View): RecyclerView.ViewHolder(view) {
 
@@ -77,16 +71,11 @@ class SensorViewHolder (view: View): RecyclerView.ViewHolder(view) {
             if (local.isEnableNotification){
                 fragment.context?.let { context ->
                     Utils.showDialog(context,fragment.getString(R.string.titleDisableNotification)){
-                        AireLibreApp.prefs.cancelScheduledNotification(local.source.hexToInt().toString())
-                        val notificationManager = fragment.requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as android.app.NotificationManager
-                        notificationManager.cancel(local.source.hexToInt())
-                        listOf(
-                            Calendar.MONDAY, Calendar.TUESDAY, Calendar.WEDNESDAY,
-                            Calendar.THURSDAY, Calendar.FRIDAY, Calendar.SATURDAY, Calendar.SUNDAY
-                        ).forEachIndexed { _, dayOfWeek ->
-                            val notificationId = "${local.source.hexToInt()}_$dayOfWeek"
-                            notificationManager.cancel(notificationId.hashCode())
-                        }
+                        AireLibreApp.prefs.cancelScheduledNotification(local.description)
+                        val notification = NotificationWorkManager(context)
+                        notification.cancelPeriodicWork(local.description)
+                        notification.cancelOneTimeNotification(local.description)
+
                         fragment.viewModel.sensorNotify = local
                         fragment.updateAdapterItem()
                     }

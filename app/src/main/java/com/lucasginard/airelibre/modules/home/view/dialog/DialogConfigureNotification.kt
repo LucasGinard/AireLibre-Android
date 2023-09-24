@@ -1,11 +1,7 @@
 package com.lucasginard.airelibre.modules.home.view.dialog
 
-import android.app.AlarmManager
 import android.app.DatePickerDialog
-import android.app.PendingIntent
 import android.app.TimePickerDialog
-import android.content.Context
-import android.content.Intent
 import android.widget.DatePicker
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -48,17 +44,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import com.google.gson.Gson
 import com.lucasginard.airelibre.AireLibreApp
 import com.lucasginard.airelibre.R
 import com.lucasginard.airelibre.modules.about.ui.theme.AireLibreTheme
 import com.lucasginard.airelibre.modules.home.model.Quality
 import com.lucasginard.airelibre.modules.home.model.SensorResponse
-import com.lucasginard.airelibre.modules.notifications.NotificationReceiver
+import com.lucasginard.airelibre.modules.notifications.NotificationWorkManager
+import com.lucasginard.airelibre.modules.notifications.model.NotificationSchedulePeriodicModel
 import com.lucasginard.airelibre.utils.ComposablesUtils
-import com.lucasginard.airelibre.utils.Constants
 import com.lucasginard.airelibre.utils.ThemeState
-import com.lucasginard.airelibre.utils.hexToInt
 import com.lucasginard.airelibre.utils.nowDate
 import java.util.Calendar
 
@@ -70,6 +64,7 @@ fun DialogConfigureNotification(
 ) {
     val font = ComposablesUtils.fonts
     val context = LocalContext.current
+    val notificationWorkerManager = NotificationWorkManager(context)
     val mCalendar = Calendar.getInstance()
     var selectedHour by remember { mutableStateOf(mCalendar[Calendar.HOUR_OF_DAY]) }
     var selectedMinute by remember {
@@ -111,21 +106,6 @@ fun DialogConfigureNotification(
     datePicker.datePicker.minDate = System.currentTimeMillis()
 
     val createNotificationDateAndTime = {
-        val intent = Intent(context, NotificationReceiver::class.java)
-        val sensorObject = Gson().toJson(sensor)
-        intent.putExtra(Constants.OBJECT_SENSOR, sensorObject)
-        intent.putExtra(Constants.NOTIFICATION_SENSOR_IS_PERIODIC, repeatWeekly)
-
-        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val calendar = Calendar.getInstance()
-        calendar.timeInMillis = System.currentTimeMillis()
-        calendar.set(Calendar.HOUR_OF_DAY, selectedHour)
-        calendar.set(Calendar.MINUTE, selectedMinute)
-        calendar.set(Calendar.SECOND, 0)
-        calendar.set(Calendar.MILLISECOND, 0)
-        calendar.set(Calendar.DAY_OF_MONTH, selectedDay)
-        calendar.set(Calendar.MONTH, selectedMonth)
-
         if (repeatWeekly) {
             val daysOfWeek = mutableListOf<Int>()
             listOf(
@@ -137,45 +117,34 @@ fun DialogConfigureNotification(
                 }
             }
             if (daysOfWeek.isNotEmpty()) {
-                for (day in daysOfWeek) {
-                    val pendingIntent = PendingIntent.getBroadcast(
-                        context,
-                        "${sensor.source.hexToInt()}_${day}".hashCode(),
-                        intent,
-                        PendingIntent.FLAG_UPDATE_CURRENT
-                    )
+                val scheduleModel = NotificationSchedulePeriodicModel(
+                    daysSelected = daysOfWeek,
+                    hour = selectedHour,
+                    minute = selectedMinute,
+                    sensor = sensor,
+                    isPeriodic = repeatWeekly
+                )
 
-                    val dayCalendar = Calendar.getInstance()
-                    dayCalendar.timeInMillis = calendar.timeInMillis
-                    dayCalendar.set(Calendar.DAY_OF_WEEK, day)
-                    dayCalendar.set(Calendar.HOUR_OF_DAY, selectedHour)
-                    dayCalendar.set(Calendar.MINUTE, selectedMinute)
-                    dayCalendar.set(Calendar.SECOND, 0)
-                    dayCalendar.set(Calendar.MILLISECOND, 0)
-                    alarmManager.setRepeating (
-                        AlarmManager.RTC_WAKEUP,
-                        dayCalendar.timeInMillis,
-                        AlarmManager.INTERVAL_DAY * 7,
-                        pendingIntent
-                    )
-                }
+                notificationWorkerManager.schedulePeriodicWork(scheduleModel)
             }
         } else {
-            val pendingIntent = PendingIntent.getBroadcast(
-                context,
-                sensor.source.hexToInt(),
-                intent,
-                PendingIntent.FLAG_MUTABLE
-            )
+            val calendar = Calendar.getInstance()
+            calendar.timeInMillis = System.currentTimeMillis()
+            calendar.set(Calendar.HOUR_OF_DAY, selectedHour)
+            calendar.set(Calendar.MINUTE, selectedMinute)
+            calendar.set(Calendar.SECOND, 0)
+            calendar.set(Calendar.MILLISECOND, 0)
+            calendar.set(Calendar.DAY_OF_MONTH, selectedDay)
+            calendar.set(Calendar.MONTH, selectedMonth)
 
-            alarmManager.set(
-                AlarmManager.RTC_WAKEUP,
-                calendar.timeInMillis,
-                pendingIntent
-            )
+            val currentTime = System.currentTimeMillis()
+            val scheduledTime = calendar.timeInMillis
+            val delayMinutes = scheduledTime - currentTime
+
+            notificationWorkerManager.scheduleOneTimeNotification(sensor,delayMinutes)
         }
 
-        AireLibreApp.prefs.scheduleNotification("${sensor.source.hexToInt()}")
+        AireLibreApp.prefs.scheduleNotification(sensor.description)
         callBackUpdate()
     }
 

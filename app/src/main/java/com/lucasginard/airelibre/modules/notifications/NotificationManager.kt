@@ -17,7 +17,6 @@ class NotificationManager(private val context: Context) {
         context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
     fun showNotification(title: String, description: String,idSensorNotifiy:String):Notification {
-        // Crear un canal de notificación (solo necesario en Android 8 y versiones posteriores)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channelName = Constants.CHANNEL_NAME
             val importance = NotificationManager.IMPORTANCE_DEFAULT
@@ -28,7 +27,6 @@ class NotificationManager(private val context: Context) {
         mainIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         val pendingIntent = PendingIntent.getActivity(context, 0, mainIntent, PendingIntent.FLAG_MUTABLE)
 
-        // Crea la notificación
         val builder = NotificationCompat.Builder(context, idSensorNotifiy)
             .setSmallIcon(R.mipmap.ic_launcher_round)
             .setContentTitle(title)
