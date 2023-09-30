@@ -13,7 +13,6 @@ import com.lucasginard.airelibre.modules.notifications.data.NotificationWorkServ
 import com.lucasginard.airelibre.modules.notifications.model.NotificationSchedulePeriodicModel
 import com.lucasginard.airelibre.utils.Constants
 import java.util.Calendar
-import java.util.UUID
 import java.util.concurrent.TimeUnit
 
 class NotificationWorkManager(private val context: Context) {
@@ -75,21 +74,26 @@ class NotificationWorkManager(private val context: Context) {
         val currentHour = calendar.get(Calendar.HOUR_OF_DAY)
         val currentMinute = calendar.get(Calendar.MINUTE)
 
-        val daysUntilNextExecution = selectedDays.minOfOrNull { selectedDay ->
-            val daysUntil = (selectedDay + 7 - currentDay) % 7
-            if (daysUntil == 0 && (hour < currentHour || (hour == currentHour && minute <= currentMinute))) {
-                7
-            } else {
-                daysUntil
+        val nextExecutionTime = Calendar.getInstance()
+        nextExecutionTime.set(Calendar.HOUR_OF_DAY, hour)
+        nextExecutionTime.set(Calendar.MINUTE, minute)
+        nextExecutionTime.set(Calendar.SECOND, 0)
+        nextExecutionTime.set(Calendar.MILLISECOND, 0)
+
+        for (selectedDay in selectedDays) {
+            if (selectedDay == currentDay && nextExecutionTime.timeInMillis <= calendar.timeInMillis) {
+                nextExecutionTime.add(Calendar.DAY_OF_MONTH, 7)
+            } else if (selectedDay > currentDay || (selectedDay == currentDay && nextExecutionTime.timeInMillis > calendar.timeInMillis)) {
+                nextExecutionTime.set(Calendar.DAY_OF_WEEK, selectedDay)
+                break
             }
-        } ?: 0
+        }
 
-        val timeUntilNextExecution = (hour - currentHour) * 60 + (minute - currentMinute)
-        val minutesUntilNextExecution = maxOf(0, daysUntilNextExecution * 24 * 60 + timeUntilNextExecution)
+        val currentTime = System.currentTimeMillis()
+        val scheduledTime = nextExecutionTime.timeInMillis
 
-        return minutesUntilNextExecution.toLong()
+        return scheduledTime - currentTime
     }
-
     fun cancelPeriodicWork(nameWork: String) {
         WorkManager.getInstance(context).cancelUniqueWork(nameWork)
     }
