@@ -3,7 +3,6 @@ package com.lucasginard.airelibre.modules.home.view.adapter
 
 import android.content.Intent
 import android.view.View
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -15,7 +14,6 @@ import com.lucasginard.airelibre.modules.home.model.SensorResponse
 import com.lucasginard.airelibre.modules.home.view.HomeFragment
 import com.lucasginard.airelibre.modules.notifications.NotificationWorkManager
 import com.lucasginard.airelibre.utils.Utils
-import com.lucasginard.airelibre.utils.setUnderlineText
 import com.lucasginard.airelibre.utils.textAQI
 import com.lucasginard.airelibre.utils.textsAQI
 
@@ -53,12 +51,12 @@ class SensorViewHolder (view: View): RecyclerView.ViewHolder(view) {
             fragment.infoAQI()
         }
 
-        binding.tvLink.setOnClickListener {
+        binding.btnGo.setOnClickListener {
             maps?.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(local.latitude,local.longitude), 13f))
             fragment.showInfoMarker(local.description)
         }
 
-        binding.tvShare.setOnClickListener {
+        binding.btnShare.setOnClickListener {
             val shareText = Intent(Intent.ACTION_SEND)
             shareText.type = "text/plain"
             val description: String = "".textAQI(local.quality.index, fragment.requireContext())
@@ -67,7 +65,7 @@ class SensorViewHolder (view: View): RecyclerView.ViewHolder(view) {
             fragment.activity?.startActivity(Intent.createChooser(shareText, null))
         }
 
-        binding.tvNotify.setOnClickListener {
+        binding.btnNotify.setOnClickListener {
             if (local.isEnableNotification){
                 fragment.context?.let { context ->
                     Utils.showDialog(context,fragment.getString(R.string.titleDisableNotification)){
@@ -88,19 +86,11 @@ class SensorViewHolder (view: View): RecyclerView.ViewHolder(view) {
 
     private fun validateNotificationSensor(fragment: HomeFragment,sensorResponse: SensorResponse){
         if (sensorResponse.isEnableNotification){
-            val textNotifyEnable = fragment.getString(R.string.tvNotifyEnable)
-            binding.tvNotify.setUnderlineText(textNotifyEnable)
-
-            fragment.context?.let {
-                binding.imNotify.setImageDrawable(ContextCompat.getDrawable(it,R.drawable.ic_notify_active))
-            }
+            binding.btnNotify.text = fragment.getString(R.string.tvNotifyEnable)
+            binding.btnNotify.setIconResource(R.drawable.ic_notify_active)
         }else{
-            val textNotifyDisable = fragment.getString(R.string.tvNotify)
-            binding.tvNotify.setUnderlineText(textNotifyDisable)
-
-            fragment.context?.let {
-                binding.imNotify.setImageDrawable(ContextCompat.getDrawable(it,R.drawable.ic_notify_add))
-            }
+            binding.btnNotify.text = fragment.getString(R.string.tvNotify)
+            binding.btnNotify.setIconResource(R.drawable.ic_notify_add)
         }
     }
 }

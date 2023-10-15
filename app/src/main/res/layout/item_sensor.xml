@@ -12,19 +12,41 @@
     android:paddingTop="8dp"
     android:paddingBottom="12dp">
 
-    <TextView
-        android:id="@+id/tv_title_sensor"
+    <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="2dp"
-        android:fontFamily="@font/rubik_bold"
-        android:gravity="center"
-        android:text="Surubi-i, Mariano"
-        android:textColor="@color/black"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView3"
-        app:layout_constraintStart_toEndOf="@+id/imageView3"
-        app:layout_constraintTop_toTopOf="@+id/imageView3" />
+        android:layout_marginTop="3dp"
+        android:background="@drawable/background_banner"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingEnd="4dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            app:srcCompat="@drawable/ic_sensors"
+            app:tint="@color/white" />
+
+        <TextView
+            android:id="@+id/tv_title_sensor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:fontFamily="@font/rubik_bold"
+            android:gravity="center"
+            android:text="Surubi-i, Mariano"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView3"
+            app:layout_constraintStart_toEndOf="@+id/imageView3"
+            app:layout_constraintTop_toTopOf="@+id/imageView3" />
+    </LinearLayout>
+
 
     <TextView
         android:id="@+id/tvState"
@@ -34,7 +56,8 @@
         android:text="@string/tvStatus"
         android:textColor="@color/black"
         android:textSize="12sp"
-        app:layout_constraintStart_toEndOf="@+id/imageView2"
+        app:layout_constraintEnd_toEndOf="@+id/btnGo"
+        app:layout_constraintStart_toStartOf="@+id/btnGo"
         app:layout_constraintTop_toTopOf="@+id/tvTitleAQI" />
 
     <TextView
@@ -53,13 +76,14 @@
         android:id="@+id/tvTitleAQI"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_marginStart="40dp"
         android:layout_marginTop="16dp"
         android:fontFamily="@font/rubik_bold"
         android:gravity="center"
         android:text="@string/tvEscale"
         android:textColor="@color/black"
         android:textSize="12sp"
+        app:layout_constraintEnd_toStartOf="@+id/tvState"
+        app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvDistance" />
 
@@ -80,48 +104,67 @@
         android:id="@+id/tvDistance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="8dp"
         android:gravity="center"
         android:text="10km"
         android:textColor="@color/black"
         android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_title_sensor" />
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
+        app:layout_constraintEnd_toStartOf="@+id/btnShare"
+        app:layout_constraintTop_toTopOf="@+id/btnShare" />
 
-    <ImageView
-        android:id="@+id/imNotify"
-        android:layout_width="20dp"
-        android:layout_height="0dp"
-        android:src="@drawable/ic_notify_add"
-        app:layout_constraintBottom_toBottomOf="@+id/tvNotify"
-        app:layout_constraintEnd_toStartOf="@+id/tvNotify"
-        app:layout_constraintTop_toTopOf="@+id/tvNotify"
-        app:tint="@color/link" />
 
-    <TextView
-        android:id="@+id/tvNotify"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnNotify"
+        style="@style/Widget.Material3.Button.OutlinedButton.Icon"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:autoLink="phone"
-        android:fontFamily="@font/rubik_bold"
+        android:layout_height="35dp"
+        android:fontFamily="@font/rubik_regular"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:text="@string/tvNotify"
-        android:textColor="@color/link"
-        android:textSize="12sp"
+        android:textColor="@color/secondColor"
+        android:textSize="11sp"
+        app:icon="@drawable/ic_notify_add"
+        app:iconSize="14dp"
+        app:iconTint="@color/secondColor"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/tvState"
-        app:layout_constraintTop_toTopOf="@+id/tvState" />
+        app:layout_constraintStart_toEndOf="@+id/stateIcon"
+        app:layout_constraintTop_toTopOf="@+id/tvState"
+        app:strokeColor="@color/secondColor" />
+
+    <Button
+        android:id="@+id/btnGo"
+        style="@style/Widget.Material3.Button.Icon"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/secondColor"
+        android:fontFamily="@font/rubik_regular"
+        android:text="@string/tvLinkGo"
+        android:textColor="@color/white"
+        android:textSize="11sp"
+        app:icon="@drawable/ic_location_link"
+        app:iconSize="14dp"
+        app:iconTint="@color/white"
+        app:strokeColor="@color/secondColor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.52"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvAQI"/>
+
 
     <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="3dp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:id="@+id/btnShare"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/background_circle_green"
+        android:scaleType="centerInside"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_sensors"
-        app:tint="@color/black" />
+        app:srcCompat="@drawable/ic_share"
+        app:tint="@color/white" />
 
     <ImageView
         android:id="@+id/tvSensorTitle"
@@ -131,30 +174,6 @@
         app:layout_constraintEnd_toStartOf="@+id/tvDistance"
         app:layout_constraintTop_toTopOf="@+id/tvDistance"
         app:srcCompat="@drawable/icon_distance_sensor" />
-
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="20dp"
-        android:layout_height="0dp"
-        android:src="@drawable/ic_location_link"
-        app:layout_constraintBottom_toBottomOf="@+id/tvLink"
-        app:layout_constraintEnd_toStartOf="@+id/tvLink"
-        app:layout_constraintTop_toTopOf="@+id/tvLink" />
-
-    <TextView
-        android:id="@+id/tvLink"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:autoLink="phone"
-        android:fontFamily="@font/rubik_bold"
-        android:text="@string/tvLinkGo"
-        android:textColor="@color/link"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.52"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvAQI" />
 
     <ImageButton
         android:id="@+id/btnInfoAQI"
@@ -171,26 +190,4 @@
         app:tint="@color/black"
         tools:ignore="TouchTargetSizeCheck" />
 
-    <ImageView
-        android:id="@+id/imShare"
-        android:layout_width="20dp"
-        android:layout_height="0dp"
-        android:src="@drawable/ic_share"
-        app:layout_constraintBottom_toBottomOf="@+id/tvShare"
-        app:layout_constraintStart_toStartOf="@+id/imNotify"
-        app:layout_constraintTop_toTopOf="@+id/tvShare"
-        app:tint="@color/link" />
-
-    <TextView
-        android:id="@+id/tvShare"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:autoLink="phone"
-        android:fontFamily="@font/rubik_bold"
-        android:text="@string/tvShareGo"
-        android:textColor="@color/link"
-        android:textSize="12sp"
-        app:layout_constraintStart_toEndOf="@+id/imShare"
-        app:layout_constraintTop_toBottomOf="@+id/tvNotify" />
 </androidx.constraintlayout.widget.ConstraintLayout>
