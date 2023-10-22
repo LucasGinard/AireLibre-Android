@@ -71,8 +71,6 @@ class NotificationWorkManager(private val context: Context) {
     private fun calculateInitialDelay(selectedDays: List<Int>, hour: Int, minute: Int): Long {
         val calendar = Calendar.getInstance()
         val currentDay = calendar.get(Calendar.DAY_OF_WEEK)
-        val currentHour = calendar.get(Calendar.HOUR_OF_DAY)
-        val currentMinute = calendar.get(Calendar.MINUTE)
 
         val nextExecutionTime = Calendar.getInstance()
         nextExecutionTime.set(Calendar.HOUR_OF_DAY, hour)

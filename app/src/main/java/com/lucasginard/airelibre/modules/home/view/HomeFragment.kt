@@ -2,10 +2,12 @@ package com.lucasginard.airelibre.modules.home.view
 
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Typeface
 import android.location.Location
 import android.os.Bundle
+import android.provider.Settings
 import android.view.*
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
@@ -101,6 +103,17 @@ class HomeFragment : Fragment(), OnMapReadyCallback,ContractHome {
         }
         requestLocation()
         return _binding.root
+    }
+
+    fun requestBatteryOptimizationAdjustment() {
+        context?.let { context ->
+            if (!viewModel.isBatteryOptimizationEnabled(context)) {
+                //Todo: Implement dialgo for request disable BatteryOptimization
+                val intent = Intent()
+                intent.action = Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS
+                context.startActivity(intent)
+            }
+        }
     }
 
     override fun showInfoMarker(marker: String) {
