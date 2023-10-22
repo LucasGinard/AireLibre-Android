@@ -368,7 +368,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback,ContractHome {
         viewModel.getStatusService()
         viewModel.getStatus.observe(requireActivity()) {
             if (!it.getDataBaseIsUp() || !it.getServiceIsUp()){
-
+                //TODO: implement toast error from service o database
             }
         }
     }
