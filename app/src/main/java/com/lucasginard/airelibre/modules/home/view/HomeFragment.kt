@@ -105,17 +105,6 @@ class HomeFragment : Fragment(), OnMapReadyCallback,ContractHome {
         return _binding.root
     }
 
-    fun requestBatteryOptimizationAdjustment() {
-        context?.let { context ->
-            if (!viewModel.isBatteryOptimizationEnabled(context)) {
-                //Todo: Implement dialgo for request disable BatteryOptimization
-                val intent = Intent()
-                intent.action = Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS
-                context.startActivity(intent)
-            }
-        }
-    }
-
     override fun showInfoMarker(marker: String) {
         _binding.linearInfoMarker.visibility = View.VISIBLE
         _binding.linearInfoMarker.startAnimation(

@@ -10,6 +10,7 @@ import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
 class AireLibreApp: Application() {
+
     companion object {
         lateinit var prefs: SharedPref
     }

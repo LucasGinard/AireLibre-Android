@@ -2,6 +2,10 @@ package com.lucasginard.airelibre.modules.home.view.dialog
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Context
+import android.content.Intent
+import android.os.PowerManager
+import android.provider.Settings
 import android.widget.DatePicker
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -66,6 +70,18 @@ fun DialogConfigureNotification(
     val context = LocalContext.current
     val notificationWorkerManager = NotificationWorkManager(context)
     val mCalendar = Calendar.getInstance()
+
+    var isBatteryOptimizationEnabled: () -> Boolean = {
+        val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
+        powerManager.isIgnoringBatteryOptimizations(context.packageName)
+    }
+
+    var goToSettingBattery: () -> Unit? = {
+        val intent = Intent()
+        intent.action = Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS
+        context.startActivity(intent)
+    }
+
     var selectedHour by remember { mutableStateOf(mCalendar[Calendar.HOUR_OF_DAY]) }
     var selectedMinute by remember {
         var minutes = mCalendar[Calendar.MINUTE]
@@ -80,7 +96,7 @@ fun DialogConfigureNotification(
     var selectedMonth by remember { mutableStateOf(0) }
 
     // Weekly repeat, monthly repeat, and single notification options
-    var repeatWeekly by remember { mutableStateOf(false) }
+    var repeatWeekly by remember { mutableStateOf(true) }
 
     // List of switches for each day of the week
     val selectedDays =
@@ -148,107 +164,105 @@ fun DialogConfigureNotification(
         callBackUpdate()
     }
 
-
-    if (repeatWeekly) {
-        Dialog(onDismissRequest = { openDialog.value = false }) {
-            Card(
-                shape = RoundedCornerShape(8.dp),
-                backgroundColor = MaterialTheme.colors.surface,
-                modifier = Modifier.padding(12.dp),
+    Dialog(onDismissRequest = { openDialog.value = false }) {
+        Card(
+            shape = RoundedCornerShape(8.dp),
+            backgroundColor = MaterialTheme.colors.surface,
+            modifier = Modifier.padding(12.dp),
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Column(
-                    modifier = Modifier.padding(16.dp),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
+                IconButton(
+                    modifier = Modifier
+                        .then(Modifier.size(30.dp))
+                        .padding(bottom = 5.dp, top = 5.dp, end = 5.dp)
+                        .align(Alignment.End),
+                    onClick = {
+                        openDialog.value = false
+                    },
                 ) {
-                    IconButton(
-                        modifier = Modifier
-                            .then(Modifier.size(30.dp))
-                            .padding(bottom = 5.dp, top = 5.dp, end = 5.dp)
-                            .align(Alignment.End),
-                        onClick = {
-                            openDialog.value = false
-                        },
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_close),
-                            contentDescription = stringResource(id = R.string.contentOnBack),
-                            tint = if (!ThemeState.isDark) Color.Black else Color.White
-                        )
-                    }
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_close),
+                        contentDescription = stringResource(id = R.string.contentOnBack),
+                        tint = if (!ThemeState.isDark) Color.Black else Color.White
+                    )
+                }
 
-                    Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
+                Text(
+                    fontFamily = font,
+                    fontWeight = FontWeight.Bold,
+                    text = context.getString(R.string.tvTitleConfigure)
+                )
+
+                Row(
+                    modifier = Modifier.padding(top = 8.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_sensors),
+                        contentDescription = "iconSensor"
+                    )
                     Text(
                         fontFamily = font,
                         fontWeight = FontWeight.Bold,
-                        text = context.getString(R.string.tvTitleConfigure)
+                        fontSize = 12.sp,
+                        text = sensor.description
+                    )
+                }
+
+                Column(
+                    horizontalAlignment = Alignment.Start
+                ) {
+
+                    Text(
+                        fontFamily = font,
+                        fontWeight = FontWeight.Normal,
+                        text = "Repetir:"
                     )
 
                     Row(
-                        modifier = Modifier.padding(top = 8.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_sensors),
-                            contentDescription = "iconSensor"
-                        )
-                        Text(
-                            fontFamily = font,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 12.sp,
-                            text = sensor.description
-                        )
-                    }
-
-                    Column(
-                        horizontalAlignment = Alignment.Start
+                        modifier = Modifier.padding(top = 15.dp),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
 
-                        Text(
-                            fontFamily = font,
-                            fontWeight = FontWeight.Normal,
-                            text = "Repetir:"
-                        )
-
-                        Row(
-                            modifier = Modifier.padding(top = 15.dp),
-                            verticalAlignment = Alignment.CenterVertically
+                        TextButton(
+                            onClick = { repeatWeekly = false},
+                            colors = ButtonDefaults.textButtonColors(
+                                backgroundColor = if (!repeatWeekly) MaterialTheme.colors.primary else Color.Gray
+                            ),
+                            modifier = Modifier.weight(1f)
                         ) {
-
-                            TextButton(
-                                onClick = { repeatWeekly = false},
-                                colors = ButtonDefaults.textButtonColors(
-                                    backgroundColor = if (!repeatWeekly) MaterialTheme.colors.primary else Color.Gray
-                                ),
-                                modifier = Modifier.weight(1f)
-                            ) {
-                                Text(
-                                    text = "Una\nvez",
-                                    color = Color.White,
-                                    textAlign = TextAlign.Center
-                                )
-                            }
-
-                            Spacer(modifier = Modifier.width(3.dp))
-
-                            TextButton(
-                                onClick = { repeatWeekly = true },
-                                colors = ButtonDefaults.textButtonColors(
-                                    backgroundColor = if (repeatWeekly) MaterialTheme.colors.primary else Color.Gray
-                                ),
-                                modifier = Modifier.weight(1f)
-                            ) {
-                                Text(
-                                    text = "Cada\nSemana",
-                                    color = Color.White,
-                                    textAlign = TextAlign.Center
-                                )
-                            }
+                            Text(
+                                text = "Una\nvez",
+                                color = Color.White,
+                                textAlign = TextAlign.Center
+                            )
                         }
 
+                        Spacer(modifier = Modifier.width(3.dp))
 
+                        TextButton(
+                            onClick = { repeatWeekly = true },
+                            colors = ButtonDefaults.textButtonColors(
+                                backgroundColor = if (repeatWeekly) MaterialTheme.colors.primary else Color.Gray
+                            ),
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Text(
+                                text = "Cada\nSemana",
+                                color = Color.White,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
+
+                    if (repeatWeekly) {
                         Text(
                             modifier = Modifier.padding(top = 15.dp),
                             fontFamily = font,
@@ -296,154 +310,7 @@ fun DialogConfigureNotification(
                                 }
                             }
                         }
-
-                        Row(
-                            modifier = Modifier.padding(top = 15.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-
-                            Text(
-                                modifier = Modifier.width(80.dp),
-                                fontFamily = font,
-                                fontWeight = FontWeight.Normal,
-                                text = "Hora:"
-                            )
-                            TextButton(onClick = { mTimePickerDialog.show() }) {
-                                Text(text = mTime)
-                            }
-                        }
-
-                        Row(
-                            modifier = Modifier
-                                .padding(top = 15.dp)
-                                .fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Center
-                        ) {
-                            OutlinedButton(
-                                shape = RoundedCornerShape(8.dp),
-                                modifier = Modifier.padding(end = 4.dp),
-                                onClick = {
-                                    openDialog.value = false
-                                }
-                            ) {
-                                Text(text = stringResource(id = R.string.btnCancel))
-                            }
-
-                            Button(
-                                shape = RoundedCornerShape(8.dp),
-                                onClick = {
-                                    createNotificationDateAndTime()
-                                    openDialog.value = false
-                                }
-                            ) {
-                                Text(text = stringResource(id = R.string.btnConfirm))
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-    } else {
-        Dialog(onDismissRequest = { openDialog.value = false }) {
-            Card(
-                shape = RoundedCornerShape(8.dp),
-                backgroundColor = MaterialTheme.colors.surface,
-                modifier = Modifier.padding(12.dp),
-            ) {
-                Column(
-                    modifier = Modifier.padding(16.dp),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    IconButton(
-                        modifier = Modifier
-                            .then(Modifier.size(30.dp))
-                            .padding(bottom = 5.dp, top = 5.dp, end = 5.dp)
-                            .align(Alignment.End),
-                        onClick = {
-                            openDialog.value = false
-                        },
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_close),
-                            contentDescription = stringResource(id = R.string.contentOnBack),
-                            tint = if (!ThemeState.isDark) Color.Black else Color.White
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    Text(
-                        fontFamily = font,
-                        fontWeight = FontWeight.Bold,
-                        text = context.getString(R.string.tvTitleConfigure)
-                    )
-
-                    Row(
-                        modifier = Modifier.padding(top = 8.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_sensors),
-                            contentDescription = "iconSensor"
-                        )
-                        Text(
-                            fontFamily = font,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 12.sp,
-                            text = sensor.description
-                        )
-                    }
-
-                    Column(
-                        horizontalAlignment = Alignment.Start
-                    ) {
-
-                        Text(
-                            fontFamily = font,
-                            fontWeight = FontWeight.Normal,
-                            text = "Repetir:"
-                        )
-
-                        Row(
-                            modifier = Modifier.padding(top = 15.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-
-                            TextButton(
-                                onClick = { repeatWeekly = false},
-                                colors = ButtonDefaults.textButtonColors(
-                                    backgroundColor = if (!repeatWeekly) MaterialTheme.colors.primary else Color.Gray
-                                ),
-                                modifier = Modifier.weight(1f)
-                            ) {
-                                Text(
-                                    text = "Una\nvez",
-                                    color = Color.White,
-                                    textAlign = TextAlign.Center
-                                )
-                            }
-
-                            Spacer(modifier = Modifier.width(3.dp))
-
-                            TextButton(
-                                onClick = { repeatWeekly = true },
-                                colors = ButtonDefaults.textButtonColors(
-                                    backgroundColor = if (repeatWeekly) MaterialTheme.colors.primary else Color.Gray
-                                ),
-                                modifier = Modifier.weight(1f)
-                            ) {
-                                Text(
-                                    text = "Cada\nSemana",
-                                    color = Color.White,
-                                    textAlign = TextAlign.Center
-                                )
-                            }
-                        }
-
+                    }else{
                         Row(
                             modifier = Modifier.padding(top = 15.dp),
                             verticalAlignment = Alignment.CenterVertically
@@ -458,55 +325,56 @@ fun DialogConfigureNotification(
                                 Text(text = selectedDateText)
                             }
                         }
+                    }
 
-                        Row(
-                            modifier = Modifier.padding(top = 15.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
+                    Row(
+                        modifier = Modifier.padding(top = 15.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
 
-                            Text(
-                                modifier = Modifier.width(80.dp),
-                                fontFamily = font,
-                                fontWeight = FontWeight.Normal,
-                                text = "Hora:"
-                            )
-                            TextButton(onClick = { mTimePickerDialog.show() }) {
-                                Text(text = mTime)
+                        Text(
+                            modifier = Modifier.width(80.dp),
+                            fontFamily = font,
+                            fontWeight = FontWeight.Normal,
+                            text = "Hora:"
+                        )
+                        TextButton(onClick = { mTimePickerDialog.show() }) {
+                            Text(text = mTime)
+                        }
+                    }
+
+                    Row(
+                        modifier = Modifier
+                            .padding(top = 15.dp)
+                            .fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        OutlinedButton(
+                            shape = RoundedCornerShape(8.dp),
+                            modifier = Modifier.padding(end = 4.dp),
+                            onClick = {
+                                openDialog.value = false
                             }
+                        ) {
+                            Text(text = stringResource(id = R.string.btnCancel))
                         }
 
-                        Row(
-                            modifier = Modifier
-                                .padding(top = 15.dp)
-                                .fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Center
+                        Button(
+                            shape = RoundedCornerShape(8.dp),
+                            onClick = {
+                                createNotificationDateAndTime()
+                                openDialog.value = false
+                            }
                         ) {
-                            OutlinedButton(
-                                shape = RoundedCornerShape(8.dp),
-                                modifier = Modifier.padding(end = 4.dp),
-                                onClick = {
-                                    openDialog.value = false
-                                }
-                            ) {
-                                Text(text = stringResource(id = R.string.btnCancel))
-                            }
-
-                            Button(
-                                shape = RoundedCornerShape(8.dp),
-                                onClick = {
-                                    createNotificationDateAndTime()
-                                    openDialog.value = false
-                                }
-                            ) {
-                                Text(text = stringResource(id = R.string.btnConfirm))
-                            }
+                            Text(text = stringResource(id = R.string.btnConfirm))
                         }
                     }
                 }
             }
         }
     }
+
 }
 
 

@@ -1,8 +1,6 @@
 package com.lucasginard.airelibre.modules.home.viewModel
 
 import android.app.Activity
-import android.content.Context
-import android.os.PowerManager
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -119,8 +117,4 @@ class HomeViewModel @Inject constructor(private val repository: HomeRepository) 
         return repository.getListScheduledNotifications().isNotEmpty()
     }
 
-    fun isBatteryOptimizationEnabled(context: Context): Boolean {
-        val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
-        return powerManager.isIgnoringBatteryOptimizations(context.packageName)
-    }
 }
