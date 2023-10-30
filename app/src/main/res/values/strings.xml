@@ -113,6 +113,6 @@
     <!---Dialog Configure Notification-->
     <string name="tvTitleConfigure">Configure su notificación</string>
     <string name="tvSelectDays">Seleccioné los días de la semana:</string>
-    <string name="tvConfigNotifSettingTitle">Para un mejor funcionamiento de las notificaciones, desactiva la optimización de batería para esta app en la configuración de tu dispositivo.</string>
+    <string name="tvConfigNotifSettingTitle">Para un mejor funcionamiento, desactive la optimización de batería para esta app en la configuración de tu dispositivo.</string>
 
 </resources>

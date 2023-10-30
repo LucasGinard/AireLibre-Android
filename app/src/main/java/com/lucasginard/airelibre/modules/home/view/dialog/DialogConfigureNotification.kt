@@ -7,6 +7,7 @@ import android.content.Intent
 import android.os.PowerManager
 import android.provider.Settings
 import android.widget.DatePicker
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -19,6 +20,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -71,12 +73,12 @@ fun DialogConfigureNotification(
     val notificationWorkerManager = NotificationWorkManager(context)
     val mCalendar = Calendar.getInstance()
 
-    var isBatteryOptimizationEnabled: () -> Boolean = {
+    val isBatteryOptimizationDisabled: () -> Boolean = {
         val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
         powerManager.isIgnoringBatteryOptimizations(context.packageName)
     }
 
-    var goToSettingBattery: () -> Unit? = {
+    val goToSettingBattery: () -> Unit? = {
         val intent = Intent()
         intent.action = Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS
         context.startActivity(intent)
@@ -340,6 +342,30 @@ fun DialogConfigureNotification(
                         )
                         TextButton(onClick = { mTimePickerDialog.show() }) {
                             Text(text = mTime)
+                        }
+                    }
+
+                    if (!isBatteryOptimizationDisabled()){
+                        Row(
+                            modifier = Modifier
+                                .padding(top = 12.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Text(
+                                modifier = Modifier.weight(0.5f),
+                                fontFamily = font,
+                                fontWeight = FontWeight.Bold,
+                                textAlign = TextAlign.Center,
+                                fontSize = 8.sp,
+                                text = context.getString(R.string.tvConfigNotifSettingTitle)
+                            )
+
+                            TextButton(
+                                modifier = Modifier.weight(0.5f),
+                                onClick = { goToSettingBattery() }
+                            ) {
+                                Text(text = "Configuración")
+                            }
                         }
                     }
 
