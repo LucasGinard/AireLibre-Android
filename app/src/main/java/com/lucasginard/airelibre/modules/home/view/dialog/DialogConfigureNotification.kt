@@ -7,7 +7,6 @@ import android.content.Intent
 import android.os.PowerManager
 import android.provider.Settings
 import android.widget.DatePicker
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -20,7 +19,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -99,6 +97,7 @@ fun DialogConfigureNotification(
 
     // Weekly repeat, monthly repeat, and single notification options
     var repeatWeekly by remember { mutableStateOf(true) }
+    var isEnableConfirm by remember { mutableStateOf(false) }
 
     // List of switches for each day of the week
     val selectedDays =
@@ -234,7 +233,10 @@ fun DialogConfigureNotification(
                     ) {
 
                         TextButton(
-                            onClick = { repeatWeekly = false},
+                            onClick = {
+                                isEnableConfirm = true
+                                repeatWeekly = false
+                            },
                             colors = ButtonDefaults.textButtonColors(
                                 backgroundColor = if (!repeatWeekly) MaterialTheme.colors.primary else Color.Gray
                             ),
@@ -250,7 +252,10 @@ fun DialogConfigureNotification(
                         Spacer(modifier = Modifier.width(3.dp))
 
                         TextButton(
-                            onClick = { repeatWeekly = true },
+                            onClick = {
+                                isEnableConfirm = selectedDays.any { it }
+                                repeatWeekly = true
+                            },
                             colors = ButtonDefaults.textButtonColors(
                                 backgroundColor = if (repeatWeekly) MaterialTheme.colors.primary else Color.Gray
                             ),
@@ -297,6 +302,7 @@ fun DialogConfigureNotification(
                                         Button(
                                             onClick = {
                                                 selectedDays[index] = !selectedDays[index]
+                                                isEnableConfirm = selectedDays.any { it }
                                             },
                                             colors = ButtonDefaults.buttonColors(
                                                 backgroundColor = if (selectedDays[index]) MaterialTheme.colors.primary else Color.Gray
@@ -388,6 +394,7 @@ fun DialogConfigureNotification(
 
                         Button(
                             shape = RoundedCornerShape(8.dp),
+                            enabled = isEnableConfirm,
                             onClick = {
                                 createNotificationDateAndTime()
                                 openDialog.value = false
