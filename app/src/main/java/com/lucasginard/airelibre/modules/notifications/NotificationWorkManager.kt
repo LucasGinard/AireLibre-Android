@@ -47,7 +47,7 @@ class NotificationWorkManager(private val context: Context) {
 
         WorkManager.getInstance(context).enqueueUniquePeriodicWork(
             scheduleModel.sensor.description,
-            ExistingPeriodicWorkPolicy.UPDATE,
+            ExistingPeriodicWorkPolicy.REPLACE,
             workRequest
         )
     }

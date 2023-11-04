@@ -93,7 +93,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback,ContractHome {
                         showNotificationDialog = remember { androidx.compose.runtime.mutableStateOf(false) }
                         if (showAQIDialog.value) DialogCardsAQICompose(showAQIDialog,listCards)
                         if (showNotificationDialog.value) DialogConfigureNotification(showNotificationDialog,viewModel.sensorNotify) {
-                            updateAdapterItem()
+                            updateAdapterItem(true)
                         }
                     }
                 }
@@ -647,9 +647,9 @@ class HomeFragment : Fragment(), OnMapReadyCallback,ContractHome {
         }
     }
 
-    fun updateAdapterItem(){
+    fun updateAdapterItem(isEnable:Boolean){
         val positionForUpdate = listSensors.indexOf(viewModel.sensorNotify)
-        listSensors[positionForUpdate].isEnableNotification = true
+        listSensors[positionForUpdate].isEnableNotification = isEnable
         adapter.notifyItemChanged(positionForUpdate)
     }
 

@@ -361,7 +361,7 @@ fun DialogConfigureNotification(
                                 modifier = Modifier.weight(0.5f),
                                 fontFamily = font,
                                 fontWeight = FontWeight.Bold,
-                                textAlign = TextAlign.Center,
+                                textAlign = TextAlign.Start,
                                 fontSize = 8.sp,
                                 text = context.getString(R.string.tvConfigNotifSettingTitle)
                             )

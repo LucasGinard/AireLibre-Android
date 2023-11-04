@@ -75,7 +75,7 @@ class SensorViewHolder (view: View): RecyclerView.ViewHolder(view) {
                         notification.cancelOneTimeNotification(local.description)
 
                         fragment.viewModel.sensorNotify = local
-                        fragment.updateAdapterItem()
+                        fragment.updateAdapterItem(false)
                     }
                 }
             }else{
