@@ -8,7 +8,7 @@ import com.lucasginard.airelibre.R
 import com.lucasginard.airelibre.modules.home.model.SensorResponse
 import com.lucasginard.airelibre.modules.home.view.HomeFragment
 
-class AdapterSensorList(var sensorList: ArrayList<SensorResponse>, val fragment: HomeFragment, val maps: GoogleMap?=null) : RecyclerView.Adapter<SensorViewHolder>(){
+class AdapterSensorList(private var sensorList: ArrayList<SensorResponse>, val fragment: HomeFragment, private val maps: GoogleMap?=null) : RecyclerView.Adapter<SensorViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SensorViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)

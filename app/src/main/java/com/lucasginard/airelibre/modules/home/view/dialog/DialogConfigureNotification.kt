@@ -423,6 +423,7 @@ fun previewDialogNotification() {
                 latitude = 0.0,
                 quality = Quality("", 0),
                 sensor = ""
-            ), {})
+            )
+        ) {}
     }
 }
