@@ -146,6 +146,8 @@ fun DialogConfigureNotification(
             }
         } else {
             val calendar = Calendar.getInstance()
+            val currentTime = calendar.timeInMillis
+
             calendar.timeInMillis = System.currentTimeMillis()
             calendar.set(Calendar.HOUR_OF_DAY, selectedHour)
             calendar.set(Calendar.MINUTE, selectedMinute)
@@ -154,7 +156,6 @@ fun DialogConfigureNotification(
             calendar.set(Calendar.DAY_OF_MONTH, selectedDay)
             calendar.set(Calendar.MONTH, selectedMonth)
 
-            val currentTime = System.currentTimeMillis()
             val scheduledTime = calendar.timeInMillis
             val delayMinutes = scheduledTime - currentTime
 

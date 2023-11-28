@@ -61,7 +61,7 @@ class NotificationWorkManager(private val context: Context) {
 
         val workRequest = OneTimeWorkRequestBuilder<NotificationWorkService>()
             .setInputData(inputData)
-            .setInitialDelay(delayMinutes, TimeUnit.MINUTES)
+            .setInitialDelay(delayMinutes, TimeUnit.MILLISECONDS)
             .addTag(sensor.description)
             .build()
 
@@ -72,23 +72,25 @@ class NotificationWorkManager(private val context: Context) {
         val calendar = Calendar.getInstance()
         val currentDay = calendar.get(Calendar.DAY_OF_WEEK)
 
+        val nextDay = selectedDays.minByOrNull { day ->
+            val daysUntil = (day - currentDay + 7) % 7
+            if (daysUntil == 0 && hour * 60 + minute < calendar.get(Calendar.HOUR_OF_DAY) * 60 + calendar.get(Calendar.MINUTE)) {
+                7
+            } else {
+                daysUntil
+            }
+        } ?: selectedDays.firstOrNull() ?: return -1
+
         val nextExecutionTime = Calendar.getInstance()
         nextExecutionTime.set(Calendar.HOUR_OF_DAY, hour)
         nextExecutionTime.set(Calendar.MINUTE, minute)
         nextExecutionTime.set(Calendar.SECOND, 0)
         nextExecutionTime.set(Calendar.MILLISECOND, 0)
-
-        for (selectedDay in selectedDays) {
-            if (selectedDay == currentDay && nextExecutionTime.timeInMillis <= calendar.timeInMillis) {
-                nextExecutionTime.add(Calendar.DAY_OF_MONTH, 7)
-            } else if (selectedDay > currentDay || (selectedDay == currentDay && nextExecutionTime.timeInMillis > calendar.timeInMillis)) {
-                nextExecutionTime.set(Calendar.DAY_OF_WEEK, selectedDay)
-                break
-            }
-        }
+        nextExecutionTime.add(Calendar.DAY_OF_MONTH, (nextDay - currentDay + 7) % 7)
 
         val currentTime = System.currentTimeMillis()
         val scheduledTime = nextExecutionTime.timeInMillis
+
 
         return scheduledTime - currentTime
     }
