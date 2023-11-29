@@ -1,6 +1,7 @@
 package com.lucasginard.airelibre.modules.notifications
 
 import android.content.Context
+import android.util.Log
 import androidx.work.Constraints
 import androidx.work.Data
 import androidx.work.ExistingPeriodicWorkPolicy
@@ -40,7 +41,7 @@ class NotificationWorkManager(private val context: Context) {
                     scheduleModel.daysSelected,
                     scheduleModel.hour,
                     scheduleModel.minute
-                ), TimeUnit.MINUTES
+                ), TimeUnit.MILLISECONDS
             )
             .setInputData(inputData)
             .build()
@@ -91,6 +92,12 @@ class NotificationWorkManager(private val context: Context) {
         val currentTime = System.currentTimeMillis()
         val scheduledTime = nextExecutionTime.timeInMillis
 
+        Log.d("NotificationWorkManager", "Selected days: $selectedDays")
+        Log.d("NotificationWorkManager", "Current day: $currentDay")
+        Log.d("NotificationWorkManager", "Next day: $nextDay")
+        Log.d("NotificationWorkManager", "Scheduled time: ${nextExecutionTime.time}")
+        Log.d("NotificationWorkManager", "Current time: ${calendar.time}")
+        Log.d("NotificationWorkManager", "Initial delay: ${scheduledTime - currentTime} milliseconds")
 
         return scheduledTime - currentTime
     }
