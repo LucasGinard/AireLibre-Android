@@ -125,6 +125,7 @@
         android:text="@string/tvNotify"
         android:textColor="@color/secondColor"
         android:textSize="11sp"
+        android:visibility="gone"
         app:icon="@drawable/ic_notify_add"
         app:iconSize="14dp"
         app:iconTint="@color/secondColor"
@@ -147,11 +148,11 @@
         app:icon="@drawable/ic_location_link"
         app:iconSize="14dp"
         app:iconTint="@color/white"
-        app:strokeColor="@color/secondColor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.52"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvAQI"/>
+        app:layout_constraintTop_toBottomOf="@+id/tvAQI"
+        app:strokeColor="@color/secondColor" />
 
 
     <ImageView
