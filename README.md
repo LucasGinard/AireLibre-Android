@@ -1,5 +1,7 @@
 # AireLibre-Android
 
+![GitHub Release](https://img.shields.io/github/v/release/lucasginard/AireLibre-Android?color=30C151) [![Build](https://github.com/LucasGinard/AireLibre-Android/actions/workflows/androidBuild.yml/badge.svg)](https://github.com/LucasGinard/AireLibre-Android/actions/workflows/androidBuild.yml)
+
 ### 📲Descarga/Download:
 
 #### <img src="https://img.utdstc.com/icon/c8c/d91/c8cd914e915d70dea2eabf58b1c03089fbe19c59729be8aec12170db47dd8f81:200" alt="drawing" width="20" height="20"/>PlayStore:[Aqui/Here](https://play.google.com/store/apps/details?id=com.lucasginard.airelibre) &nbsp; <img src="https://www.apple.com/v/app-store/b/images/overview/icon_appstore__ev0z770zyxoy_medium.png" alt="drawing" width="20" height="20"/> AppStore:[Aqui/Here](https://apps.apple.com/us/app/airelibre-calidad-del-aire/id6446297783)
