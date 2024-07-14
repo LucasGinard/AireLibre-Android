@@ -26,15 +26,15 @@ class OnSwipeTouchListener internal constructor(ctx: Context, val mainView: View
         }
 
         override fun onFling(
-            e1: MotionEvent,
+            e1: MotionEvent?,
             e2: MotionEvent,
             velocityX: Float,
             velocityY: Float
         ): Boolean {
             var result = false
             try {
-                val diffY = e2.y - e1.y
-                val diffX = e2.x - e1.x
+                val diffY = e2.y - (e1?.y ?: 0F)
+                val diffX = e2.x - (e1?.x ?: 0F)
                 if (abs(diffX) > abs(diffY)) {
                     if (abs(diffX) > Companion.SWIPE_THRESHOLD && abs(velocityX) > Companion.SWIPE_VELOCITY_THRESHOLD) {
                         if (diffX > 0) {
