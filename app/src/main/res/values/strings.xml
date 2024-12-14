@@ -99,6 +99,7 @@
 
     <!---MapsNames-->
     <string name="mapDefault">Pred</string>
+    <string name="mapSatellite">Satelital</string>
     <string name="mapUber">Uber</string>
     <string name="mapRetro">Retro</string>
     <string name="mapLightBlue">Celeste</string>

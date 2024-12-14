@@ -608,6 +608,10 @@ class HomeFragment : Fragment(), OnMapReadyCallback,ContractHome {
                 GoogleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(requireContext(), R.raw.mapstyle_cyber))
                 changeColorTitleMap(false)
             }
+            getString(R.string.mapSatellite) ->{
+                GoogleMap.mapType = com.google.android.gms.maps.GoogleMap.MAP_TYPE_SATELLITE
+                changeColorTitleMap(false)
+            }
         }
     }
 
