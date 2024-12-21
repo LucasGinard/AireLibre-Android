@@ -53,7 +53,7 @@ class ConfigViewModel: ViewModel() {
     fun getListMaps(context: Context):ArrayList<MapData>{
         val list = ArrayList<MapData>()
         list.add(MapData(R.drawable.map_default,context.getString(R.string.mapDefault)))
-        list.add(MapData(R.drawable.map_default,context.getString(R.string.mapSatellite)))
+        list.add(MapData(R.drawable.map_satellite,context.getString(R.string.mapSatellite)))
         list.add(MapData(R.drawable.map_uber,context.getString(R.string.mapUber)))
         list.add(MapData(R.drawable.map_retro,context.getString(R.string.mapRetro)))
         list.add(MapData(R.drawable.map_light_blue,context.getString(R.string.mapLightBlue)))
