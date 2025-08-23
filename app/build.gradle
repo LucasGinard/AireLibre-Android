@@ -16,7 +16,7 @@ if(keystorePropertiesFile.exists()){
 android {
     namespace = 'com.lucasginard.airelibre'
 
-    compileSdk 34
+    compileSdk 35
 
     signingConfigs {
         if (keystorePropertiesFile.exists()) {
@@ -32,7 +32,7 @@ android {
     defaultConfig {
         applicationId "com.lucasginard.airelibre"
         minSdk 24
-        targetSdk 34
+        targetSdk 35
         versionCode 25
         versionName "1.2.0"
 

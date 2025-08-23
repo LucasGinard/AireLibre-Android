@@ -351,12 +351,22 @@ class HomeFragment : Fragment(), OnMapReadyCallback,ContractHome {
         callStatusService()
     }
 
-    private fun callStatusService(){
-        viewModel.getStatusService()
-        viewModel.getStatus.observe(requireActivity()) {
-            if (!it.getDataBaseIsUp() || !it.getServiceIsUp()){
-                //TODO: implement toast error from service o database
+    private fun callStatusService() {
+        try {
+            viewModel.getStatusService()
+
+            viewModel.getStatus.observe(viewLifecycleOwner) { status ->
+                status?.let {
+                    val dbIsUp = it.getDataBaseIsUp() ?: false
+                    val serviceIsUp = it.getServiceIsUp() ?: false
+
+                    if (!dbIsUp || !serviceIsUp) {
+                        // TODO: implement toast error from service o database
+                    }
+                }
             }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 
