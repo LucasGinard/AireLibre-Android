@@ -16,7 +16,7 @@ if(keystorePropertiesFile.exists()){
 android {
     namespace = 'com.lucasginard.airelibre'
 
-    compileSdk 35
+    compileSdk 36
 
     signingConfigs {
         if (keystorePropertiesFile.exists()) {
@@ -32,7 +32,7 @@ android {
     defaultConfig {
         applicationId "com.lucasginard.airelibre"
         minSdk 24
-        targetSdk 35
+        targetSdk 36
         versionCode 26
         versionName "1.2.1"
 
@@ -44,6 +44,8 @@ android {
         if (keystorePropertiesFile.exists()) {
             signingConfig signingConfigs.config
             manifestPlaceholders = [GOOGLE_MAP_API_KEY: "${keystoreProperties['apiMaps']}"]
+        } else {
+            manifestPlaceholders = [GOOGLE_MAP_API_KEY: "dummy_key"]
         }
     }
 
@@ -70,8 +72,9 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion compose_version
+        kotlinCompilerExtensionVersion '1.5.14'
     }
+
 
     packagingOptions {
         resources {
